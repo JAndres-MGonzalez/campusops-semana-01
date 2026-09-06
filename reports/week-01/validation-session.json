@@ -25,11 +25,5 @@
     }
   ],
   "deliveryReady": false,
-  "remainingRequirements": [
-    "Confirmar el equipo y sus tres identificadores escolares para CampusOps.",
-    "Registrar aportaciones, commits propios y pruebas o revisiones personales de exactamente tres integrantes.",
-    "Agregar a los otros dos colaboradores con sus cuentas reales.",
-    "Revalidar las evidencias con el SHA tecnico vigente, seguir el commit exclusivo de evidencias y crear/publicar la etiqueta final cuando todo pase."
-  ],
   "finalTagCreated": false
 }

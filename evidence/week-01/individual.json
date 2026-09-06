@@ -5,20 +5,37 @@
   "teamId": "REEMPLAZAR_CON_ID_DEL_EQUIPO",
   "members": [
     {
-      "studentId": "REEMPLAZAR_INTEGRANTE_1",
-      "commitShas": ["REEMPLAZAR_CON_SHA_COMPLETO"],
-      "files": ["REEMPLAZAR_CON_ARCHIVO_TRABAJADO"],
+      "studentId": "3523110131",
+      "commitShas": [
+        "19c9611e0847248d1d1d342a4b9cf26f8d0a2cef",
+        "1cfab5a5d06dab6f55d6c824a8f2f7d3daae8a21",
+        "cae15ba0c77974d21f1f1faceb2e8f0f9582fafd"
+      ],
+      "files": [
+        "docs/diagnostico-semana-01.md",
+        "docs/problem-definition.md",
+        "reports/week-01/logs/setup-original.log",
+        "reports/week-01/logs/feedback-original.log",
+        "reports/week-01/logs/controlled-change.patch",
+        "reports/week-01/logs/smoke-failure.log",
+        "reports/week-01/logs/smoke-corrected.log",
+        "reports/week-01/diagnostic-observations.json"
+      ],
       "tests": [],
       "reviews": [],
-      "prediction": "REEMPLAZAR_CON_LO_QUE_ESPERABA_OBSERVAR",
-      "command": "REEMPLAZAR_CON_EL_COMANDO_EJECUTADO",
-      "observedResult": "REEMPLAZAR_CON_LO_QUE_OCURRIO",
-      "explanation": "REEMPLAZAR_CON_LA_EXPLICACION_TECNICA"
+      "prediction": "El plan previo, preparado con asistencia de Codex, esperaba que la prueba fallara al cambiar el título porque busca CampusOps exacto, y que volviera a pasar al restaurarlo. Esta es la predicción documentada del experimento, no una declaración de ejecución personal.",
+      "command": "npm run test:smoke",
+      "observedResult": "Ejecución asistida por Codex: con CampusOps - falla controlada, código 1, una suite y una prueba fallidas; mensaje Unable to find an element with text: CampusOps. Al restaurar CampusOps, código 0, una suite y una prueba aprobadas. Salidas: reports/week-01/logs/smoke-failure.log y reports/week-01/logs/smoke-corrected.log. La repetición personal de Juan Andrés sigue pendiente.",
+      "explanation": "Elegí cambiar temporalmente el título para provocar una falla controlada. La prueba buscaba CampusOps exacto, pero la aplicación mostraba CampusOps - falla controlada; por eso falló. El síntoma fue que no se encontró el texto; la causa fue el título cambiado. Al restaurarlo, la misma prueba pasó sin modificarla. El backend simulado seguía disponible. Codex ayudó con los cambios, las ejecuciones y esta explicación; todavía falta mi comprobación personal. Detalle: evidence/week-01/juan-andres.md."
     },
     {
       "studentId": "REEMPLAZAR_INTEGRANTE_2",
-      "commitShas": ["REEMPLAZAR_CON_SHA_COMPLETO"],
-      "files": ["REEMPLAZAR_CON_ARCHIVO_TRABAJADO"],
+      "commitShas": [
+        "REEMPLAZAR_CON_SHA_COMPLETO"
+      ],
+      "files": [
+        "REEMPLAZAR_CON_ARCHIVO_TRABAJADO"
+      ],
       "tests": [],
       "reviews": [],
       "prediction": "REEMPLAZAR_CON_LO_QUE_ESPERABA_OBSERVAR",
@@ -28,8 +45,12 @@
     },
     {
       "studentId": "REEMPLAZAR_INTEGRANTE_3",
-      "commitShas": ["REEMPLAZAR_CON_SHA_COMPLETO"],
-      "files": ["REEMPLAZAR_CON_ARCHIVO_TRABAJADO"],
+      "commitShas": [
+        "REEMPLAZAR_CON_SHA_COMPLETO"
+      ],
+      "files": [
+        "REEMPLAZAR_CON_ARCHIVO_TRABAJADO"
+      ],
       "tests": [],
       "reviews": [],
       "prediction": "REEMPLAZAR_CON_LO_QUE_ESPERABA_OBSERVAR",

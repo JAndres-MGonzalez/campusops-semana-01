@@ -1,6 +1,6 @@
 # CampusOps — starter público de Desarrollo Móvil Integral
 
-## Avance de Semana 1
+## Semana 1
 
 Repositorio público: [JAndres-MGonzalez/campusops-semana-01](https://github.com/JAndres-MGonzalez/campusops-semana-01).
 
@@ -12,11 +12,7 @@ Repositorio público: [JAndres-MGonzalez/campusops-semana-01](https://github.com
 | 3523110741 | Montalvo Lopez Jose Ismael |
 | 3523110092 | Montalvo Marcial Kevin Armando |
 
-La línea base fue instalada y comprobada; la falla controlada del título se reprodujo y corrigió sin alterar las pruebas. El repositorio contiene la definición del problema, tres riesgos priorizados y los registros técnicos con sus logs. Consulta [el estado y los pendientes](docs/estado-semana-01.md) y [el diagnóstico](docs/diagnostico-semana-01.md).
-
-**Avance individual:** Juan Andrés ejecutó `npm run test:smoke` y obtuvo una suite y una prueba aprobadas. Los comandos, resultados y archivos están en su [registro individual](evidence/week-01/juan-andres.md).
-
-**Entrega pendiente:** faltan las aportaciones de Jose Ismael y Kevin Armando en `individual.json`. La etiqueta `week-01-final` se creará después de completar la evidencia y pasar las comprobaciones de [LEEME_PRIMERO.md](LEEME_PRIMERO.md).
+La línea base fue instalada y comprobada; la falla controlada del título se reprodujo y corrigió sin alterar las pruebas. El repositorio contiene la definición del problema, tres riesgos priorizados y los registros técnicos con sus logs. Consulta [las comprobaciones y el entorno](docs/estado-semana-01.md), [el diagnóstico](docs/diagnostico-semana-01.md) y [la evidencia individual](evidence/week-01/individual.json).
 
 Base técnica: Expo SDK 57, React Native 0.86, React 19, TypeScript estricto y Node.js 22. Este repositorio es el punto de partida del equipo; no contiene pruebas ocultas, respuestas, secretos ni lógica privada de calificación.
 

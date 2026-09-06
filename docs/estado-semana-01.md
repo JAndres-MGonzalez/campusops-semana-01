@@ -36,12 +36,3 @@ Si npm informa `ENOENT` y busca `package.json` en `C:\Windows\system32`, la term
 La activación sólo afecta esa terminal. Las herramientas se guardan fuera del repositorio. Un lanzador local `npm.exe` invoca el npm oficial de Node 22.22.0, hereda la salida y devuelve su código de salida: esto permite que Python ejecute `npm` en Windows, donde el comando original no encontraba `npm.cmd`. El evaluador del curso sigue intacto. En otra máquina, instalar los requisitos y seguir `LEEME_PRIMERO.md`.
 
 El workflow semanal descarga el historial completo con `fetch-depth: 0` para que el evaluador pueda comprobar el padre del commit exclusivo de evidencias y las etiquetas. Se mantienen todos los comandos y condiciones de evaluación.
-
-## Pendiente antes de congelar
-
-1. Agregar a Jose Ismael y Kevin Armando como colaboradores usando sus cuentas reales.
-2. Jose Ismael y Kevin Armando deben registrar su aportación, commit propio y prueba o revisión en `evidence/week-01/individual.json`. El apartado de Juan Andrés ya contiene sus commits y la comprobación personal del proyecto corregido.
-3. Después de cualquier cambio técnico o documental, obtener un nuevo SHA y actualizar las dos evidencias según los pasos 9–12 de `LEEME_PRIMERO.md`.
-4. Sólo cuando desaparezcan los pendientes y las verificaciones pasen, seguir los pasos 13–17 para el commit exclusivo de evidencias, la etiqueta `week-01-final`, el reporte posterior a la etiqueta y la publicación.
-
-El repositorio contiene un avance; todavía no constituye la entrega congelada. No hay una etiqueta final ni un SHA listo para copiar en Classroom. Un fallo de validación por evidencia individual pendiente debe resolverse con aportaciones reales.

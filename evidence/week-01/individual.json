@@ -36,19 +36,20 @@
       "explanation": "Elegí cambiar temporalmente el título para provocar una falla controlada. La prueba buscaba CampusOps, pero la aplicación mostraba CampusOps - falla controlada; por eso no encontraba el texto y fallaba. Al restaurar el título original, la misma prueba pasó sin modificarla. Después ejecuté la prueba en mi computadora y también pasó. El error ENOENT del primer intento se resolvió cambiando a la carpeta del proyecto."
     },
     {
-      "studentId": "3523110741",
-      "commitShas": [
-        "REEMPLAZAR_CON_SHA_COMPLETO"
-      ],
-      "files": [
-        "REEMPLAZAR_CON_ARCHIVO_TRABAJADO"
-      ],
-      "tests": [],
-      "reviews": [],
-      "prediction": "REEMPLAZAR_CON_LO_QUE_ESPERABA_OBSERVAR",
-      "command": "REEMPLAZAR_CON_EL_COMANDO_EJECUTADO",
-      "observedResult": "REEMPLAZAR_CON_LO_QUE_OCURRIO",
-      "explanation": "REEMPLAZAR_CON_LA_EXPLICACION_TECNICA"
+       "studentId": "3523110741",
+  "commitShas": [
+    "8cbbaf3433530b7c6fa0b0674b4f1f16f93eb6e8"
+  ],
+  "files": [
+    "docs/problem-definition.md"
+  ],
+  "tests": [],
+  "reviews": [
+    "Revisión cruzada de docs/problem-definition.md contra docs/risk-register.md y LEEME_PRIMERO.md (Paso 5) para verificar coherencia entre problema, actores, criterios de aceptación y riesgos priorizados."
+  ],
+  "prediction": "Esperaba que al convertir la sección de actores en una matriz de permisos por acción (crear, ver, asignar, iniciar, resolver, cerrar, reabrir) apareciera al menos un caso de autorización que el texto en prosa dejaba implícito, y que eso obligara a agregar un criterio de aceptación nuevo.",
+  "observedResult": "Al construir la matriz encontré que el texto original solo decía 'la autorización se comprueba en el servicio' sin especificar qué pasa si un reportante intenta asignar o cerrar directamente contra el servicio (no solo ocultando el botón en la interfaz). Agregué el criterio de aceptación 5 exigiendo que esa acción sea rechazada por el servicio, y reorganicé los criterios 1-9 en una tabla que indica cuáles cuentan para el rubro de Reproducción y cuáles para Definición del caso. También agregué el criterio 4, que conecta explícitamente el riesgo 1 del registro de riesgos (reproducibilidad en otra máquina) con un criterio de aceptación, algo que antes no existía.",
+  "explanation": "El documento original ya cumplía el mínimo del Paso 5 de LEEME_PRIMERO.md, pero dejaba la autorización y la trazabilidad hacia el registro de riesgos como afirmaciones generales, no como condiciones verificables acción por acción. La rúbrica exige criterios de aceptación observables y coherentes con el resto del diagnóstico, así que transformé la sección de actores en una matriz de permisos y reescribí los criterios como tabla con columna de verificación y de rubro al que aportan. El cambio es documental: no ejecuté un comando de terminal, la comprobación fue una revisión de coherencia entre problem-definition.md, risk-register.md y las instrucciones del curso."
     },
     {
       "studentId": "3523110092",

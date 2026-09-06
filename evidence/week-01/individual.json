@@ -2,7 +2,7 @@
   "_instructions": "Eliminen este campo cuando terminen. Conserven exactamente tres integrantes y usen SHA Git completos de commits creados por cada persona.",
   "schemaVersion": 1,
   "week": 1,
-  "teamId": "REEMPLAZAR_CON_ID_DEL_EQUIPO",
+  "teamId": "9A-E08",
   "members": [
     {
       "studentId": "3523110131",
@@ -36,7 +36,7 @@
       "explanation": "Elegí cambiar temporalmente el título para provocar una falla controlada. La prueba buscaba CampusOps, pero la aplicación mostraba CampusOps - falla controlada; por eso no encontraba el texto y fallaba. Al restaurar el título original, la misma prueba pasó sin modificarla. Después ejecuté la prueba en mi computadora y también pasó. El error ENOENT del primer intento se resolvió cambiando a la carpeta del proyecto."
     },
     {
-      "studentId": "REEMPLAZAR_INTEGRANTE_2",
+      "studentId": "3523110741",
       "commitShas": [
         "REEMPLAZAR_CON_SHA_COMPLETO"
       ],
@@ -51,7 +51,7 @@
       "explanation": "REEMPLAZAR_CON_LA_EXPLICACION_TECNICA"
     },
     {
-      "studentId": "REEMPLAZAR_INTEGRANTE_3",
+      "studentId": "3523110092",
       "commitShas": [
         "REEMPLAZAR_CON_SHA_COMPLETO"
       ],

@@ -1,6 +1,6 @@
 # Aportación de Juan Andrés — Semana 1
 
-**Estudiante:** 3523110131 · **Cuenta GitHub:** JAndres-MGonzalez.
+**Nombre:** Medina González Juan Andrés · **Matrícula:** 3523110131 · **Equipo:** 9A-E08 · **Cuenta GitHub:** JAndres-MGonzalez.
 
 ## Aportación
 

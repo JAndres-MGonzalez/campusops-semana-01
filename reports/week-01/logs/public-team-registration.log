@@ -1,3 +1,4 @@
+python tools/course_public_evaluator.py --week 01 --mode public --execute-toolchain
 {
   "schemaVersion": 1,
   "week": 1,
@@ -73,3 +74,4 @@
     }
   ]
 }
+make: *** [Makefile:31: public-test-week-01] Error 1

@@ -2,6 +2,8 @@
 
 Repositorio público: https://github.com/JAndres-MGonzalez/campusops-semana-01
 
+Equipo **9A-E08**. Los nombres y matrículas de los tres integrantes están registrados en el [README](../README.md) y las matrículas correspondientes en `evidence/week-01/individual.json`.
+
 El proyecto inicial está instalado y comprobado. Se definieron el problema, el alcance, los actores, el flujo, los criterios de aceptación y tres riesgos. El diagnóstico registra una falla del título y su corrección.
 
 ## Evidencia disponible
@@ -37,10 +39,9 @@ El workflow semanal descarga el historial completo con `fetch-depth: 0` para que
 
 ## Pendiente antes de congelar
 
-1. Confirmar el identificador del equipo y los identificadores escolares de los otros dos integrantes. El registro de Juan Andrés ya contiene su matrícula y su prueba personal.
-2. Agregar a los otros dos integrantes como colaboradores usando sus cuentas reales.
-3. Los otros dos integrantes deben registrar su aportación, commit propio y prueba o revisión en `evidence/week-01/individual.json`. El apartado de Juan Andrés ya contiene sus commits y la comprobación personal del proyecto corregido.
-4. Después de cualquier cambio técnico o documental, obtener un nuevo SHA y actualizar las dos evidencias según los pasos 9–12 de `LEEME_PRIMERO.md`.
-5. Sólo cuando desaparezcan los pendientes y las verificaciones pasen, seguir los pasos 13–17 para el commit exclusivo de evidencias, la etiqueta `week-01-final`, el reporte posterior a la etiqueta y la publicación.
+1. Agregar a Jose Ismael y Kevin Armando como colaboradores usando sus cuentas reales.
+2. Jose Ismael y Kevin Armando deben registrar su aportación, commit propio y prueba o revisión en `evidence/week-01/individual.json`. El apartado de Juan Andrés ya contiene sus commits y la comprobación personal del proyecto corregido.
+3. Después de cualquier cambio técnico o documental, obtener un nuevo SHA y actualizar las dos evidencias según los pasos 9–12 de `LEEME_PRIMERO.md`.
+4. Sólo cuando desaparezcan los pendientes y las verificaciones pasen, seguir los pasos 13–17 para el commit exclusivo de evidencias, la etiqueta `week-01-final`, el reporte posterior a la etiqueta y la publicación.
 
 El repositorio contiene un avance; todavía no constituye la entrega congelada. No hay una etiqueta final ni un SHA listo para copiar en Classroom. Un fallo de validación por evidencia individual pendiente debe resolverse con aportaciones reales.

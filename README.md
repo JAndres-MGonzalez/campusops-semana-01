@@ -1,5 +1,13 @@
 # CampusOps — starter público de Desarrollo Móvil Integral
 
+## Avance de Semana 1
+
+Repositorio público: [JAndres-MGonzalez/campusops-semana-01](https://github.com/JAndres-MGonzalez/campusops-semana-01).
+
+La línea base fue instalada y comprobada; la falla controlada del título se reprodujo y corrigió sin alterar las pruebas. Están preparados la definición del problema, tres riesgos priorizados y los registros técnicos con sus logs. Consulta [el estado y los pendientes](docs/estado-semana-01.md) y [el diagnóstico](docs/diagnostico-semana-01.md).
+
+**Entrega pendiente:** faltan la confirmación del equipo y las tres aportaciones personales de CampusOps en `individual.json`. Las ejecuciones realizadas con Codex no se presentan como ejecuciones personales de los estudiantes. La etiqueta `week-01-final` se creará después de completar la evidencia y pasar las comprobaciones de [LEEME_PRIMERO.md](LEEME_PRIMERO.md).
+
 Base técnica: Expo SDK 57, React Native 0.86, React 19, TypeScript estricto y Node.js 22. Este repositorio es el punto de partida del equipo; no contiene pruebas ocultas, respuestas, secretos ni lógica privada de calificación.
 
 Lee `docs/CAMPUSOPS.md` (caso y alcance) y `docs/CAMPUSOPS_API.md` (contratos y variantes públicas). La pantalla inicial sólo comprueba la línea base; no implementa los flujos que el equipo debe construir. Los adaptadores en `src/course-evaluation/` permanecen intencionalmente pendientes para sus semanas: la suite completa no tiene que pasar al recibir el starter; sí debe pasar `make feedback`.

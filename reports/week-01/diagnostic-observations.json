@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "week": 1,
+  "executedBy": "Codex, con la falla elegida por el usuario; no acredita ejecucion personal de los tres integrantes",
+  "initialCommitSha": "19c9611e0847248d1d1d342a4b9cf26f8d0a2cef",
+  "observations": [
+    {
+      "command": "npm run test:smoke",
+      "startedAt": "2026-09-06T01:00:43.296968-06:00",
+      "finishedAt": "2026-09-06T01:00:46.788204-06:00",
+      "exitCode": 1,
+      "log": "reports/week-01/logs/smoke-failure.log"
+    },
+    {
+      "command": "npm run test:smoke",
+      "startedAt": "2026-09-06T01:00:46.789076-06:00",
+      "finishedAt": "2026-09-06T01:00:49.745422-06:00",
+      "exitCode": 0,
+      "log": "reports/week-01/logs/smoke-corrected.log"
+    }
+  ],
+  "appSha256Before": "5ff246c828c334532aa2550abcace034b3351a988875a534972913cdccbf0fc4",
+  "appSha256WithFault": "97540ba113efb0cbf20bde7407ad0da48ea5b08e15dfb3709958e6093ad23924",
+  "appSha256After": "5ff246c828c334532aa2550abcace034b3351a988875a534972913cdccbf0fc4",
+  "protectedFileHashesBefore": {
+    "course-tests/public/week-01.test.ts": "f158a1329403515800aed195b0b0fc05e649256e567e506d028104c58ef7ee1c",
+    "course-tests/public/week-02.test.ts": "e175f368eef93953126de25abf144ecb950bf7d5727363424e9a62861df64031",
+    "course-tests/public/week-03.test.ts": "2117ab7b74514bfacf0ae2234c5b2dab4af472e58076efca0143fa1f77127f16",
+    "course-tests/public/week-04.test.ts": "84c9134a77c17e281d2a76badd5b4c50216d41c2976fe8a124fbe086c7795120",
+    "course-tests/public/week-05.test.ts": "445c17a57824259f0079b147bdff552754f3aa7d58fdb345b5cf339ea67557fc",
+    "course-tests/public/week-06.test.ts": "ae8674f772be4b7f83b2d8a72c919fffd482bbf30aa9f0eb926f8d70f3edbd71",
+    "course-tests/public/week-08.test.ts": "86585346aed86ce5988a26906fd90344dfefd72435d9dca23da1c204be1df896",
+    "course-tests/public/week-09.test.ts": "265fa5ba285c4be74bad478a8f53cbaa770031e201cd3a6067b6b368d09d34c8",
+    "course-tests/public/week-10.test.ts": "37d763492ccb4c8a44233c5b83a22954790f43c0b18ef3363e6849aa7bb2125b",
+    "course-tests/public/week-11.test.ts": "6dafdaba35bd3a2fda31e22f46b4b24b451f9d9f48da200962451dd2fee98674",
+    "course-tests/public/week-12.test.ts": "8fe318c7a286c7570c38436f6417d5e75ea681ea056d095497ec5d20d9094a43",
+    "course-tests/public/week-13.test.ts": "6745afc25f936efb512cdb64564a4eeb977f040cffd802011fa693dd03939cd8",
+    "course-tests/smoke.test.tsx": "9a6cd5608134f582fdf9b3362a62e38baeee50c6cf77f7e54056ad5bf3851222",
+    "tools/course_public_evaluator.py": "1b8b65d6262c0ec3b827383002424964d4cc2e1323291c50e9546848f3e6a787",
+    "package.json": "74e68aee836fc1324b0e034916232b4fec344a0b29db5f46153e7508de1c4d50",
+    "package-lock.json": "c55277cd37bdeec5a419b1d4f99412b86e2b6cac0bdea36448bf27962639d7f1"
+  },
+  "protectedFileHashesAfter": {
+    "course-tests/public/week-01.test.ts": "f158a1329403515800aed195b0b0fc05e649256e567e506d028104c58ef7ee1c",
+    "course-tests/public/week-02.test.ts": "e175f368eef93953126de25abf144ecb950bf7d5727363424e9a62861df64031",
+    "course-tests/public/week-03.test.ts": "2117ab7b74514bfacf0ae2234c5b2dab4af472e58076efca0143fa1f77127f16",
+    "course-tests/public/week-04.test.ts": "84c9134a77c17e281d2a76badd5b4c50216d41c2976fe8a124fbe086c7795120",
+    "course-tests/public/week-05.test.ts": "445c17a57824259f0079b147bdff552754f3aa7d58fdb345b5cf339ea67557fc",
+    "course-tests/public/week-06.test.ts": "ae8674f772be4b7f83b2d8a72c919fffd482bbf30aa9f0eb926f8d70f3edbd71",
+    "course-tests/public/week-08.test.ts": "86585346aed86ce5988a26906fd90344dfefd72435d9dca23da1c204be1df896",
+    "course-tests/public/week-09.test.ts": "265fa5ba285c4be74bad478a8f53cbaa770031e201cd3a6067b6b368d09d34c8",
+    "course-tests/public/week-10.test.ts": "37d763492ccb4c8a44233c5b83a22954790f43c0b18ef3363e6849aa7bb2125b",
+    "course-tests/public/week-11.test.ts": "6dafdaba35bd3a2fda31e22f46b4b24b451f9d9f48da200962451dd2fee98674",
+    "course-tests/public/week-12.test.ts": "8fe318c7a286c7570c38436f6417d5e75ea681ea056d095497ec5d20d9094a43",
+    "course-tests/public/week-13.test.ts": "6745afc25f936efb512cdb64564a4eeb977f040cffd802011fa693dd03939cd8",
+    "course-tests/smoke.test.tsx": "9a6cd5608134f582fdf9b3362a62e38baeee50c6cf77f7e54056ad5bf3851222",
+    "tools/course_public_evaluator.py": "1b8b65d6262c0ec3b827383002424964d4cc2e1323291c50e9546848f3e6a787",
+    "package.json": "74e68aee836fc1324b0e034916232b4fec344a0b29db5f46153e7508de1c4d50",
+    "package-lock.json": "c55277cd37bdeec5a419b1d4f99412b86e2b6cac0bdea36448bf27962639d7f1"
+  },
+  "logSanitization": "La ruta absoluta de la carpeta de trabajo se sustituye por <workspace> en las salidas guardadas."
+}

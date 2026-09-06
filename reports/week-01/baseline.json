@@ -1,23 +1,22 @@
 {
-  "_instructions": "Eliminen este campo cuando terminen. Los demás campos deben contener evidencia real y commitSha debe ser un SHA Git completo de 40 caracteres.",
   "schemaVersion": 1,
   "week": 1,
-  "commitSha": "REEMPLAZAR_CON_SHA_DEL_COMMIT_DE_CODIGO_Y_DOCUMENTOS",
-  "generatedAt": "REEMPLAZAR_CON_FECHA_HORA_ISO_8601",
+  "commitSha": "1cfab5a5d06dab6f55d6c824a8f2f7d3daae8a21",
+  "generatedAt": "2026-09-06T10:59:43.242081-06:00",
   "checks": [
     {
-      "id": "falla-controlada",
+      "id": "titulo-alterado",
       "status": "fail",
       "scenarioType": "failure",
       "command": "npm run test:smoke",
-      "evidence": "REEMPLAZAR_CON_SINTOMA_OBSERVADO_Y_CAUSA_IDENTIFICADA"
+      "evidence": "Ejecución 2026-09-06 01:00:43–01:00:46 -06:00, código 1: 1 suite y 1 prueba fallaron. Síntoma: Unable to find an element with text: CampusOps. Causa: App.tsx renderizaba CampusOps - falla controlada en vez del literal exacto esperado por getByText. El árbol mostraba el backend simulado en available. Salida: reports/week-01/logs/smoke-failure.log; cambio temporal: reports/week-01/logs/controlled-change.patch."
     },
     {
-      "id": "correccion-verificada",
+      "id": "titulo-restaurado",
       "status": "pass",
       "scenarioType": "nominal",
       "command": "npm run test:smoke",
-      "evidence": "REEMPLAZAR_CON_RESULTADO_OBSERVABLE_DESPUES_DE_CORREGIR"
+      "evidence": "Ejecución 2026-09-06 01:00:46–01:00:49 -06:00, código 0: Test Suites: 1 passed, 1 total; Tests: 1 passed, 1 total. Se restauraron exactamente los bytes de App.tsx; la prueba encuentra CampusOps y verifica available con el doble existente. Salida: reports/week-01/logs/smoke-corrected.log. reports/week-01/diagnostic-observations.json confirma SHA-256 idénticos antes/después de App.tsx, pruebas, evaluador, package.json y lockfile. Ejecuciones realizadas con asistencia de Codex."
     }
   ]
 }

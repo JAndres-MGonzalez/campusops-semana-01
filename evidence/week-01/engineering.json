@@ -1,20 +1,32 @@
 {
-  "_instructions": "Eliminen este campo cuando terminen. Comparen alternativas reales y relacionen la decisión con una comprobación ejecutada.",
   "schemaVersion": 1,
   "week": 1,
-  "commitSha": "REEMPLAZAR_CON_SHA_DEL_COMMIT_DE_CODIGO_Y_DOCUMENTOS",
-  "decision": "REEMPLAZAR_CON_LA_DECISION_DE_ALCANCE_RIESGO_O_ACEPTACION",
+  "commitSha": "1cfab5a5d06dab6f55d6c824a8f2f7d3daae8a21",
+  "decision": "Para aislar y comprobar el diagnóstico de Semana 1, usar la prueba smoke suministrada con su doble determinista de salud y provocar la regresión únicamente en el título de App.tsx. El usuario eligió esta falla. Se mantiene Node 22.22.0 y el lockfile original; se vincula el experimento con los criterios de línea base y el riesgo 1 de reproducibilidad. Decisión aplicada en esta sesión con asistencia de Codex, pendiente de revisión personal de los tres integrantes.",
   "alternatives": [
-    "REEMPLAZAR_CON_PRIMERA_ALTERNATIVA_REAL",
-    "REEMPLAZAR_CON_SEGUNDA_ALTERNATIVA_REAL"
+    "Usar npm run test:smoke con el doble de getBackendHealth ya suministrado: consultar el título exacto y available sin arrancar un servicio ni depender de conectividad durante la prueba.",
+    "Arrancar el backend sintético y la aplicación, alterar el título y revisar manualmente la pantalla y su conexión: permite observar el servicio real, pero agrega disponibilidad, configuración de URL y juicio manual al diagnóstico del título."
   ],
-  "tradeoff": "REEMPLAZAR_CON_EL_BENEFICIO_Y_EL_COSTO_DE_LA_DECISION",
-  "requirementIds": ["AC-02", "AC-04"],
+  "tradeoff": "El doble existente permite repetir el mismo comando, atribuir el fallo al literal modificado y comparar códigos y salidas sin variación del servicio; conserva intactas las pruebas. El costo es que no verifica conectividad real ni el contrato del backend en ejecución, tampoco autorización, persistencia o sincronización. Una modificación legítima futura del título exigiría acordar el contrato correspondiente; este experimento sólo restaura el actual. La comparación de alternativas fue razonada, no una medición de ambos enfoques.",
+  "requirementIds": [
+    "AC-02",
+    "AC-04"
+  ],
   "verification": [
     {
-      "command": "REEMPLAZAR_CON_COMANDO_EJECUTADO",
-      "result": "REEMPLAZAR_CON_RESULTADO_OBSERVADO",
-      "evidence": "REEMPLAZAR_CON_ARCHIVO_REPORTE_O_SALIDA_QUE_LO_DEMUESTRA"
+      "command": "make feedback",
+      "result": "Antes de provocar la falla: código 0; TypeScript, lint, smoke, auditoría con umbral crítico y bundle Android terminados. La auditoría mostró una vulnerabilidad moderada, por lo que no se afirma ausencia total de vulnerabilidades.",
+      "evidence": "reports/week-01/logs/feedback-original.log; reports/week-01/logs/setup-original.log contiene la instalación original."
+    },
+    {
+      "command": "npm run test:smoke",
+      "result": "Con el título alterado: código 1, 1 suite y 1 prueba fallidas; el texto exacto CampusOps no se encontró, aunque el backend simulado estaba available.",
+      "evidence": "reports/week-01/logs/smoke-failure.log y reports/week-01/logs/controlled-change.patch."
+    },
+    {
+      "command": "npm run test:smoke",
+      "result": "Después de restaurar App.tsx: código 0, 1 suite y 1 prueba aprobadas. La comparación de hashes confirma que App.tsx fue restaurado y que las pruebas y el evaluador no cambiaron.",
+      "evidence": "reports/week-01/logs/smoke-corrected.log y reports/week-01/diagnostic-observations.json."
     }
   ]
 }

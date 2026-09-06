@@ -1,0 +1,13 @@
+diff --git a/App.tsx b/App.tsx
+index f50abea..07b2e0a 100644
+--- a/App.tsx
++++ b/App.tsx
+@@ -20,7 +20,7 @@ export default function App() {
+   return (
+     <View style={styles.screen}>
+       <View accessibilityRole="summary" style={styles.card}>
+-        <Text style={styles.title}>CampusOps</Text>
++        <Text style={styles.title}>CampusOps - falla controlada</Text>
+         <Text>Incidencias del campus · entorno académico ficticio</Text>
+         <Text testID="backend-status">Backend: {status}</Text>
+       </View>

@@ -1,0 +1,48 @@
+
+> dmi-react-native-starter@1.0.0 test:smoke
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx
+
+
+FAIL course-tests/smoke.test.tsx
+  × renders the reproducible baseline and resolves backend state (120 ms)
+
+  ● renders the reproducible baseline and resolves backend state
+
+    Unable to find an element with text: CampusOps
+
+    [36m<View>[39m
+      [36m<View[39m
+        [33maccessibilityRole[39m=[32m"summary"[39m
+      [36m>[39m
+        [36m<Text>[39m
+          [0mCampusOps - falla controlada[0m
+        [36m</Text>[39m
+        [36m<Text>[39m
+          [0mIncidencias del campus · entorno académico ficticio[0m
+        [36m</Text>[39m
+        [36m<Text[39m
+          [33mtestID[39m=[32m"backend-status"[39m
+        [36m>[39m
+          [0mBackend: [0m
+          [0mavailable[0m
+        [36m</Text>[39m
+      [36m</View>[39m
+    [36m</View>[39m
+
+    [0m [90m 13 |[39m test([32m'renders the reproducible baseline and resolves backend state'[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m 14 |[39m   [36mconst[39m view [33m=[39m [36mawait[39m render([33m<[39m[33mApp[39m [33m/[39m[33m>[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 15 |[39m   expect(view[33m.[39mgetByText([32m'CampusOps'[39m))[33m.[39mtoBeTruthy()[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 16 |[39m   [36mawait[39m waitFor(() [33m=>[39m expect(view[33m.[39mgetByTestId([32m'backend-status'[39m)[33m.[39mprops[33m.[39mchildren[33m.[39mjoin([32m''[39m))[33m.[39mtoContain([32m'available'[39m))[33m;[39m
+     [90m 17 |[39m })[33m;[39m
+     [90m 18 |[39m[0m
+
+      at Object.getByText (course-tests/smoke.test.tsx:15:15)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 1 total
+Snapshots:   0 total
+Time:        2.277 s, estimated 8 s
+Ran all test suites matching /course-tests\\smoke.test.tsx/i.

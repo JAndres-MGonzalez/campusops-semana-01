@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "week": 1,
-  "commitSha": "e6be8ca1dc1d63d96c0baabde3a699bf0b074a0d",
-  "decision": "Para aislar y comprobar el diagnóstico de Semana 1, usar la prueba smoke suministrada con su doble determinista de salud y provocar la regresión únicamente en el título de App.tsx. El usuario eligió esta falla. Se mantiene Node 22.22.0 y el lockfile original; se vincula el experimento con los criterios de línea base y el riesgo 1 de reproducibilidad. Decisión aplicada en esta sesión con asistencia de Codex, pendiente de revisión personal de los tres integrantes.",
+  "commitSha": "1f57a196c460755c87e632c8f08e584dbeb85831",
+  "decision": "Usar la prueba smoke incluida y su respuesta simulada del backend para detectar una falla del título en App.tsx. Así se comprueba el diagnóstico con el mismo comando y sin depender de un servicio en ejecución. Se conservan Node 22.22.0 y el lockfile original. La decisión corresponde al riesgo 1 de reproducibilidad y a los criterios de aceptación de la línea base.",
   "alternatives": [
     "Usar npm run test:smoke con el doble de getBackendHealth ya suministrado: consultar el título exacto y available sin arrancar un servicio ni depender de conectividad durante la prueba.",
     "Arrancar el backend sintético y la aplicación, alterar el título y revisar manualmente la pantalla y su conexión: permite observar el servicio real, pero agrega disponibilidad, configuración de URL y juicio manual al diagnóstico del título."
   ],
-  "tradeoff": "El doble existente permite repetir el mismo comando, atribuir el fallo al literal modificado y comparar códigos y salidas sin variación del servicio; conserva intactas las pruebas. El costo es que no verifica conectividad real ni el contrato del backend en ejecución, tampoco autorización, persistencia o sincronización. Una modificación legítima futura del título exigiría acordar el contrato correspondiente; este experimento sólo restaura el actual. La comparación de alternativas fue razonada, no una medición de ambos enfoques.",
+  "tradeoff": "La prueba permite repetir el diagnóstico y relacionar el fallo con el título cambiado. Como usa una respuesta simulada del backend, no comprueba conexión real, permisos ni sincronización. Esas funciones requieren sus propias pruebas. Las alternativas se compararon por sus requisitos y límites; no se midió el rendimiento de ambas.",
   "requirementIds": [
     "AC-02",
     "AC-04"

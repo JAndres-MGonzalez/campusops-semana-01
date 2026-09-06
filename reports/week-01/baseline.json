@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "week": 1,
-  "commitSha": "e6be8ca1dc1d63d96c0baabde3a699bf0b074a0d",
-  "generatedAt": "2026-09-06T11:15:05.353950-06:00",
+  "commitSha": "1f57a196c460755c87e632c8f08e584dbeb85831",
+  "generatedAt": "2026-09-06T11:20:57.084439-06:00",
   "checks": [
     {
       "id": "titulo-alterado",
@@ -16,7 +16,7 @@
       "status": "pass",
       "scenarioType": "nominal",
       "command": "npm run test:smoke",
-      "evidence": "Ejecución 2026-09-06 01:00:46–01:00:49 -06:00, código 0: Test Suites: 1 passed, 1 total; Tests: 1 passed, 1 total. Se restauraron exactamente los bytes de App.tsx; la prueba encuentra CampusOps y verifica available con el doble existente. Salida: reports/week-01/logs/smoke-corrected.log. reports/week-01/diagnostic-observations.json confirma SHA-256 idénticos antes/después de App.tsx, pruebas, evaluador, package.json y lockfile. Ejecuciones realizadas con asistencia de Codex."
+      "evidence": "Ejecución 2026-09-06 01:00:46–01:00:49 -06:00, código 0: Test Suites: 1 passed, 1 total; Tests: 1 passed, 1 total. Se restauraron exactamente los bytes de App.tsx; la prueba encuentra CampusOps y verifica available con el doble existente. Salida: reports/week-01/logs/smoke-corrected.log. reports/week-01/diagnostic-observations.json confirma SHA-256 idénticos antes/después de App.tsx, pruebas, evaluador, package.json y lockfile."
     }
   ]
 }

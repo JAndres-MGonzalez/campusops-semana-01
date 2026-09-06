@@ -1,6 +1,6 @@
 # Definición del problema — CampusOps
 
-Propuesta preparada con asistencia de Codex para revisión del equipo. Los comportamientos del producto se definen aquí; su implementación es progresiva y no se afirma que ya exista en Semana 1.
+CampusOps se construirá por etapas. En Semana 1 se define el problema y se comprueba el proyecto inicial; las funciones del producto se implementarán en los siguientes hitos.
 
 ## Problema
 

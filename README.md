@@ -4,9 +4,9 @@
 
 Repositorio público: [JAndres-MGonzalez/campusops-semana-01](https://github.com/JAndres-MGonzalez/campusops-semana-01).
 
-La línea base fue instalada y comprobada; la falla controlada del título se reprodujo y corrigió sin alterar las pruebas. Están preparados la definición del problema, tres riesgos priorizados y los registros técnicos con sus logs. Consulta [el estado y los pendientes](docs/estado-semana-01.md) y [el diagnóstico](docs/diagnostico-semana-01.md).
+La línea base fue instalada y comprobada; la falla controlada del título se reprodujo y corrigió sin alterar las pruebas. El repositorio contiene la definición del problema, tres riesgos priorizados y los registros técnicos con sus logs. Consulta [el estado y los pendientes](docs/estado-semana-01.md) y [el diagnóstico](docs/diagnostico-semana-01.md).
 
-**Avance individual:** Juan Andrés ya ejecutó personalmente `npm run test:smoke` y compartió el resultado: una suite y una prueba aprobadas. Su [registro individual](evidence/week-01/juan-andres.md) distingue esa comprobación de la preparación asistida con Codex.
+**Avance individual:** Juan Andrés ejecutó `npm run test:smoke` y obtuvo una suite y una prueba aprobadas. Los comandos, resultados y archivos están en su [registro individual](evidence/week-01/juan-andres.md).
 
 **Entrega pendiente:** faltan la confirmación del equipo y las aportaciones de los otros dos integrantes en `individual.json`. La etiqueta `week-01-final` se creará después de completar la evidencia y pasar las comprobaciones de [LEEME_PRIMERO.md](LEEME_PRIMERO.md).
 

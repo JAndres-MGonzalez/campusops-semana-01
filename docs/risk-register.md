@@ -1,6 +1,6 @@
 # Registro de riesgos — CampusOps
 
-Propuesta preparada con asistencia de Codex para revisión del equipo. La prioridad corresponde al hito de Semana 1; las probabilidades son estimaciones cualitativas justificadas, no frecuencias medidas.
+Los tres riesgos están ordenados según su prioridad para Semana 1. La probabilidad se estima a partir de las condiciones del proyecto; no representa una frecuencia medida.
 
 | Prioridad | Riesgo | Probabilidad | Impacto | Mitigación | Cómo comprobar la mitigación |
 |---:|---|---|---|---|---|

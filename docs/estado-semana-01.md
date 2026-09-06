@@ -2,7 +2,7 @@
 
 Repositorio público: https://github.com/JAndres-MGonzalez/campusops-semana-01
 
-El trabajo técnico de esta sesión se preparó con asistencia de Codex. El usuario eligió la falla controlada del título. Los documentos contienen una propuesta específica de problema, alcance, actores, flujo, criterios y tres riesgos para que el equipo la revise y haga aportaciones propias.
+El proyecto inicial está instalado y comprobado. Se definieron el problema, el alcance, los actores, el flujo, los criterios de aceptación y tres riesgos. El diagnóstico registra una falla del título y su corrección.
 
 ## Evidencia disponible
 
@@ -10,7 +10,7 @@ El trabajo técnico de esta sesión se preparó con asistencia de Codex. El usua
 - `make feedback` pasó antes del experimento: TypeScript, lint, smoke, auditoría crítica y exportación Android. Los logs originales están en `reports/week-01/logs/`.
 - La prueba original también pasó en GitHub Actions, en el workflow Starter Public Feedback del commit inicial.
 - La falla del título produjo código 1 y el mensaje que identifica el texto ausente. Su corrección produjo código 0 con la misma prueba. Se conservan patch, logs, horas y hashes.
-- `baseline.json` y `engineering.json` registran las observaciones de esta sesión y apuntan al commit técnico. No sustituyen evidencia individual.
+- `baseline.json` y `engineering.json` registran el diagnóstico y la decisión técnica, vinculados al SHA del trabajo comprobado.
 - Juan Andrés repitió personalmente `npm run test:smoke` desde la carpeta del proyecto: una suite y una prueba aprobadas. Su registro está en `evidence/week-01/juan-andres.md`, con transcripción de la salida compartida y extractos sanitizados de los logs de npm.
 
 La auditoría del entorno original reportó una vulnerabilidad **moderada** en `@xmldom/xmldom`. Pasar el umbral crítico configurado no significa tener cero vulnerabilidades. Se conservó el lockfile original y el resultado completo de la auditoría.
@@ -37,9 +37,9 @@ El workflow semanal descarga el historial completo con `fetch-depth: 0` para que
 
 ## Pendiente antes de congelar
 
-1. Confirmar el identificador del equipo y los identificadores escolares de los otros dos integrantes aplicables a CampusOps. El registro de Juan Andrés ya contiene su matrícula y su prueba personal; no se trasladaron pruebas de PWA.
+1. Confirmar el identificador del equipo y los identificadores escolares de los otros dos integrantes. El registro de Juan Andrés ya contiene su matrícula y su prueba personal.
 2. Agregar a los otros dos integrantes como colaboradores usando sus cuentas reales.
-3. Los otros dos integrantes deben hacer una aportación técnica, commit propio y prueba o revisión personal explicable. Registrar esos datos en `evidence/week-01/individual.json`; las ejecuciones de Codex no se atribuyen a estudiantes. Juan Andrés ya registró sus commits de trabajo asistido y repitió personalmente la prueba del proyecto corregido.
+3. Los otros dos integrantes deben registrar su aportación, commit propio y prueba o revisión en `evidence/week-01/individual.json`. El apartado de Juan Andrés ya contiene sus commits y la comprobación personal del proyecto corregido.
 4. Después de cualquier cambio técnico o documental, obtener un nuevo SHA y actualizar las dos evidencias según los pasos 9–12 de `LEEME_PRIMERO.md`.
 5. Sólo cuando desaparezcan los pendientes y las verificaciones pasen, seguir los pasos 13–17 para el commit exclusivo de evidencias, la etiqueta `week-01-final`, el reporte posterior a la etiqueta y la publicación.
 

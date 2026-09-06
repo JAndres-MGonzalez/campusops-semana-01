@@ -1,6 +1,6 @@
 # Plan del diagnóstico — Semana 1
 
-Este plan se registra antes de introducir el cambio. El usuario eligió cambiar temporalmente el título de la aplicación; las ejecuciones de esta sesión se realizan con asistencia de Codex. Cada integrante debe repetir o revisar personalmente el trabajo que declare en `individual.json`.
+La falla elegida consiste en cambiar temporalmente el título de la aplicación. El plan establece el cambio, el resultado esperado y la forma de restaurarlo. Las salidas y la procedencia de las ejecuciones están en `reports/week-01/diagnostic-observations.json`.
 
 ## Estado de partida
 

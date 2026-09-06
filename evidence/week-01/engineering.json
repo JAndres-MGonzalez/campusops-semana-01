@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 1,
-  "commitSha": "cae15ba0c77974d21f1f1faceb2e8f0f9582fafd",
+  "commitSha": "e6be8ca1dc1d63d96c0baabde3a699bf0b074a0d",
   "decision": "Para aislar y comprobar el diagnóstico de Semana 1, usar la prueba smoke suministrada con su doble determinista de salud y provocar la regresión únicamente en el título de App.tsx. El usuario eligió esta falla. Se mantiene Node 22.22.0 y el lockfile original; se vincula el experimento con los criterios de línea base y el riesgo 1 de reproducibilidad. Decisión aplicada en esta sesión con asistencia de Codex, pendiente de revisión personal de los tres integrantes.",
   "alternatives": [
     "Usar npm run test:smoke con el doble de getBackendHealth ya suministrado: consultar el título exacto y available sin arrancar un servicio ni depender de conectividad durante la prueba.",

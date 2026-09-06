@@ -1,0 +1,30 @@
+Extractos de logs reales de npm. Selección de versión, comando, carpeta y salida; ruta del proyecto sustituida por <workspace>. No contienen stdout completo de Jest.
+
+2026-09-06T17_07_38_447Z-debug-0.log
+1 info using npm@10.9.4
+2 info using node@v22.22.0
+7 verbose title npm run test:smoke
+8 verbose argv "run" "test:smoke"
+13 error code ENOENT
+14 error syscall open
+16 error errno -4058
+19 verbose cwd C:\WINDOWS\system32
+23 verbose exit -4058
+
+2026-09-06T17_09_59_623Z-debug-0.log
+1 info using npm@10.9.4
+2 info using node@v22.22.0
+7 verbose title npm run test:smoke
+8 verbose argv "run" "test:smoke"
+13 verbose cwd <workspace>
+17 verbose exit 0
+18 info ok
+
+2026-09-06T17_10_13_095Z-debug-0.log
+1 info using npm@10.9.4
+2 info using node@v22.22.0
+7 verbose title npm run test:smoke
+8 verbose argv "run" "test:smoke"
+13 verbose cwd <workspace>
+17 verbose exit 0
+18 info ok

@@ -1,0 +1,14 @@
+Transcripción de la salida visible compartida por Juan Andrés en la conversación.
+No es una captura automática de stdout. Se omiten el banner de PowerShell y la ruta absoluta de la carpeta.
+Comando mostrado: npm run test:smoke
+
+> dmi-react-native-starter@1.0.0 test:smoke
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx
+
+PASS course-tests/smoke.test.tsx
+✓ renders the reproducible baseline and resolves backend state (116 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        1.341 s

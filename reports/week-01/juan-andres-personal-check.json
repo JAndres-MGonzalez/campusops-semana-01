@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "week": 1,
+  "studentId": "3523110131",
+  "recordedAt": "2026-09-06T11:15:05.353950-06:00",
+  "repositoryHeadObservedBeforeRecording": "3fb4fddcf481e5cb6dfa0dec19e7ebbdd11ced29",
+  "source": "Resultado de terminal compartido por el estudiante; corroboración con logs locales de npm, sin ejecutar nuevamente el comando por cuenta del estudiante.",
+  "command": "npm run test:smoke",
+  "status": "pass",
+  "visibleResult": {
+    "suitesPassed": 1,
+    "suitesTotal": 1,
+    "testsPassed": 1,
+    "testsTotal": 1,
+    "snapshotsTotal": 0,
+    "testDurationMs": 116,
+    "jestDurationSeconds": 1.341
+  },
+  "consoleTranscript": "reports/week-01/logs/juan-andres-smoke-console.log",
+  "npmLogExcerpts": "reports/week-01/logs/juan-andres-npm-excerpts.log",
+  "npmLogCorroboration": [
+    {
+      "sourceFileName": "2026-09-06T17_07_38_447Z-debug-0.log",
+      "sourceSha256": "0b0b68ae9ea8dcc03f83dd6ae62d2ffc1ba5504b5f49a154236fc066ea600826",
+      "command": "npm run test:smoke",
+      "nodeVersion": "22.22.0",
+      "npmVersion": "10.9.4",
+      "cwd": "C:\\WINDOWS\\system32",
+      "npmLoggedExitCode": -4058
+    },
+    {
+      "sourceFileName": "2026-09-06T17_09_59_623Z-debug-0.log",
+      "sourceSha256": "d3cf364fb1307a1fd77a00233f06f59fe1e7b6c34a7ddc1aa7cb4c01a9f97edd",
+      "command": "npm run test:smoke",
+      "nodeVersion": "22.22.0",
+      "npmVersion": "10.9.4",
+      "cwd": "<workspace>",
+      "npmLoggedExitCode": 0
+    },
+    {
+      "sourceFileName": "2026-09-06T17_10_13_095Z-debug-0.log",
+      "sourceSha256": "d4948c280d53f175976f5545f7f38877777f5a9fc5f8a30698b2503cb1a8dd73",
+      "command": "npm run test:smoke",
+      "nodeVersion": "22.22.0",
+      "npmVersion": "10.9.4",
+      "cwd": "<workspace>",
+      "npmLoggedExitCode": 0
+    }
+  ],
+  "screenshotSha256": "e98f4ae9860b00535354c5dbe79f8707e3c7024e30fd81c7c03a196fb71e2a5c",
+  "limitations": [
+    "La captura no muestra una fecha, hora ni SHA; se registra el HEAD observado al recibirla y los nombres fechados de los logs locales por separado.",
+    "Los dos logs exitosos corroboran el comando en la raíz del proyecto; no se afirma cuál de ellos corresponde exactamente a la captura.",
+    "La repetición personal comprueba el estado corregido. La introducción y corrección de la falla original fueron asistidas por Codex."
+  ],
+  "initialDirectoryError": "El primer intento ocurrió en C:\\Windows\\system32: npm no encontró package.json (ENOENT) y no llegó a ejecutar Jest. El estudiante cambió a la carpeta del proyecto antes de repetir. No es la falla controlada del título."
+}

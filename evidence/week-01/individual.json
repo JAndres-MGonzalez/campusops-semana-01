@@ -9,7 +9,9 @@
       "commitShas": [
         "19c9611e0847248d1d1d342a4b9cf26f8d0a2cef",
         "1cfab5a5d06dab6f55d6c824a8f2f7d3daae8a21",
-        "cae15ba0c77974d21f1f1faceb2e8f0f9582fafd"
+        "cae15ba0c77974d21f1f1faceb2e8f0f9582fafd",
+        "3fb4fddcf481e5cb6dfa0dec19e7ebbdd11ced29",
+        "e6be8ca1dc1d63d96c0baabde3a699bf0b074a0d"
       ],
       "files": [
         "docs/diagnostico-semana-01.md",
@@ -19,14 +21,19 @@
         "reports/week-01/logs/controlled-change.patch",
         "reports/week-01/logs/smoke-failure.log",
         "reports/week-01/logs/smoke-corrected.log",
-        "reports/week-01/diagnostic-observations.json"
+        "reports/week-01/diagnostic-observations.json",
+        "evidence/week-01/juan-andres.md",
+        "README.md",
+        "docs/estado-semana-01.md"
       ],
-      "tests": [],
+      "tests": [
+        "npm run test:smoke"
+      ],
       "reviews": [],
-      "prediction": "El plan previo, preparado con asistencia de Codex, esperaba que la prueba fallara al cambiar el título porque busca CampusOps exacto, y que volviera a pasar al restaurarlo. Esta es la predicción documentada del experimento, no una declaración de ejecución personal.",
+      "prediction": "Antes de mi repetición se esperaba que, con el título restaurado a CampusOps, la prueba encontrara el texto y el estado available y mostrara una prueba aprobada. Esta predicción y la explicación se prepararon con asistencia de Codex antes de mi ejecución.",
       "command": "npm run test:smoke",
-      "observedResult": "Ejecución asistida por Codex: con CampusOps - falla controlada, código 1, una suite y una prueba fallidas; mensaje Unable to find an element with text: CampusOps. Al restaurar CampusOps, código 0, una suite y una prueba aprobadas. Salidas: reports/week-01/logs/smoke-failure.log y reports/week-01/logs/smoke-corrected.log. La repetición personal de Juan Andrés sigue pendiente.",
-      "explanation": "Elegí cambiar temporalmente el título para provocar una falla controlada. La prueba buscaba CampusOps exacto, pero la aplicación mostraba CampusOps - falla controlada; por eso falló. El síntoma fue que no se encontró el texto; la causa fue el título cambiado. Al restaurarlo, la misma prueba pasó sin modificarla. El backend simulado seguía disponible. Codex ayudó con los cambios, las ejecuciones y esta explicación; todavía falta mi comprobación personal. Detalle: evidence/week-01/juan-andres.md."
+      "observedResult": "Ejecuté personalmente npm run test:smoke en PowerShell y compartí la salida. Primero apareció ENOENT porque estaba en C:\\Windows\\system32. Cambié a la raíz del proyecto y repetí: PASS course-tests/smoke.test.tsx; Test Suites: 1 passed, 1 total; Tests: 1 passed, 1 total; prueba de 116 ms y tiempo de Jest de 1.341 s. Los logs locales corroboran Node 22.22.0, npm 10.9.4 y salida 0. Evidencia: reports/week-01/juan-andres-personal-check.json y sus logs referenciados.",
+      "explanation": "Elegí cambiar temporalmente el título para provocar una falla controlada. La prueba buscaba CampusOps exacto, pero la aplicación mostraba CampusOps - falla controlada; por eso falló. El síntoma fue que no encontraba el texto y la causa fue el título cambiado. Al restaurarlo, la misma prueba pasó sin modificarla. Después repetí personalmente la prueba y pasó. Mi primer error ENOENT se debió a la carpeta incorrecta, no al código. Codex ayudó con la preparación, el experimento original y esta explicación; mi repetición personal está documentada en evidence/week-01/juan-andres.md."
     },
     {
       "studentId": "REEMPLAZAR_INTEGRANTE_2",

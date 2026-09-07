@@ -1,5 +1,4 @@
 {
-  "_instructions": "Eliminen este campo cuando terminen. Conserven exactamente tres integrantes y usen SHA Git completos de commits creados por cada persona.",
   "schemaVersion": 1,
   "week": 1,
   "teamId": "9A-E08",
@@ -48,23 +47,29 @@
     "Revisión cruzada de docs/problem-definition.md contra docs/risk-register.md y LEEME_PRIMERO.md (Paso 5) para verificar coherencia entre problema, actores, criterios de aceptación y riesgos priorizados."
   ],
   "prediction": "Esperaba que al convertir la sección de actores en una matriz de permisos por acción (crear, ver, asignar, iniciar, resolver, cerrar, reabrir) apareciera al menos un caso de autorización que el texto en prosa dejaba implícito, y que eso obligara a agregar un criterio de aceptación nuevo.",
+  "command": "git show 8cbbaf3433530b7c6fa0b0674b4f1f16f93eb6e8 -- docs/problem-definition.md",
   "observedResult": "Al construir la matriz encontré que el texto original solo decía 'la autorización se comprueba en el servicio' sin especificar qué pasa si un reportante intenta asignar o cerrar directamente contra el servicio (no solo ocultando el botón en la interfaz). Agregué el criterio de aceptación 5 exigiendo que esa acción sea rechazada por el servicio, y reorganicé los criterios 1-9 en una tabla que indica cuáles cuentan para el rubro de Reproducción y cuáles para Definición del caso. También agregué el criterio 4, que conecta explícitamente el riesgo 1 del registro de riesgos (reproducibilidad en otra máquina) con un criterio de aceptación, algo que antes no existía.",
   "explanation": "El documento original ya cumplía el mínimo del Paso 5 de LEEME_PRIMERO.md, pero dejaba la autorización y la trazabilidad hacia el registro de riesgos como afirmaciones generales, no como condiciones verificables acción por acción. La rúbrica exige criterios de aceptación observables y coherentes con el resto del diagnóstico, así que transformé la sección de actores en una matriz de permisos y reescribí los criterios como tabla con columna de verificación y de rubro al que aportan. El cambio es documental: no ejecuté un comando de terminal, la comprobación fue una revisión de coherencia entre problem-definition.md, risk-register.md y las instrucciones del curso."
     },
     {
       "studentId": "3523110092",
       "commitShas": [
-        "REEMPLAZAR_CON_SHA_COMPLETO"
+        "99a7cc3695a31925ad8f8bab8b70295ac243650b"
       ],
       "files": [
-        "REEMPLAZAR_CON_ARCHIVO_TRABAJADO"
+        "docs/risk-register.md"
       ],
-      "tests": [],
-      "reviews": [],
-      "prediction": "REEMPLAZAR_CON_LO_QUE_ESPERABA_OBSERVAR",
-      "command": "REEMPLAZAR_CON_EL_COMANDO_EJECUTADO",
-      "observedResult": "REEMPLAZAR_CON_LO_QUE_OCURRIO",
-      "explanation": "REEMPLAZAR_CON_LA_EXPLICACION_TECNICA"
+      "tests": [
+        "npm run test:smoke",
+        "npm run typecheck"
+      ],
+      "reviews": [
+        "Revisión técnica de docs/risk-register.md contra docs/CAMPUSOPS.md, docs/CAMPUSOPS_API.md y docs/EVIDENCE_CONTRACT.md: comprobé que el orden de prioridad de los tres riesgos, las estimaciones y cada medida tengan una forma observable de verificación, y anclé el riesgo 2 al conflicto del campo compuesto work de la semana 8 y el riesgo 3 a la idempotencia y al escenario timeout_after_commit de las semanas 8-9."
+      ],
+      "prediction": "Esperaba que el registro ya delimitara bien los tres riesgos y su prioridad, pero que la columna de comprobación quedara en 'prueba futura' sin indicar el hito ni la observación exacta, y que reforzar esas comprobaciones no rompiera ninguna verificación de la semana.",
+      "command": "npm run test:smoke",
+      "observedResult": "La revisión confirmó el orden 1-2-3 y encontró que el riesgo 2 y el 3 solo citaban 'prueba futura'. Agregué el hito (Semana 8 para el conflicto de reasignación, Semanas 8-9 para idempotencia), la condición observable exacta (conflicto del campo work con resolveSync y cola conservada; un solo evento con timeout_after_commit; 409 al reutilizar la clave con otro cuerpo) y la justificación de que la reasignación antecede a la duplicidad. Después ejecuté npm run test:smoke y npm run typecheck: ambos terminaron en PASS/0 con la salida capturada en reports/week-01/logs.",
+      "explanation": "El registro de riesgos ya cumplía el mínimo del Paso 6, pero dejaba las comprobaciones como afirmaciones a futuro sin momento ni resultado esperado. Como la evidencia de la semana se valida con docs/CAMPUSOPS_API.md, escribí en cada fila el hito y la observación verificable para que la mitigación se pueda demostrar en su semana correspondiente. El cambio es documental y lo comprobé ejecutando las pruebas que exige la línea base para confirmar que nada se rompió."
     }
   ]
 }

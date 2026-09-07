@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "week": 1,
   "mode": "public",
-  "commitSha": "1e3b8524a49602db07c2f5b5128c279156161dae",
-  "evaluatedAt": "2026-09-06T18:17:25.733963+00:00",
-  "status": "fail",
+  "commitSha": "99a7cc3695a31925ad8f8bab8b70295ac243650b",
+  "evaluatedAt": "2026-09-07T01:43:08.207983+00:00",
+  "status": "pass",
   "checks": [
     {
       "id": "base_files",
@@ -48,8 +48,8 @@
     },
     {
       "id": "schema:evidence/week-01/individual.json",
-      "status": "fail",
-      "detail": "3523110741: commitShas must contain full lowercase Git SHAs"
+      "status": "pass",
+      "detail": "three individual evidence records found"
     },
     {
       "id": "toolchain_1",
@@ -69,7 +69,7 @@
     {
       "id": "toolchain_4",
       "status": "pass",
-      "detail": "npm test -- --ci --runInBand course-tests/public/week-01.test.ts\n> dmi-react-native-starter@1.0.0 test\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-01.test.ts\n\n\nPASS course-tests/public/week-01.test.ts\n  √ baseline preserves the reproduced failure and its verified correction (4 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       1 passed, 1 total\nSnapshots:   0 total\nTime:        4.761 s\nRan all test suites matching /course-tests\\\\public\\\\week-01.test.ts/i."
+      "detail": "npm test -- --ci --runInBand course-tests/public/week-01.test.ts\n> dmi-react-native-starter@1.0.0 test\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-01.test.ts\n\n\nPASS course-tests/public/week-01.test.ts\n  âˆš baseline preserves the reproduced failure and its verified correction (5 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       1 passed, 1 total\nSnapshots:   0 total\nTime:        1.68 s, estimated 3 s\nRan all test suites matching /course-tests\\\\public\\\\week-01.test.ts/i."
     }
   ]
 }

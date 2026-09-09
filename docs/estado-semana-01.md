@@ -35,4 +35,4 @@ Si npm informa `ENOENT` y busca `package.json` en `C:\Windows\system32`, la term
 
 La activación sólo afecta esa terminal. Las herramientas se guardan fuera del repositorio. Un lanzador local `npm.exe` invoca el npm oficial de Node 22.22.0, hereda la salida y devuelve su código de salida: esto permite que Python ejecute `npm` en Windows, donde el comando original no encontraba `npm.cmd`. El evaluador del curso sigue intacto. En otra máquina, instalar los requisitos y seguir `LEEME_PRIMERO.md`.
 
-El workflow semanal descarga el historial completo con `fetch-depth: 0` para que el evaluador pueda comprobar el padre del commit exclusivo de evidencias y las etiquetas. Se mantienen todos los comandos y condiciones de evaluación.
+El workflow semanal comprueba el SHA de la rama del pull request o, en los demás eventos, `github.sha`. Descarga dos commits con `fetch-depth: 2` para que el evaluador pueda comprobar el padre del commit exclusivo de evidencias. En las ejecuciones de la etiqueta final, descarga también `week-01-final` antes de validar la entrega.

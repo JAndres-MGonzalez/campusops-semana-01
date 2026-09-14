@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 1,
-  "commitSha": "725f1f6056cbcb6227b9f6826950c9aa06b66c69",
+  "commitSha": "0152aaadf8be56a164e281bf048edcc07957a005",
   "decision": "Usar la prueba smoke incluida y su respuesta simulada del backend para detectar una falla del título en App.tsx. Así se comprueba el diagnóstico con el mismo comando y sin depender de un servicio en ejecución. Se conservan Node 22.22.0 y el lockfile original. La decisión corresponde al riesgo 1 de reproducibilidad y a los criterios de aceptación de la línea base.",
   "alternatives": [
     "Usar npm run test:smoke con el doble de getBackendHealth ya suministrado: consultar el título exacto y available sin arrancar un servicio ni depender de conectividad durante la prueba.",

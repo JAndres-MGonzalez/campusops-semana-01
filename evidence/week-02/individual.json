@@ -27,10 +27,10 @@
         "make PYTHON=python public-test-week-01"
       ],
       "reviews": [],
-      "prediction": "Espero que importar infraestructura desde la pantalla de lista haga fallar el detector con una dependencia ui -> infrastructure. Al retirar únicamente ese cambio, espero que el mismo detector y la comprobación de tipos terminen con código 0.",
+      "prediction": "Espero que el detector marque un error si la pantalla importa directamente infraestructura. Al quitar ese import, el detector y la revisión de tipos deben pasar.",
       "command": "node tools/check-boundaries.mjs",
-      "observedResult": "Ejecución asistida: el detector devolvió código 1 con el import ui -> infrastructure y código 0 al restaurar la pantalla; las 13 dependencias internas respetan los límites. Typecheck y make feedback terminaron con código 0. Las cuatro pruebas de lista, detalle, cambio de repositorio, vacío y error pasaron al repetir el mismo comando después de un timeout inicial. Logs: reports/week-02/logs/; comparación de hashes: reports/week-02/restoration.json.",
-      "explanation": "La pantalla debe pedir los datos mediante el caso de uso. Si usa directamente el adaptador en memoria, queda ligada a esa forma de guardar los datos y habría que cambiarla al usar otro proveedor. Al quitar ese import, la pantalla vuelve a respetar la separación acordada."
+      "observedResult": "En la ejecución asistida, el detector marcó la falla con código 1. Después de restaurar la pantalla pasó con código 0 y confirmó 13 dependencias permitidas. También pasaron la revisión de tipos, make feedback y las pruebas públicas de las semanas 1 y 2. Las cuatro pruebas de comportamiento pasaron al repetir el comando después del timeout inicial. Resultados: reports/week-02/logs/; restauración: reports/week-02/restoration.json.",
+      "explanation": "La pantalla pide los datos al caso de uso. Si accede directamente al almacenamiento en memoria, queda ligada a ese proveedor. Por eso el detector marcó el import como incorrecto; al quitarlo, volvió a pasar."
     },
     {
       "studentId": "3523110092",

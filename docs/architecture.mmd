@@ -1,0 +1,18 @@
+graph TD
+  Reportante(Reportante) --> UI(ui)
+  Tecnico(Tecnico) --> UI
+  Coordinador(Coordinador) --> UI
+
+  UI -->|usa casos de uso| Aplicacion(application)
+  Aplicacion -->|coordinan contratos| Dominio(domain)
+  UI -->|lee contratos| Dominio
+  Dominio --- Incidencias[Incidencias: modelo y reglas]
+
+  Infra(infrastructure) -->|implementa puertos| Dominio
+  Infra --- Sesion[Sesion: futura, adaptador]
+  Infra --- Persistencia[Persistencia: futura, adaptador]
+  Infra --- Proveedores[Proveedores: ubicacion/mapas, futuro]
+
+%% Leyenda: UI = pantallas; application = casos de uso; domain = modelo y contratos;
+%% infrastructure = adaptadores (fake en memoria hoy). Sesión, persistencia y proveedores
+%% son límites previstos para hitos posteriores; no se programan esta semana.

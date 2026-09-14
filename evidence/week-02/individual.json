@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "week": 2,
+  "teamId": "9A-E08",
+  "members": [
+    {
+      "studentId": "3523110131",
+      "commitShas": [
+        "af102727803807b7abfb6ed72f58c97b2eee45ed"
+      ],
+      "files": [
+        "evidence/week-02/list-detail.test.tsx",
+        "reports/week-02/boundary-plan.json",
+        ".github/workflows/week-02-arquitectura-justificable-feedback.yml",
+        "evidence/week-02/reports/3523110131.md",
+        "reports/week-02/dependencies.json",
+        "evidence/week-02/engineering.json",
+        "evidence/week-02/individual.json"
+      ],
+      "tests": [
+        "node tools/check-boundaries.mjs",
+        "npm run typecheck",
+        "npm test -- --ci --runInBand evidence/week-02/list-detail.test.tsx",
+        "make feedback",
+        "make PYTHON=python verify-week-02",
+        "make PYTHON=python public-test-week-02",
+        "make PYTHON=python public-test-week-01"
+      ],
+      "reviews": [],
+      "prediction": "Espero que importar infraestructura desde la pantalla de lista haga fallar el detector con una dependencia ui -> infrastructure. Al retirar únicamente ese cambio, espero que el mismo detector y la comprobación de tipos terminen con código 0.",
+      "command": "node tools/check-boundaries.mjs",
+      "observedResult": "Ejecución asistida: el detector devolvió código 1 con el import ui -> infrastructure y código 0 al restaurar la pantalla; las 13 dependencias internas respetan los límites. Typecheck y make feedback terminaron con código 0. Las cuatro pruebas de lista, detalle, cambio de repositorio, vacío y error pasaron al repetir el mismo comando después de un timeout inicial. Logs: reports/week-02/logs/; comparación de hashes: reports/week-02/restoration.json.",
+      "explanation": "La pantalla debe pedir los datos mediante el caso de uso. Si usa directamente el adaptador en memoria, queda ligada a esa forma de guardar los datos y habría que cambiarla al usar otro proveedor. Al quitar ese import, la pantalla vuelve a respetar la separación acordada."
+    },
+    {
+      "studentId": "3523110092",
+      "commitShas": [
+        "87e3fafd5b79c01d82ff9f945f96a765d618b331"
+      ],
+      "files": [
+        "src/domain/incident.ts",
+        "src/domain/ports/incident-repository.ts",
+        "src/infrastructure/incidents/in-memory-incident-repository.ts",
+        "src/application/incidents/use-cases.ts",
+        "src/ui/incident-labels.ts",
+        "src/ui/screens/IncidentListScreen.tsx",
+        "src/ui/screens/IncidentDetailScreen.tsx",
+        "src/ui/IncidentApp.tsx",
+        "App.tsx",
+        "tools/check-boundaries.mjs",
+        "package.json",
+        "evidence/week-02/reports/3523110092.md"
+      ],
+      "tests": [
+        "npm.cmd run typecheck",
+        "npm.cmd run lint",
+        "node tools/check-boundaries.mjs",
+        "npm.cmd run test:smoke"
+      ],
+      "reviews": [],
+      "prediction": "Esperaba que al sustituir el fake por cualquier otro adaptador que implemente IncidentRepository, ni la UI ni los casos de uso necesiten cambios.",
+      "command": "npm.cmd run typecheck; npm.cmd run lint; node tools/check-boundaries.mjs; npm.cmd run test:smoke",
+      "observedResult": "El reporte evidence/week-02/reports/3523110092.md registra PASS / código 0 para los cuatro comandos. La prueba smoke de Semana 1 conserva el título CampusOps y backend-status available con la navegación de lista y detalle.",
+      "explanation": "El esqueleto separa modelo y puerto en dominio, el fake determinista en infraestructura, los casos de uso en aplicación y las pantallas en UI. App.tsx construye las dependencias. La comprobación tools/check-boundaries.mjs revisa que la UI no importe infraestructura."
+    },
+    {
+      "studentId": "3523110741",
+      "commitShas": [
+        "2a91c65ce83bee95b182a2e1671c2e239c5543dc"
+      ],
+      "files": [
+        "docs/adr/ADR-001-architecture.md",
+        "docs/architecture.mmd",
+        "evidence/week-02/reports/3523110741.md"
+      ],
+      "tests": [],
+      "reviews": [
+        "Revisión de src/domain y src/application contra el ADR-001 y architecture.mmd para confirmar que los límites descritos (ui, application, domain, infrastructure) coinciden con la estructura real del código de Kevin, y que no existe una arista directa de ui a infrastructure."
+      ],
+      "prediction": "Esperaba que el ADR y el diagrama pasaran el autochequeo del Paso 4 sin modificaciones porque ambos documentos se escribieron después del código, describiendo exactamente los límites que Kevin implementó (ui, application, domain, infrastructure) y sin ninguna dependencia directa de ui hacia infrastructure.",
+      "command": "node -e \"const d=require('fs').readFileSync('docs/architecture.mmd','utf8').toLowerCase();for(const b of ['ui','application','domain','infrastructure'])if(!d.includes(b))process.exit(2);if(/ui\\s*[-.=]+>\\s*infrastructure/.test(d))process.exit(3);const a=require('fs').readFileSync('docs/adr/ADR-001-architecture.md','utf8');if(!/alternativa/i.test(a)||!/consecuencia|trade.?off/i.test(a))process.exit(4);console.log('OK')\"",
+      "observedResult": "El comando imprimió OK: el diagrama contiene los cuatro límites (ui, application, domain, infrastructure) en minúsculas, no existe la arista ui -> infrastructure, y el ADR-001 contiene literalmente las palabras 'alternativa' y 'consecuencia'.",
+      "explanation": "Redacté el ADR-001 comparando la Alternativa A (capas hexagonales con puertos y adaptadores) contra la Alternativa B (slices verticales por feature), elegí la hexagonal por testabilidad y aislamiento de proveedores, y dibujé architecture.mmd representando los tres perfiles de usuario (reportante, técnico, coordinador) y los límites futuros de sesión, persistencia y proveedores de ubicación, sin que la UI dependa directamente de infraestructura."
+    }
+  ]
+}

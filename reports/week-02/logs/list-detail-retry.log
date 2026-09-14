@@ -1,0 +1,20 @@
+command: npm test -- --ci --runInBand evidence/week-02/list-detail.test.tsx
+startedAt: 2026-09-14T11:47:43.086539-06:00
+finishedAt: 2026-09-14T11:47:45.857237-06:00
+exitCode: 0
+
+
+> dmi-react-native-starter@1.0.0 test
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand evidence/week-02/list-detail.test.tsx
+
+PASS evidence/week-02/list-detail.test.tsx
+  √ opens a synthetic incident, displays its detail and returns to the list (438 ms)
+  √ uses another repository through the same application and UI contracts (10 ms)
+  √ shows an empty list when the repository contains no incidents (3 ms)
+  √ shows a recoverable message when the repository cannot load the list (3 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        1.652 s, estimated 17 s
+Ran all test suites matching /evidence\\week-02\\list-detail.test.tsx/i.

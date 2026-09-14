@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 1,
-  "commitSha": "87e3fafd5b79c01d82ff9f945f96a765d618b331",
+  "commitSha": "af102727803807b7abfb6ed72f58c97b2eee45ed",
   "decision": "Usar la prueba smoke incluida y su respuesta simulada del backend para detectar una falla del título en App.tsx. Así se comprueba el diagnóstico con el mismo comando y sin depender de un servicio en ejecución. Se conservan Node 22.22.0 y el lockfile original. La decisión corresponde al riesgo 1 de reproducibilidad y a los criterios de aceptación de la línea base.",
   "alternatives": [
     "Usar npm run test:smoke con el doble de getBackendHealth ya suministrado: consultar el título exacto y available sin arrancar un servicio ni depender de conectividad durante la prueba.",
@@ -27,6 +27,11 @@
       "command": "npm run test:smoke",
       "result": "Después de restaurar App.tsx: código 0, 1 suite y 1 prueba aprobadas. La comparación de hashes confirma que App.tsx fue restaurado y que las pruebas y el evaluador no cambiaron.",
       "evidence": "reports/week-01/logs/smoke-corrected.log y reports/week-01/diagnostic-observations.json."
+    },
+    {
+      "command": "make feedback",
+      "result": "Revalidación del 2026-09-14 sobre la integración de Semana 2: smoke aprobada y exportación Android completada, código 0. Los resultados anteriores son históricos del 2026-09-06.",
+      "evidence": "reports/week-02/logs/feedback.log"
     }
   ]
 }

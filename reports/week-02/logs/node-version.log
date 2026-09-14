@@ -1,0 +1,6 @@
+command: node --version
+startedAt: 2026-09-14T11:45:58.644795-06:00
+finishedAt: 2026-09-14T11:45:58.692533-06:00
+exitCode: 0
+
+v22.22.0

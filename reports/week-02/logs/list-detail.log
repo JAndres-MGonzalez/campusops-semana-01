@@ -1,0 +1,35 @@
+command: npm test -- --ci --runInBand evidence/week-02/list-detail.test.tsx
+startedAt: 2026-09-14T11:46:33.845617-06:00
+finishedAt: 2026-09-14T11:47:02.614763-06:00
+exitCode: 1
+
+
+> dmi-react-native-starter@1.0.0 test
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand evidence/week-02/list-detail.test.tsx
+
+FAIL evidence/week-02/list-detail.test.tsx (16.204 s)
+  × opens a synthetic incident, displays its detail and returns to the list (5258 ms)
+  √ uses another repository through the same application and UI contracts (26 ms)
+  √ shows an empty list when the repository contains no incidents (4 ms)
+  √ shows a recoverable message when the repository cannot load the list (3 ms)
+
+  ● opens a synthetic incident, displays its detail and returns to the list
+
+    thrown: "Exceeded timeout of 5000 ms for a test.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+    [0m [90m  7 |[39m [36mimport[39m { [33mIncidentApp[39m } [36mfrom[39m [32m'../../src/ui/IncidentApp'[39m[33m;[39m
+     [90m  8 |[39m
+    [31m[1m>[22m[39m[90m  9 |[39m test([32m'opens a synthetic incident, displays its detail and returns to the list'[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m    |[39m [31m[1m^[22m[39m
+     [90m 10 |[39m   [36mconst[39m repository [33m=[39m [36mnew[39m [33mInMemoryIncidentRepository[39m()[33m;[39m
+     [90m 11 |[39m   [36mconst[39m incidents [33m=[39m [36mawait[39m getIncidentList(repository)[33m;[39m
+     [90m 12 |[39m   expect(incidents)[33m.[39mtoHaveLength([35m4[39m)[33m;[39m[0m
+
+      at Object.test (evidence/week-02/list-detail.test.tsx:9:1)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 3 passed, 4 total
+Snapshots:   0 total
+Time:        19.469 s
+Ran all test suites matching /evidence\\week-02\\list-detail.test.tsx/i.

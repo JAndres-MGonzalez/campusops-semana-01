@@ -1,0 +1,6 @@
+command: python --version
+startedAt: 2026-09-14T11:45:59.227876-06:00
+finishedAt: 2026-09-14T11:45:59.360283-06:00
+exitCode: 0
+
+Python 3.14.6

@@ -1,0 +1,11 @@
+command: make --version
+startedAt: 2026-09-14T11:45:58.983693-06:00
+finishedAt: 2026-09-14T11:45:59.221883-06:00
+exitCode: 0
+
+GNU Make 4.4.1
+Built for Windows32
+Copyright (C) 1988-2023 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.

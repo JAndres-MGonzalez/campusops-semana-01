@@ -1,0 +1,7 @@
+command: node tools/check-boundaries.mjs
+startedAt: 2026-09-14T11:48:06.299463-06:00
+finishedAt: 2026-09-14T11:48:06.394795-06:00
+exitCode: 1
+
+Arquitectura: se detectaron violaciones de límites:
+  - src\ui\screens\IncidentListScreen.tsx -> src\infrastructure\incidents\in-memory-incident-repository (ui -> infrastructure)

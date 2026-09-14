@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "week": 2,
+  "executedBy": "Codex, ejecución asistida solicitada por Juan Andrés",
+  "sourceCommit": "f45ace3a7e3b9bb05aba97ac4b23cc4d4648f091",
+  "commands": [
+    {
+      "command": "node --version",
+      "startedAt": "2026-09-14T11:45:58.644795-06:00",
+      "finishedAt": "2026-09-14T11:45:58.692533-06:00",
+      "exitCode": 0,
+      "log": "reports/week-02/logs/node-version.log"
+    },
+    {
+      "command": "npm --version",
+      "startedAt": "2026-09-14T11:45:58.754665-06:00",
+      "finishedAt": "2026-09-14T11:45:58.976381-06:00",
+      "exitCode": 0,
+      "log": "reports/week-02/logs/npm-version.log"
+    },
+    {
+      "command": "make --version",
+      "startedAt": "2026-09-14T11:45:58.983693-06:00",
+      "finishedAt": "2026-09-14T11:45:59.221883-06:00",
+      "exitCode": 0,
+      "log": "reports/week-02/logs/make-version.log"
+    },
+    {
+      "command": "python --version",
+      "startedAt": "2026-09-14T11:45:59.227876-06:00",
+      "finishedAt": "2026-09-14T11:45:59.360283-06:00",
+      "exitCode": 0,
+      "log": "reports/week-02/logs/python-version.log"
+    },
+    {
+      "command": "make setup",
+      "startedAt": "2026-09-14T11:45:59.367816-06:00",
+      "finishedAt": "2026-09-14T11:46:30.335450-06:00",
+      "exitCode": 0,
+      "log": "reports/week-02/logs/setup.log"
+    },
+    {
+      "command": "node tools/check-boundaries.mjs",
+      "startedAt": "2026-09-14T11:46:30.344081-06:00",
+      "finishedAt": "2026-09-14T11:46:30.426878-06:00",
+      "exitCode": 0,
+      "log": "reports/week-02/logs/boundaries-initial.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "startedAt": "2026-09-14T11:46:30.433779-06:00",
+      "finishedAt": "2026-09-14T11:46:33.839761-06:00",
+      "exitCode": 0,
+      "log": "reports/week-02/logs/typecheck-initial.log"
+    },
+    {
+      "command": "npm test -- --ci --runInBand evidence/week-02/list-detail.test.tsx",
+      "startedAt": "2026-09-14T11:46:33.845617-06:00",
+      "finishedAt": "2026-09-14T11:47:02.614763-06:00",
+      "exitCode": 1,
+      "log": "reports/week-02/logs/list-detail.log"
+    },
+    {
+      "command": "npm test -- --ci --runInBand evidence/week-02/list-detail.test.tsx",
+      "commitSha": "f45ace3a7e3b9bb05aba97ac4b23cc4d4648f091",
+      "startedAt": "2026-09-14T11:47:43.086539-06:00",
+      "finishedAt": "2026-09-14T11:47:45.857237-06:00",
+      "exitCode": 0,
+      "log": "reports/week-02/logs/list-detail-retry.log"
+    },
+    {
+      "command": "node tools/check-boundaries.mjs",
+      "commitSha": "af102727803807b7abfb6ed72f58c97b2eee45ed",
+      "startedAt": "2026-09-14T11:48:06.299463-06:00",
+      "finishedAt": "2026-09-14T11:48:06.394795-06:00",
+      "exitCode": 1,
+      "log": "reports/week-02/logs/boundaries-failure.log"
+    },
+    {
+      "command": "node tools/check-boundaries.mjs",
+      "commitSha": "af102727803807b7abfb6ed72f58c97b2eee45ed",
+      "startedAt": "2026-09-14T11:48:06.469202-06:00",
+      "finishedAt": "2026-09-14T11:48:06.569918-06:00",
+      "exitCode": 0,
+      "log": "reports/week-02/logs/boundaries-corrected.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "commitSha": "af102727803807b7abfb6ed72f58c97b2eee45ed",
+      "startedAt": "2026-09-14T11:48:06.643502-06:00",
+      "finishedAt": "2026-09-14T11:48:08.251567-06:00",
+      "exitCode": 0,
+      "log": "reports/week-02/logs/typecheck-corrected.log"
+    },
+    {
+      "command": "make feedback",
+      "commitSha": "af102727803807b7abfb6ed72f58c97b2eee45ed",
+      "startedAt": "2026-09-14T11:48:08.330851-06:00",
+      "finishedAt": "2026-09-14T11:49:03.295800-06:00",
+      "exitCode": 0,
+      "log": "reports/week-02/logs/feedback.log"
+    },
+    {
+      "command": "make PYTHON=python verify-week-02",
+      "commitSha": "af102727803807b7abfb6ed72f58c97b2eee45ed",
+      "startedAt": "2026-09-14T11:53:35.716088-06:00",
+      "finishedAt": "2026-09-14T11:53:50.259901-06:00",
+      "exitCode": 0,
+      "log": "reports/week-02/logs/verify-week-02.log"
+    },
+    {
+      "command": "make PYTHON=python public-test-week-02",
+      "commitSha": "af102727803807b7abfb6ed72f58c97b2eee45ed",
+      "startedAt": "2026-09-14T11:53:51.342321-06:00",
+      "finishedAt": "2026-09-14T11:54:02.454486-06:00",
+      "exitCode": 0,
+      "log": "reports/week-02/logs/public-test-week-02.log"
+    },
+    {
+      "command": "make PYTHON=python public-test-week-01",
+      "commitSha": "af102727803807b7abfb6ed72f58c97b2eee45ed",
+      "startedAt": "2026-09-14T11:54:03.536925-06:00",
+      "finishedAt": "2026-09-14T11:54:14.160961-06:00",
+      "exitCode": 0,
+      "log": "reports/week-02/logs/public-test-week-01.log"
+    }
+  ]
+}

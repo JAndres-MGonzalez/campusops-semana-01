@@ -1,0 +1,6 @@
+command: npm --version
+startedAt: 2026-09-14T11:45:58.754665-06:00
+finishedAt: 2026-09-14T11:45:58.976381-06:00
+exitCode: 0
+
+10.9.4

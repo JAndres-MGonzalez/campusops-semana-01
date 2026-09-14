@@ -1,3 +1,9 @@
+command: make PYTHON=python public-test-week-01
+startedAt: 2026-09-14T11:54:03.536925-06:00
+finishedAt: 2026-09-14T11:54:14.160961-06:00
+exitCode: 0
+
+python tools/course_public_evaluator.py --week 01 --mode public --execute-toolchain
 {
   "schemaVersion": 1,
   "week": 1,

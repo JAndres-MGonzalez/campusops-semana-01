@@ -1,0 +1,9 @@
+command: npm run typecheck
+startedAt: 2026-09-14T11:46:30.433779-06:00
+finishedAt: 2026-09-14T11:46:33.839761-06:00
+exitCode: 0
+
+
+> dmi-react-native-starter@1.0.0 typecheck
+> tsc --noEmit
+

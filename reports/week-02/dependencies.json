@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "week": 2,
+  "commitSha": "af102727803807b7abfb6ed72f58c97b2eee45ed",
+  "generatedAt": "2026-09-14T11:53:34.596546-06:00",
+  "checks": [
+    {
+      "id": "ui-infrastructure-detectada",
+      "status": "fail",
+      "scenarioType": "failure",
+      "command": "node tools/check-boundaries.mjs",
+      "evidence": "El 2026-09-14 a las 11:48:06 -06:00, código 1: el detector señaló IncidentListScreen.tsx -> in-memory-incident-repository (ui -> infrastructure). El import temporal usa ../../infrastructure desde src/ui/screens, contradiciendo ADR-001. Salida exacta: reports/week-02/logs/boundaries-failure.log. Cambio temporal: reports/week-02/logs/controlled-import.patch. Predicción previa: reports/week-02/boundary-plan.json."
+    },
+    {
+      "id": "ui-infrastructure-corregida",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "node tools/check-boundaries.mjs",
+      "evidence": "Tras restaurar los bytes originales, código 0: OK: 13 dependencias internas respetan los límites (ui/application/domain/infrastructure). Salida: reports/week-02/logs/boundaries-corrected.log. reports/week-02/restoration.json confirma allRestored=true y hashes idénticos de código, pruebas, detector, evaluador, contratos y documentos de arquitectura."
+    },
+    {
+      "id": "lista-detalle-puerto",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm test -- --ci --runInBand evidence/week-02/list-detail.test.tsx",
+      "evidence": "Cuatro pruebas aprobadas: abrir detalle y volver desde una lista de cuatro incidencias sintéticas; usar otro IncidentRepository con la misma UI y casos de uso; lista vacía; error de carga. El primer intento agotó 5000 ms en una prueba; el mismo comando sin cambios pasó las cuatro en 1.652 s. Se conservan ambos resultados en reports/week-02/logs/list-detail.log y reports/week-02/logs/list-detail-retry.log."
+    }
+  ]
+}

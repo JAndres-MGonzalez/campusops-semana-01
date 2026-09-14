@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "week": 2,
+  "plannedAt": "2026-09-14T11:47:23.207418-06:00",
+  "preparedBy": "Codex, por solicitud de Juan Andrés",
+  "file": "src/ui/screens/IncidentListScreen.tsx",
+  "temporaryChange": "import type { InMemoryIncidentRepository } from '../../infrastructure/incidents/in-memory-incident-repository';\nconst _forbidden: typeof InMemoryIncidentRepository | null = null;",
+  "command": "node tools/check-boundaries.mjs",
+  "prediction": "El estado inicial debe terminar con código 0. El import temporal debe producir código 1 y mostrar ui -> infrastructure. Al restaurar el archivo, el mismo detector debe terminar con código 0.",
+  "reason": "El ADR permite UI hacia aplicación/dominio, pero prohíbe UI hacia infraestructura. El import directo introduce acoplamiento con un adaptador concreto.",
+  "restoration": "Guardar los bytes iniciales, restaurarlos incluso si el experimento falla y comparar SHA-256 de la pantalla, el código, las pruebas públicas y el detector."
+}

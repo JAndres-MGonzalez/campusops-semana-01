@@ -40,23 +40,23 @@ Escala: alta = 3, media = 2, baja = 1. Fórmula: **riesgo = impacto × probabili
 
 | activo | frontera | amenaza | control | verificación |
 |---|---|---|---|---|
-| A1 credenciales y secretos de CI | B1 GitHub Actions / secretos | un secreto se imprime o se sube al repositorio y queda expuesto en los registros | el workflow busca secretos y falla si encuentra uno; los permisos son mínimos (`contents: read`); ningún paso oculta fallos | `make PYTHON=python verify-week-03` ejecuta la búsqueda de secretos, que ante un secreto ficticio de prueba debe terminar con código de salida distinto de cero (AC-03); `Select-String -Path .github\workflows\week-03-ci-amenazas-feedback.yml -Pattern "contents: read"` debe encontrar el permiso y el mismo comando con `continue-on-error` no debe devolver resultados |
+| A1 credenciales y secretos de CI | B1 GitHub Actions / secretos | un secreto se imprime o se sube al repositorio y queda expuesto en los registros | permisos mínimos del workflow (`contents: read`); ningún paso oculta fallos (sin `continue-on-error` ni ignorar códigos de salida); los secretos no se escriben en el código ni en los registros | `npm test -- course-tests/public/week-03.test.ts` comprueba el mínimo privilegio y que no se oculten fallos; `Select-String -Path .github\workflows\week-03-ci-amenazas-feedback.yml -Pattern "contents: read"` debe encontrar el permiso y con `-Pattern "continue-on-error"` no debe devolver resultados; el paso AC-03 del workflow (`make evidence-week-03`) conserva la evidencia de la falla declarada |
 
-**Riesgo residual:** un secreto con formato no reconocido por el escaneo base podría pasar; se mantiene revisión humana periódica.
+**Riesgo residual:** un secreto podría escribirse por descuido en el código o en un registro sin que ningún paso lo detecte; se mantiene revisión humana en cada pull request.
 
 ### amenaza T2: consultar incidencias ajenas (riesgo 6)
 
 | activo | frontera | amenaza | control | verificación |
 |---|---|---|---|---|
-| A2 incidencias | B2 aplicación móvil / API y B3 API / almacenamiento | una persona usuaria consulta incidencias que no le pertenecen | la API valida la sesión y filtra por propietario y rol antes de leer datos | paso de pruebas del workflow (`npm test`) sobre las reglas de acceso, y `make PYTHON=python verify-week-03` en verde |
+| A2 incidencias | B2 aplicación móvil / API y B3 API / almacenamiento | una persona usuaria consulta incidencias que no le pertenecen | se filtra por propietario y rol antes de mostrar o devolver una incidencia | `npm test` y `npm run test:smoke` deben pasar; la prueba de acceso por propietario con datos ficticios está pendiente de añadir (riesgo residual) |
 
-**Riesgo residual:** reglas de acceso no cubiertas por las pruebas actuales; se amplían las pruebas conforme crezca la API.
+**Riesgo residual:** la regla de acceso por propietario aún no tiene una prueba específica; se añadirá con datos ficticios.
 
 ### amenaza T3: alterar asignaciones o expedientes (riesgo 4)
 
 | activo | frontera | amenaza | control | verificación |
 |---|---|---|---|---|
-| A3 asignaciones y expedientes | B2 aplicación móvil / API y B3 API / almacenamiento | se modifica una asignación sin permiso o con datos inválidos | validación de rol y de tipos (TypeScript) en cada operación de escritura | revisión de tipos y pruebas del workflow (`npm test`), y `make PYTHON=python verify-week-03` en verde |
+| A3 asignaciones y expedientes | B2 aplicación móvil / API y B3 API / almacenamiento | se modifica una asignación sin permiso o con datos inválidos | validación de rol y de tipos (TypeScript) en cada operación de escritura | `npm run typecheck` (`tsc --noEmit`) rechaza tipos inválidos y `npm test` debe pasar |
 
 **Riesgo residual:** un rol legítimo podría alterar una asignación por error; se conserva historial de cambios para auditarlo.
 
@@ -64,12 +64,13 @@ Escala: alta = 3, media = 2, baja = 1. Fórmula: **riesgo = impacto × probabili
 
 | activo | frontera | amenaza | control | verificación |
 |---|---|---|---|---|
-| A4 sesiones, fotografías y ubicaciones | B4 API / registros | un dato sensible se escribe en un registro o consola | no se registran datos sensibles, solo identificadores ficticios; el estilo y las pruebas revisan el código | `git grep -n -E "console\.(log|error)" -- src` no debe mostrar datos sensibles; el paso de estilo y pruebas del workflow y la búsqueda de secretos en `make PYTHON=python verify-week-03` en verde |
+| A4 sesiones, fotografías y ubicaciones | B4 API / registros | un dato sensible se escribe en un registro o consola | no se registran datos sensibles, solo identificadores ficticios; el estilo y las pruebas revisan el código | `git grep -n console -- src` no debe mostrar datos sensibles; `npm run lint` y `npm test` deben pasar |
 
 **Riesgo residual:** un desarrollador podría registrar un dato nuevo sin advertirlo; se revisa en cada pull request.
 
 ## 5. Resumen de verificación
 
-- `make PYTHON=python verify-week-03`: reproduce localmente las comprobaciones del workflow (paquete, tipos, estilo, pruebas y búsqueda de secretos).
-- Búsqueda de secretos: es la comprobación obligatoria cuya falla se demuestra en la evidencia de la semana (AC-03).
+- `npm run typecheck`, `npm run lint`, `npm test` y `npm run test:smoke`: comprobaciones locales reproducibles del proyecto (scripts de `package.json`).
+- `npm test -- course-tests/public/week-03.test.ts`: prueba pública que valida el workflow (mínimo privilegio, sin ocultar fallos) y que este documento enlaza activo, amenaza, control y verificación.
+- Workflow `Week 03 Academic Feedback`: pasos AC-01 (`make verify-week-03`), AC-02 (`make public-test-week-03`) y AC-03 (`make evidence-week-03`) en GitHub Actions.
 - Cada control de este documento tiene una verificación asociada; una amenaza sin verificación no se considera cubierta.

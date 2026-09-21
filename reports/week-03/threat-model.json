@@ -2,7 +2,7 @@
     "schemaVersion":  1,
     "week":  3,
     "teamId":  "9A-E08",
-    "generatedAt":  "2026-09-21T20:46:35Z",
+    "generatedAt":  "2026-09-21T20:53:06Z",
     "network":  {
                     "assets":  [
                                    {
@@ -86,8 +86,8 @@
                         "likelihood":  "high",
                         "impact":  "high",
                         "priority":  1,
-                        "control":  "secretos no se imprimen; permisos de solo lectura (contents: read); escaneo de secretos en el workflow sin ocultar fallos",
-                        "verification":  "make PYTHON=python verify-week-03 (busqueda de secretos falla con codigo distinto de cero ante un secreto ficticio) y Select-String de contents: read en el workflow"
+                        "control":  "permisos minimos del workflow (contents: read); ningun paso oculta fallos (sin continue-on-error ni ignorar codigos de salida); los secretos no se escriben en el codigo ni en los registros",
+                        "verification":  "npm test -- course-tests/public/week-03.test.ts (minimo privilegio y sin ocultar fallos); Select-String de contents: read en el workflow debe encontrar el permiso y de continue-on-error no debe devolver resultados; paso AC-03 del workflow (make evidence-week-03) conserva la evidencia de la falla declarada"
                     },
                     {
                         "id":  "T2",
@@ -102,8 +102,8 @@
                         "likelihood":  "medium",
                         "impact":  "high",
                         "priority":  2,
-                        "control":  "la API valida sesion y filtra por propietario y rol antes de leer datos",
-                        "verification":  "npm test (pruebas de reglas de acceso del workflow) y make PYTHON=python verify-week-03"
+                        "control":  "se filtra por propietario y rol antes de mostrar o devolver una incidencia",
+                        "verification":  "npm test y npm run test:smoke; prueba de acceso por propietario con datos ficticios pendiente de anadir"
                     },
                     {
                         "id":  "T3",
@@ -119,7 +119,7 @@
                         "impact":  "medium",
                         "priority":  3,
                         "control":  "validacion de rol y de tipos TypeScript en cada operacion de escritura",
-                        "verification":  "revision de tipos y npm test del workflow, y make PYTHON=python verify-week-03"
+                        "verification":  "npm run typecheck (tsc --noEmit) y npm test"
                     },
                     {
                         "id":  "T4",
@@ -134,7 +134,7 @@
                         "impact":  "high",
                         "priority":  4,
                         "control":  "no se registran datos sensibles, solo identificadores ficticios; estilo y pruebas revisan el codigo",
-                        "verification":  "git grep -n -E \"console\\.(log|error)\" -- src sin datos sensibles y make PYTHON=python verify-week-03"
+                        "verification":  "git grep -n console -- src sin datos sensibles; npm run lint y npm test"
                     }
                 ],
     "risks":  [
@@ -150,7 +150,7 @@
                       "threatId":  "T2",
                       "likelihood":  "medium",
                       "impact":  "high",
-                      "residual":  "Riesgo 6 (2x3). Reglas de acceso probadas; ampliar pruebas al crecer la API"
+                      "residual":  "Riesgo 6 (2x3). Falta prueba especifica de acceso por propietario; se anadira con datos ficticios"
                   },
                   {
                       "id":  "R3",

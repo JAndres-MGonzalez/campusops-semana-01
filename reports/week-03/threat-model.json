@@ -1,0 +1,170 @@
+{
+    "schemaVersion":  1,
+    "week":  3,
+    "teamId":  "9A-E08",
+    "generatedAt":  "2026-09-21T20:46:35Z",
+    "network":  {
+                    "assets":  [
+                                   {
+                                       "id":  "A1",
+                                       "name":  "credenciales y secretos de CI",
+                                       "owner":  "devops",
+                                       "confidentiality":  "high",
+                                       "integrity":  "high",
+                                       "availability":  "low"
+                                   },
+                                   {
+                                       "id":  "A2",
+                                       "name":  "incidencias",
+                                       "owner":  "backend",
+                                       "confidentiality":  "high",
+                                       "integrity":  "medium",
+                                       "availability":  "medium"
+                                   },
+                                   {
+                                       "id":  "A3",
+                                       "name":  "asignaciones y expedientes",
+                                       "owner":  "backend",
+                                       "confidentiality":  "medium",
+                                       "integrity":  "high",
+                                       "availability":  "medium"
+                                   },
+                                   {
+                                       "id":  "A4",
+                                       "name":  "sesiones, fotografias y ubicaciones",
+                                       "owner":  "backend",
+                                       "confidentiality":  "high",
+                                       "integrity":  "medium",
+                                       "availability":  "low"
+                                   },
+                                   {
+                                       "id":  "A5",
+                                       "name":  "codigo fuente",
+                                       "owner":  "dev",
+                                       "confidentiality":  "medium",
+                                       "integrity":  "high",
+                                       "availability":  "low"
+                                   }
+                               ],
+                    "boundaries":  [
+                                       {
+                                           "id":  "B1",
+                                           "name":  "GitHub Actions y secretos de CI",
+                                           "from":  "workflow",
+                                           "to":  "secrets"
+                                       },
+                                       {
+                                           "id":  "B2",
+                                           "name":  "aplicacion movil y API",
+                                           "from":  "mobile-app",
+                                           "to":  "api"
+                                       },
+                                       {
+                                           "id":  "B3",
+                                           "name":  "API y almacenamiento de datos",
+                                           "from":  "api",
+                                           "to":  "datastore"
+                                       },
+                                       {
+                                           "id":  "B4",
+                                           "name":  "API y registros",
+                                           "from":  "api",
+                                           "to":  "logs"
+                                       }
+                                   ]
+                },
+    "threats":  [
+                    {
+                        "id":  "T1",
+                        "name":  "exponer credenciales en CI",
+                        "assetIds":  [
+                                         "A1"
+                                     ],
+                        "boundaryIds":  [
+                                            "B1"
+                                        ],
+                        "likelihood":  "high",
+                        "impact":  "high",
+                        "priority":  1,
+                        "control":  "secretos no se imprimen; permisos de solo lectura (contents: read); escaneo de secretos en el workflow sin ocultar fallos",
+                        "verification":  "make PYTHON=python verify-week-03 (busqueda de secretos falla con codigo distinto de cero ante un secreto ficticio) y Select-String de contents: read en el workflow"
+                    },
+                    {
+                        "id":  "T2",
+                        "name":  "consultar incidencias ajenas",
+                        "assetIds":  [
+                                         "A2"
+                                     ],
+                        "boundaryIds":  [
+                                            "B2",
+                                            "B3"
+                                        ],
+                        "likelihood":  "medium",
+                        "impact":  "high",
+                        "priority":  2,
+                        "control":  "la API valida sesion y filtra por propietario y rol antes de leer datos",
+                        "verification":  "npm test (pruebas de reglas de acceso del workflow) y make PYTHON=python verify-week-03"
+                    },
+                    {
+                        "id":  "T3",
+                        "name":  "alterar asignaciones o expedientes",
+                        "assetIds":  [
+                                         "A3"
+                                     ],
+                        "boundaryIds":  [
+                                            "B2",
+                                            "B3"
+                                        ],
+                        "likelihood":  "medium",
+                        "impact":  "medium",
+                        "priority":  3,
+                        "control":  "validacion de rol y de tipos TypeScript en cada operacion de escritura",
+                        "verification":  "revision de tipos y npm test del workflow, y make PYTHON=python verify-week-03"
+                    },
+                    {
+                        "id":  "T4",
+                        "name":  "filtrar datos sensibles en registros",
+                        "assetIds":  [
+                                         "A4"
+                                     ],
+                        "boundaryIds":  [
+                                            "B4"
+                                        ],
+                        "likelihood":  "low",
+                        "impact":  "high",
+                        "priority":  4,
+                        "control":  "no se registran datos sensibles, solo identificadores ficticios; estilo y pruebas revisan el codigo",
+                        "verification":  "git grep -n -E \"console\\.(log|error)\" -- src sin datos sensibles y make PYTHON=python verify-week-03"
+                    }
+                ],
+    "risks":  [
+                  {
+                      "id":  "R1",
+                      "threatId":  "T1",
+                      "likelihood":  "high",
+                      "impact":  "high",
+                      "residual":  "Riesgo 9 (3x3). Escaneo base y permisos minimos; revision humana periodica"
+                  },
+                  {
+                      "id":  "R2",
+                      "threatId":  "T2",
+                      "likelihood":  "medium",
+                      "impact":  "high",
+                      "residual":  "Riesgo 6 (2x3). Reglas de acceso probadas; ampliar pruebas al crecer la API"
+                  },
+                  {
+                      "id":  "R3",
+                      "threatId":  "T3",
+                      "likelihood":  "medium",
+                      "impact":  "medium",
+                      "residual":  "Riesgo 4 (2x2). Validacion de rol y tipos; historial de cambios para auditar"
+                  },
+                  {
+                      "id":  "R4",
+                      "threatId":  "T4",
+                      "likelihood":  "low",
+                      "impact":  "high",
+                      "residual":  "Riesgo 3 (1x3). Revision de lo que se registra en cada pull request"
+                  }
+              ]
+}

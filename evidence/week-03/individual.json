@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "week": 3,
+  "teamId": "9A-E08",
+  "members": [
+    {
+      "studentId": "3523110092",
+      "commitShas": [
+        "92d6f0b226a460a9a0d72dfa98f623912a280d98"
+      ],
+      "files": [
+        ".github/workflows/week-03-ci-amenazas-feedback.yml",
+        "INSTALL.md",
+        "docs/assignments/week-03.md",
+        "docs/assignments/week-03-repository.md",
+        "docs/assignments/week-03-rubric.md",
+        "evidence/week-03/reports/3523110092.md"
+      ],
+      "tests": [
+        "make verify-week-03",
+        "npm test -- --ci --runInBand course-tests/public/week-03.test.ts"
+      ],
+      "reviews": [],
+      "prediction": "El workflow debe instalar las dependencias fijadas, revisar el proyecto con permisos de lectura y guardar los resultados aunque una comprobación falle.",
+      "command": "make verify-week-03",
+      "observedResult": "GitHub Actions sobre su commit: AC-01 pasó, incluida la prueba smoke, y se aprobó el caso público de permisos y controles del workflow. La ejecución completa falló porque todavía no estaban el modelo de amenazas ni los tres JSON requeridos; el paso de artefactos sí terminó correctamente. Fuente: ejecución 35403722896, resumida en reports/week-03/logs/contributions-ci.json.",
+      "explanation": "Integró el workflow público y las instrucciones de Semana 3. El checkout selecciona el commit evaluado y descarga dos niveles de historial. Las verificaciones se ejecutan automáticamente y sus resultados se conservan como artefactos."
+    },
+    {
+      "studentId": "3523110741",
+      "commitShas": [
+        "730475b071b98f606125e82e24b35d6569b2e94c",
+        "0fff2c37fd8b1aae454286048afaca7e998bd3ee",
+        "412ac2e3b4d3281d54ca76793df9920fd3a8ef7a",
+        "b697c70eabd49ddf14c377cbce1d8ca39c6d8da8"
+      ],
+      "files": [
+        "docs/threat-model.md",
+        "reports/week-03/threat-model.json",
+        "evidence/week-03/reports/3523110741.md"
+      ],
+      "tests": [
+        "npm test -- --ci --runInBand course-tests/public/week-03.test.ts"
+      ],
+      "reviews": [],
+      "prediction": "El modelo debe relacionar activos, fronteras, amenazas, controles y verificaciones, y ordenar las amenazas por probabilidad e impacto.",
+      "command": "npm test -- --ci --runInBand course-tests/public/week-03.test.ts",
+      "observedResult": "GitHub Actions sobre su commit: las dos pruebas públicas de Semana 3 pasaron. La evaluación general señaló que faltaban security.json, engineering.json e individual.json. Fuente: ejecución 35654193028, resumida en reports/week-03/logs/contributions-ci.json.",
+      "explanation": "Documentó cinco activos y cuatro fronteras de confianza. Priorizó la exposición de credenciales, el acceso a incidencias ajenas, los cambios en asignaciones y las filtraciones en registros, con controles y riesgos residuales."
+    },
+    {
+      "studentId": "3523110131",
+      "commitShas": [
+        "1893b8a0a985a00b3bb7be3913491f70579814fa",
+        "d882a7c17d09066a6ec26d9d87595b57c1927726"
+      ],
+      "files": [
+        "evidence/week-03/reproduce-failure.py",
+        "reports/week-03/security.json",
+        "reports/week-03/failure-observations.json",
+        "evidence/week-03/engineering.json",
+        "evidence/week-03/individual.json",
+        "evidence/week-03/reports/3523110131.md"
+      ],
+      "tests": [
+        "node tools/check-boundaries.mjs",
+        "make verify-week-03",
+        "make feedback",
+        "npm run backend:self-test",
+        "npm test -- --ci --runInBand evidence/week-02/list-detail.test.tsx",
+        "make public-test-week-03",
+        "make public-test-week-02",
+        "make public-test-week-01"
+      ],
+      "reviews": [
+        "Revisión de las referencias a commits y de los resultados de CI asociados a los cambios del equipo."
+      ],
+      "prediction": "El import UI a infraestructura debe fallar. Una credencial ficticia debe hacer fallar secret_scan y Make. Al restaurar el archivo, ambos controles deben pasar.",
+      "command": "python evidence/week-03/reproduce-failure.py",
+      "observedResult": "En la ejecución asistida, el detector de arquitectura devolvió 1 ante la dependencia prohibida y 0 al restaurarla. Make devolvió 2 al detectar el marcador ficticio y 0 después de retirarlo también de la caché. Los hashes de los archivos protegidos coinciden antes y después. Pasaron make feedback, las pruebas del backend didáctico y las cuatro pruebas de lista y detalle. La validación pública de Semana 3 y las regresiones de semanas 1 y 2 terminaron con código 0.",
+      "explanation": "La pantalla no debe usar directamente el almacenamiento en memoria. Al agregar ese import, el detector marcó el error; al quitarlo, pasó. El escaneo también detectó una credencial ficticia. Se retiró del código y de la caché, y se repitieron las comprobaciones hasta obtener el resultado correcto."
+    }
+  ]
+}

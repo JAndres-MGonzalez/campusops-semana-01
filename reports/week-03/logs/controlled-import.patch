@@ -1,0 +1,10 @@
+diff --git a/src/ui/screens/IncidentListScreen.tsx b/src/ui/screens/IncidentListScreen.tsx
+index 1eff588..68b9397 100644
+--- a/src/ui/screens/IncidentListScreen.tsx
++++ b/src/ui/screens/IncidentListScreen.tsx
+@@ -1,3 +1,5 @@
++import type { InMemoryIncidentRepository } from '../../infrastructure/incidents/in-memory-incident-repository';
++const _forbidden: typeof InMemoryIncidentRepository | null = null;
+ import { FlatList, Pressable, StyleSheet, Text } from 'react-native';
+ import type { IncidentSummary } from '../../domain/incident';
+ import { CATEGORY_LABEL, STATUS_LABEL } from '../incident-labels';

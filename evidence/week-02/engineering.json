@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 2,
-  "commitSha": "0152aaadf8be56a164e281bf048edcc07957a005",
+  "commitSha": "d882a7c17d09066a6ec26d9d87595b57c1927726",
   "decision": "Se conserva la Alternativa A del ADR-001: separar pantallas, casos de uso, dominio e infraestructura. Los casos de uso reciben el contrato IncidentRepository y App.tsx conecta el adaptador en memoria. La lista y el detalle funcionan con datos sintéticos sin importar el proveedor desde las pantallas.",
   "alternatives": [
     "Alternativa A: capas con puertos y adaptadores. Facilita probar los casos de uso y sustituir el proveedor mediante IncidentRepository; requiere más archivos y respetar las direcciones de los imports.",

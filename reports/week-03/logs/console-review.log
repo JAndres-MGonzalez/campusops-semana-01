@@ -1,0 +1,5 @@
+command: git grep -n console -- src
+startedAt: 2026-09-21T18:09:44.642281-06:00
+finishedAt: 2026-09-21T18:09:44.675053-06:00
+exitCode: 1
+

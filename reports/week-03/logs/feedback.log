@@ -1,0 +1,88 @@
+command: make feedback
+startedAt: 2026-09-21T18:08:21.735317-06:00
+finishedAt: 2026-09-21T18:09:41.164179-06:00
+exitCode: 0
+
+npm run typecheck
+
+> dmi-react-native-starter@1.0.0 typecheck
+> tsc --noEmit
+
+npm run lint
+
+> dmi-react-native-starter@1.0.0 lint
+> eslint .
+
+npm run test:smoke
+
+> dmi-react-native-starter@1.0.0 test:smoke
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx
+
+npm run audit:ci
+
+> dmi-react-native-starter@1.0.0 audit:ci
+> npm audit --omit=dev --audit-level=critical
+
+# npm audit report
+
+@xmldom/xmldom  <=0.8.14 || 0.9.0-beta.1 - 0.9.11
+Severity: high
+xmldom: XML fragment injection via invalid EntityReference.nodeName during requireWellFormed serialization - https://github.com/advisories/GHSA-6gmq-8vp8-gcm6
+xmldom: XML fragment injection via invalid EntityReference.nodeName during requireWellFormed serialization - https://github.com/advisories/GHSA-6gmq-8vp8-gcm6
+xmldom: HTML raw-text closing-tag case mismatch causes output amplification - https://github.com/advisories/GHSA-6mj3-qw4j-hgrw
+xmldom: Processing Instruction Target Injection Bypasses requireWellFormed - https://github.com/advisories/GHSA-c7q8-3ch8-vqpv
+xmldom: Processing Instruction Target Injection Bypasses requireWellFormed - https://github.com/advisories/GHSA-c7q8-3ch8-vqpv
+xmldom: requireWellFormed element/attribute name validation is bypassable via an embedded line terminator - https://github.com/advisories/GHSA-jxjr-3g7g-3944
+xmldom: DocType `name` Injection Bypasses requireWellFormed - https://github.com/advisories/GHSA-27p8-2357-5qqv
+xmldom: DocType `name` Injection Bypasses requireWellFormed - https://github.com/advisories/GHSA-27p8-2357-5qqv
+xmldom: Creation-time XML Name/QName validation is bypassable via an embedded line terminator, allowing injection on the default serialization path - https://github.com/advisories/GHSA-3px3-54cx-rmw9
+xmldom: requireWellFormed DocType publicId/systemId validation is bypassable via an embedded line terminator - https://github.com/advisories/GHSA-vr34-hp96-76pp
+xmldom: Parser silently accepts a not-well-formed end tag whose name is followed by a line break and trailing content - https://github.com/advisories/GHSA-6h8r-xr42-gp59
+xmldom: Parser silently accepts a not-well-formed end tag whose name is followed by a line break and trailing content - https://github.com/advisories/GHSA-6h8r-xr42-gp59
+xmldom: Quadratic-time attribute deduplication - https://github.com/advisories/GHSA-8344-3jmq-59r6
+xmldom: Quadratic-time attribute deduplication - https://github.com/advisories/GHSA-8344-3jmq-59r6
+xmldom: End-tag Whitespace-Trim Regex ReDoS — quadratic backtracking in the 0.8.x end-tag parser - https://github.com/advisories/GHSA-x4fp-j954-r2f4
+xmldom: Quadratic-memory consumption - https://github.com/advisories/GHSA-965w-775f-mr7g
+xmldom: Quadratic-memory consumption - https://github.com/advisories/GHSA-965w-775f-mr7g
+xmldom: Quadratic-time parsing via the malformed-input recovery path — `parseElementStartPart` re-scan and `normalize()` adjacent-text merge - https://github.com/advisories/GHSA-93r5-fhx6-vmg9
+xmldom: Quadratic-time parsing via the malformed-input recovery path — `parseElementStartPart` re-scan and `normalize()` adjacent-text merge - https://github.com/advisories/GHSA-93r5-fhx6-vmg9
+fix available via `npm audit fix`
+node_modules/@xmldom/xmldom
+node_modules/plist/node_modules/@xmldom/xmldom
+
+js-yaml  3.0.0 - 3.15.1 || 4.0.0 - 4.3.1
+Severity: high
+js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources - https://github.com/advisories/GHSA-2883-xcg3-v3hh
+js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources - https://github.com/advisories/GHSA-2883-xcg3-v3hh
+fix available via `npm audit fix`
+node_modules/@expo/xcpretty/node_modules/js-yaml
+node_modules/js-yaml
+
+2 high severity vulnerabilities
+
+To address all issues, run:
+  npm audit fix
+npm run bundle:release
+
+> dmi-react-native-starter@1.0.0 bundle:release
+> expo export --platform android --output-dir dist/export
+
+Starting Metro Bundler
+
+Android Bundled 11481ms index.ts (587 modules)
+
+› android bundles (1):
+_expo/static/js/android/index-016388e833206e967df677f63d736d12.hbc (1.4MB)
+
+› Files (1):
+metadata.json (150B)
+
+Exported: dist/export
+PASS course-tests/smoke.test.tsx (9.038 s)
+  √ renders the reproducible baseline and resolves backend state (3680 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        11.571 s
+Ran all test suites matching /course-tests\\smoke.test.tsx/i.

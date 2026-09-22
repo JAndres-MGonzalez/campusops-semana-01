@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "week": 3,
+  "commitSha": "d882a7c17d09066a6ec26d9d87595b57c1927726",
+  "generatedAt": "2026-09-21T18:14:54.787646-06:00",
+  "checks": [
+    {
+      "id": "boundary-ui-infra-fail",
+      "status": "fail",
+      "scenarioType": "failure",
+      "command": "node tools/check-boundaries.mjs",
+      "evidence": "reports/week-03/: Código 1: dependencia ui -> infrastructure. logs/boundaries-failure.log y logs/controlled-import.patch."
+    },
+    {
+      "id": "boundary-ui-infra-fixed",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "node tools/check-boundaries.mjs",
+      "evidence": "reports/week-03/: Código 0: 13 dependencias permitidas. logs/boundaries-corrected.log."
+    },
+    {
+      "id": "synthetic-secret-detected",
+      "status": "fail",
+      "scenarioType": "failure",
+      "command": "make verify-week-03",
+      "evidence": "reports/week-03/: Make devolvió 2; el evaluador detectó github_token en la pantalla. Las otras comprobaciones pasaron. logs/secret-failure.log y logs/secret-failure.json."
+    },
+    {
+      "id": "synthetic-secret-removed",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "make verify-week-03",
+      "evidence": "reports/week-03/: Código 0 al retirar el marcador ficticio de la pantalla y de la caché de Jest. logs/secret-corrected.log y verify.json; ningún secreto real utilizado."
+    },
+    {
+      "id": "synthetic-secret-cache-detected",
+      "status": "fail",
+      "scenarioType": "failure",
+      "command": "make verify-week-03",
+      "evidence": "En el primer intento, restaurar la pantalla no bastó: el escaneo detectó el marcador ficticio copiado por Jest a un source map de .jest-cache. Make devolvió 2. Se retiró esa copia temporal y se repitió el control, que pasó. reports/week-03/logs/secret-cache-failure.json y secret-corrected-before-cache-cleanup.log; el resultado corregido está en secret-corrected.log."
+    },
+    {
+      "id": "t2-t3-backend-access",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm run backend:self-test",
+      "evidence": "Código 0. El backend didáctico rechaza con 403 la consulta de reporter-2 a una incidencia ajena, el cierre por un reportante y el inicio por un técnico reasignado. También comprueba reasignación, conflictos e idempotencia. Código comprobado: course-backend/campusops-self-test.mjs. Salida: reports/week-03/logs/backend-self-test.log. Esta evidencia corresponde al simulador incluido, no a una conexión de la app móvil ni a autenticación de producción."
+    },
+    {
+      "id": "t4-console-review",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "git grep -n console -- src",
+      "evidence": "Salida vacía y código 1 de git grep: no encontró llamadas a console en src. reports/week-03/logs/console-review.log. Es una revisión del código actual; no demuestra sanitización de cualquier dato futuro. La sanitización se implementa en el hito indicado por docs/CAMPUSOPS_API.md."
+    },
+    {
+      "id": "ci-feedback",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "make feedback",
+      "evidence": "Código 0: typecheck, lint, smoke, auditoría con umbral crítico y paquete Android de Expo. reports/week-03/logs/feedback.log. La auditoría señaló dos vulnerabilidades altas; el resultado no significa ausencia de vulnerabilidades."
+    },
+    {
+      "id": "ci-public-controls",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "make public-test-week-03",
+      "evidence": "Código 0; dos pruebas públicas aprobadas y 13 comprobaciones del evaluador aprobadas. El workflow mantiene permisos contents: read, instalación fijada y errores obligatorios. reports/week-03/public-tests.json y reports/week-03/logs/public-test-week-03.log."
+    }
+  ]
+}

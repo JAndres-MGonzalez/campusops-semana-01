@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "week": 3,
+  "commitSha": "1893b8a0a985a00b3bb7be3913491f70579814fa",
+  "generatedAt": "2026-09-21T18:09:44.805707-06:00",
+  "execution": "Comprobaciones asistidas con Codex",
+  "prediction": "El import UI a infraestructura debe fallar. Una credencial ficticia debe hacer fallar secret_scan y Make. Al restaurar el archivo, ambos controles deben pasar.",
+  "checks": []
+}

@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "week": 2,
   "mode": "public",
-  "commitSha": "af102727803807b7abfb6ed72f58c97b2eee45ed",
-  "evaluatedAt": "2026-09-14T17:54:02.441773+00:00",
+  "commitSha": "d882a7c17d09066a6ec26d9d87595b57c1927726",
+  "evaluatedAt": "2026-09-22T00:16:26.280251+00:00",
   "status": "pass",
   "checks": [
     {
@@ -69,7 +69,7 @@
     {
       "id": "toolchain_4",
       "status": "pass",
-      "detail": "npm test -- --ci --runInBand course-tests/public/week-02.test.ts\n> dmi-react-native-starter@1.0.0 test\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-02.test.ts\n\n\nPASS course-tests/public/week-02.test.ts\n  √ architecture exposes boundaries and no direct UI-to-infrastructure edge (3 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       1 passed, 1 total\nSnapshots:   0 total\nTime:        1.387 s, estimated 4 s\nRan all test suites matching /course-tests\\\\public\\\\week-02.test.ts/i."
+      "detail": "npm test -- --ci --runInBand course-tests/public/week-02.test.ts\n> dmi-react-native-starter@1.0.0 test\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-02.test.ts\n\n\nPASS course-tests/public/week-02.test.ts\n  √ architecture exposes boundaries and no direct UI-to-infrastructure edge (3 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       1 passed, 1 total\nSnapshots:   0 total\nTime:        0.913 s, estimated 2 s\nRan all test suites matching /course-tests\\\\public\\\\week-02.test.ts/i."
     }
   ]
 }

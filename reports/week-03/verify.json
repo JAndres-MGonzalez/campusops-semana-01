@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "week": 1,
-  "mode": "public",
+  "week": 3,
+  "mode": "verify",
   "commitSha": "d882a7c17d09066a6ec26d9d87595b57c1927726",
-  "evaluatedAt": "2026-09-22T00:16:37.818627+00:00",
+  "evaluatedAt": "2026-09-22T00:11:55.682115+00:00",
   "status": "pass",
   "checks": [
     {
@@ -32,26 +32,6 @@
       "detail": "hits=[]"
     },
     {
-      "id": "required_evidence",
-      "status": "pass",
-      "detail": "missing/empty=[]"
-    },
-    {
-      "id": "schema:reports/week-01/baseline.json",
-      "status": "pass",
-      "detail": "3 checks indexed, 1 boundary/failure; report evaluates HEAD"
-    },
-    {
-      "id": "schema:evidence/week-01/engineering.json",
-      "status": "pass",
-      "detail": "decision evidence is substantive and reproducible; report evaluates HEAD"
-    },
-    {
-      "id": "schema:evidence/week-01/individual.json",
-      "status": "pass",
-      "detail": "three individual evidence records found"
-    },
-    {
       "id": "toolchain_1",
       "status": "pass",
       "detail": "npm run typecheck\n> dmi-react-native-starter@1.0.0 typecheck\n> tsc --noEmit"
@@ -69,7 +49,7 @@
     {
       "id": "toolchain_4",
       "status": "pass",
-      "detail": "npm test -- --ci --runInBand course-tests/public/week-01.test.ts\n> dmi-react-native-starter@1.0.0 test\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-01.test.ts\n\n\nPASS course-tests/public/week-01.test.ts\n  √ baseline preserves the reproduced failure and its verified correction (3 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       1 passed, 1 total\nSnapshots:   0 total\nTime:        0.937 s, estimated 1 s\nRan all test suites matching /course-tests\\\\public\\\\week-01.test.ts/i."
+      "detail": "npm run test:smoke\n> dmi-react-native-starter@1.0.0 test:smoke\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx\n\n\nPASS course-tests/smoke.test.tsx\n  √ renders the reproducible baseline and resolves backend state (453 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       1 passed, 1 total\nSnapshots:   0 total\nTime:        1.745 s, estimated 2 s\nRan all test suites matching /course-tests\\\\smoke.test.tsx/i."
     }
   ]
 }

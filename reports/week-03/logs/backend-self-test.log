@@ -1,0 +1,11 @@
+command: npm run backend:self-test
+startedAt: 2026-09-21T18:09:41.165296-06:00
+finishedAt: 2026-09-21T18:09:41.870560-06:00
+exitCode: 0
+
+
+> dmi-react-native-starter@1.0.0 backend:self-test
+> node course-backend/self-test.mjs
+
+CampusOps backend contracts: roles, reassignment conflict, lost response, idempotency, evidence and geocoding PASS.
+Controlled backend self-test passed.

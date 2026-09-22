@@ -67,6 +67,14 @@ def main():
         (LOGS / 'secret-failure.json').write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     finally:
         screen.write_bytes(original)
+        cache = ROOT / '.jest-cache'
+        assert cache.resolve().is_relative_to(ROOT.resolve()), 'Cache outside repository'
+        removed = []
+        for path in cache.rglob('*'):
+            if path.is_file() and marker.encode('ascii') in path.read_bytes():
+                assert path.resolve().is_relative_to(cache.resolve()), 'Cache file outside cache'
+                path.unlink()
+                removed.append(path.relative_to(ROOT).as_posix())
     run(['make', 'verify-week-03'], 'secret-corrected.log', 0)
     after = {p: hashlib.sha256((ROOT / p).read_bytes()).hexdigest() for p in paths}
     assert before == after, 'A protected file changed during the experiment'
@@ -74,10 +82,10 @@ def main():
         ('boundary-ui-infra-fail', 'fail', 'failure', 'node tools/check-boundaries.mjs', 'Código 1: dependencia ui -> infrastructure. logs/boundaries-failure.log y logs/controlled-import.patch.'),
         ('boundary-ui-infra-fixed', 'pass', 'nominal', 'node tools/check-boundaries.mjs', 'Código 0: 13 dependencias permitidas. logs/boundaries-corrected.log.'),
         ('synthetic-secret-detected', 'fail', 'failure', 'make verify-week-03', 'Make devolvió 2; el evaluador detectó github_token en la pantalla. Las otras comprobaciones pasaron. logs/secret-failure.log y logs/secret-failure.json.'),
-        ('synthetic-secret-removed', 'pass', 'nominal', 'make verify-week-03', 'Código 0 al retirar el marcador ficticio. logs/secret-corrected.log y verify.json; ningún secreto real utilizado.')]:
+        ('synthetic-secret-removed', 'pass', 'nominal', 'make verify-week-03', 'Código 0 al retirar el marcador ficticio de la pantalla y de la caché de Jest. logs/secret-corrected.log y verify.json; ningún secreto real utilizado.')]:
         observations['checks'].append({'id': identifier, 'status': status, 'scenarioType': scenario,
             'command': command, 'evidence': 'reports/week-03/: ' + detail})
-    observations.update({'generatedAt': now(), 'restored': before == after,
+    observations.update({'generatedAt': now(), 'restored': before == after, 'removedCacheArtifacts': removed,
                          'beforeSha256': before, 'afterSha256': after})
     report.write_text(json.dumps(observations, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print('Fallos detectados; controles corregidos; archivos restaurados.', flush=True)

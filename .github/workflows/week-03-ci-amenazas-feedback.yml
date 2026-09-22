@@ -24,7 +24,6 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 2
-          fetch-tags: true
       - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
@@ -39,7 +38,9 @@ jobs:
       - name: AC-02 — public behavior
         run: make public-test-week-03
       - name: AC-03 — declared failure evidence
-        run: make evidence-week-03
+        run: |
+          git fetch --no-tags --depth=2 origin tag week-03-final
+          make evidence-week-03
       - name: Upload academic evidence
         if: always()
         uses: actions/upload-artifact@v4

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 3,
-  "commitSha": "d882a7c17d09066a6ec26d9d87595b57c1927726",
+  "commitSha": "7f75d31129c54cbe26a50a171656a4857598734f",
   "decision": "Atender primero T1, exposición de credenciales en CI, como establece el modelo de amenazas: probabilidad 3 por impacto 3, riesgo 9. Se conservan permisos contents: read y el escaneo obligatorio del evaluador. El proceso debe detener la entrega si encuentra un patrón de credencial; se comprueba con un marcador ficticio y después con el proyecto restaurado.",
   "alternatives": [
     "Aplicar escaneo automático y permisos mínimos en cada ejecución, conservando el error y los reportes cuando se detecta un problema. Se eligió porque permite repetir el control y relacionarlo con el commit.",
@@ -42,7 +42,7 @@
     {
       "command": "make public-test-week-03",
       "result": "Código 0; 13 comprobaciones aprobadas.",
-      "evidence": "reports/week-03/public-tests.json; reports/week-03/logs/public-test-week-03.log"
+      "evidence": "reports/week-03/public-tests.json; reports/week-03/logs/public-final.log"
     },
     {
       "command": "make public-test-week-02",
@@ -53,6 +53,11 @@
       "command": "make public-test-week-01",
       "result": "Código 0; 13 comprobaciones aprobadas.",
       "evidence": "reports/week-01/public-tests.json; reports/week-03/logs/public-test-week-01.log"
+    },
+    {
+      "command": "make verify-week-03",
+      "result": "Código 0 en la verificación final después de ajustar la descarga de la etiqueta; 9 comprobaciones aprobadas.",
+      "evidence": "reports/week-03/verify.json; reports/week-03/logs/verify-final.log"
     }
   ]
 }

@@ -52,7 +52,8 @@
       "studentId": "3523110131",
       "commitShas": [
         "1893b8a0a985a00b3bb7be3913491f70579814fa",
-        "d882a7c17d09066a6ec26d9d87595b57c1927726"
+        "d882a7c17d09066a6ec26d9d87595b57c1927726",
+        "7f75d31129c54cbe26a50a171656a4857598734f"
       ],
       "files": [
         "evidence/week-03/reproduce-failure.py",
@@ -60,7 +61,8 @@
         "reports/week-03/failure-observations.json",
         "evidence/week-03/engineering.json",
         "evidence/week-03/individual.json",
-        "evidence/week-03/reports/3523110131.md"
+        "evidence/week-03/reports/3523110131.md",
+        ".github/workflows/week-03-ci-amenazas-feedback.yml"
       ],
       "tests": [
         "node tools/check-boundaries.mjs",

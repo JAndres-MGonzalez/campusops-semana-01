@@ -1,3 +1,9 @@
+command: make public-test-week-03
+startedAt: 2026-09-21T18:22:32.320036-06:00
+finishedAt: 2026-09-21T18:22:43.889350-06:00
+exitCode: 0
+
+python tools/course_public_evaluator.py --week 03 --mode public --execute-toolchain
 {
   "schemaVersion": 1,
   "week": 3,

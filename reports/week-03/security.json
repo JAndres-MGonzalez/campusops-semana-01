@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 3,
-  "commitSha": "d882a7c17d09066a6ec26d9d87595b57c1927726",
+  "commitSha": "7f75d31129c54cbe26a50a171656a4857598734f",
   "generatedAt": "2026-09-21T18:14:54.787646-06:00",
   "checks": [
     {
@@ -65,7 +65,7 @@
       "status": "pass",
       "scenarioType": "nominal",
       "command": "make public-test-week-03",
-      "evidence": "Código 0; dos pruebas públicas aprobadas y 13 comprobaciones del evaluador aprobadas. El workflow mantiene permisos contents: read, instalación fijada y errores obligatorios. reports/week-03/public-tests.json y reports/week-03/logs/public-test-week-03.log."
+      "evidence": "Código 0; dos pruebas públicas aprobadas y 13 comprobaciones del evaluador aprobadas. El workflow mantiene permisos contents: read, instalación fijada y errores obligatorios. reports/week-03/public-tests.json y reports/week-03/logs/public-final.log."
     }
   ]
 }

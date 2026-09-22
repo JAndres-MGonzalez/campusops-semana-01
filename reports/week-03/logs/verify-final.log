@@ -1,9 +1,15 @@
+command: make verify-week-03
+startedAt: 2026-09-21T18:22:16.563990-06:00
+finishedAt: 2026-09-21T18:22:32.319511-06:00
+exitCode: 0
+
+python tools/course_public_evaluator.py --week 03 --mode verify --execute-toolchain
 {
   "schemaVersion": 1,
   "week": 3,
-  "mode": "public",
+  "mode": "verify",
   "commitSha": "7f75d31129c54cbe26a50a171656a4857598734f",
-  "evaluatedAt": "2026-09-22T00:22:43.877477+00:00",
+  "evaluatedAt": "2026-09-22T00:22:32.307063+00:00",
   "status": "pass",
   "checks": [
     {
@@ -32,26 +38,6 @@
       "detail": "hits=[]"
     },
     {
-      "id": "required_evidence",
-      "status": "pass",
-      "detail": "missing/empty=[]"
-    },
-    {
-      "id": "schema:reports/week-03/security.json",
-      "status": "pass",
-      "detail": "9 checks indexed, 5 boundary/failure; report evaluates HEAD"
-    },
-    {
-      "id": "schema:evidence/week-03/engineering.json",
-      "status": "pass",
-      "detail": "decision evidence is substantive and reproducible; report evaluates HEAD"
-    },
-    {
-      "id": "schema:evidence/week-03/individual.json",
-      "status": "pass",
-      "detail": "three individual evidence records found"
-    },
-    {
       "id": "toolchain_1",
       "status": "pass",
       "detail": "npm run typecheck\n> dmi-react-native-starter@1.0.0 typecheck\n> tsc --noEmit"
@@ -69,7 +55,7 @@
     {
       "id": "toolchain_4",
       "status": "pass",
-      "detail": "npm test -- --ci --runInBand course-tests/public/week-03.test.ts\n> dmi-react-native-starter@1.0.0 test\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-03.test.ts\n\n\nPASS course-tests/public/week-03.test.ts\n  √ feedback workflow preserves critical checks and least privilege (2 ms)\n  √ threat model links assets, threats, controls and verification (1 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       2 passed, 2 total\nSnapshots:   0 total\nTime:        0.915 s, estimated 7 s\nRan all test suites matching /course-tests\\\\public\\\\week-03.test.ts/i."
+      "detail": "npm run test:smoke\n> dmi-react-native-starter@1.0.0 test:smoke\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx\n\n\nPASS course-tests/smoke.test.tsx (5.062 s)\n  √ renders the reproducible baseline and resolves backend state (2254 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       1 passed, 1 total\nSnapshots:   0 total\nTime:        5.353 s\nRan all test suites matching /course-tests\\\\smoke.test.tsx/i."
     }
   ]
 }

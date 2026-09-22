@@ -42,6 +42,7 @@ jobs:
       - name: List, detail and replaceable repository
         run: npm test -- --ci --runInBand evidence/week-02/list-detail.test.tsx
       - name: AC-03 — declared failure evidence
+        if: startsWith(github.ref, 'refs/tags/week-02-final')
         run: make evidence-week-02
       - name: Upload academic evidence
         if: always()

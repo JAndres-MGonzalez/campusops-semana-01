@@ -1,0 +1,17 @@
+Hallazgo 1 — Evidencia: el backend sigue funcionando tras la corrección
+=======================================================================
+Comando ejecutado:
+
+  npm.cmd run backend:self-test
+
+Salida:
+
+  > dmi-react-native-starter@1.0.0 backend:self-test
+  > node course-backend/self-test.mjs
+
+  CampusOps backend contracts: roles, reassignment conflict, lost response, idempotency, evidence and geocoding PASS.
+  Controlled backend self-test passed.
+
+Conclusión:
+- Los endpoints protegidos siguen respondiendo correctamente con el token
+  proveniente de las variables de entorno (valores ficticios del `.env`).

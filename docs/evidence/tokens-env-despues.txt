@@ -1,0 +1,49 @@
+Hallazgo 1 — DESPUÉS: tokens movidos a variables de entorno
+=============================================================
+Los tokens ya NO están escritos en el código. Se leen de variables de
+entorno (o del archivo local `.env`, ignorado por Git) mediante un módulo
+nuevo `course-backend/env.mjs`.
+
+--- course-backend/env.mjs (nuevo) ---
+  const dotEnv = readDotEnv();
+  const fromEnv = (name) => process.env[name] ?? dotEnv[name] ?? '';
+
+  export const validToken = fromEnv('COURSE_VALID_TOKEN');
+  export const refreshToken0 = fromEnv('COURSE_REFRESH_TOKEN_0');
+  export const refreshToken1 = fromEnv('COURSE_REFRESH_TOKEN_1');
+
+--- course-backend/server.mjs (después) ---
+  import { refreshToken0, refreshToken1, validToken } from './env.mjs';
+  ...
+  if (!validToken || request.headers.authorization !== `Bearer ${validToken}`) {
+  ...
+  if (!input || !refreshToken0 || input.refreshToken !== refreshToken0 || scenario === 'invalid_refresh') {
+  ...
+  return send(response, 200, { accessToken: validToken, refreshToken: refreshToken1, expiresIn: 60 });
+
+--- course-backend/campusops.mjs (después) ---
+  import { refreshToken0, validToken } from './env.mjs';
+  ...
+  ... accessToken: validToken, refreshToken: refreshToken0, expiresIn: 60 });
+  ...
+  if (!validToken || request.headers.authorization !== `Bearer ${validToken}` || !Object.hasOwn(actors, actorId)) {
+
+--- course-backend/self-test.mjs y campusops-self-test.mjs (después) ---
+  import { validToken } from './env.mjs';
+  ...
+  headers: { Authorization: `Bearer ${validToken}`, ... },
+
+--- .env.example (después; solo nombres, sin valores) ---
+  COURSE_VALID_TOKEN=
+  COURSE_REFRESH_TOKEN_0=
+  COURSE_REFRESH_TOKEN_1=
+
+--- .env (local, NO se sube; valores ficticios) ---
+  COURSE_VALID_TOKEN=course-valid-token
+  COURSE_REFRESH_TOKEN_0=course-refresh-0
+  COURSE_REFRESH_TOKEN_1=course-refresh-1
+
+Comprobación adicional: si no existe `.env`, `validToken` es vacío y el
+servidor responde 401 en los endpoints protegidos (sin token disponible).
+
+Ver también: tokens-env-git-status.txt, tokens-env-self-test.txt

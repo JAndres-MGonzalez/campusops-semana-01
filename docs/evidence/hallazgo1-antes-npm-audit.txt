@@ -1,0 +1,16 @@
+﻿# npm audit report
+
+@xmldom/xmldom  <=0.8.14 || 0.9.0-beta.1 - 0.9.11
+Severity: high
+xmldom: XML fragment injection via invalid EntityReference.nodeName during requireWellFormed serialization - https://github.com/advisories/GHSA-6gmq-8vp8-gcm6
+fix available via `npm audit fix`
+
+js-yaml  3.0.0 - 3.15.1 || 4.0.0 - 4.3.1
+Severity: high
+js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources - https://github.com/advisories/GHSA-2883-xcg3-v3hh
+fix available via `npm audit fix`
+
+2 high severity vulnerabilities
+
+To address all issues, run:
+  npm audit fix

@@ -1,16 +1,7 @@
-﻿On branch main
-Your branch is up to date with 'origin/main'.
-
+﻿On branch week4/security-audit-joseismaelmontalvolopez
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git restore <file>..." to discard changes in working directory)
-	modified:   .env.example
-	modified:   package-lock.json
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	docs/evidence/
-	docs/security-audit.md
-	src/security-audit/
+	modified:   docs/evidence/gitignore-env.txt
 
 no changes added to commit (use "git add" and/or "git commit -a")

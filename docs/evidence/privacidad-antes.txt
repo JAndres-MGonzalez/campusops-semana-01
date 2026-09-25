@@ -1,0 +1,113 @@
+Comando: npm test -- --ci --runInBand tests/security-audit.test.ts
+Commit: 7601804feb5a488c3c34ab6ea825e6f120162b47
+Fecha: 2026-09-24T18:04:57.3321206-06:00
+
+
+> dmi-react-native-starter@1.0.0 test
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand tests/security-audit.test.ts
+
+FAIL tests/security-audit.test.ts (8.491 s)
+  × el detalle de una incidencia no devuelve datos privados fuera del contrato (1 ms)
+  Protección de archivos de configuración
+    √ .env queda fuera de Git (52 ms)
+    × .env.local queda fuera de Git (51 ms)
+    × .env.production queda fuera de Git (50 ms)
+    × .env.test queda fuera de Git (49 ms)
+    × config/.env.local queda fuera de Git (51 ms)
+    √ la plantilla sin secretos se puede versionar (49 ms)
+    √ no hay archivos de entorno privados en el índice de Git (50 ms)
+
+  ● Protección de archivos de configuración › .env.local queda fuera de Git
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 1
+
+    [0m [90m 13 |[39m   test[33m.[39meach(privateFiles)([32m'%s queda fuera de Git'[39m[33m,[39m (file) [33m=>[39m {
+     [90m 14 |[39m     [36mconst[39m result [33m=[39m git([[32m'check-ignore'[39m[33m,[39m [32m'--no-index'[39m[33m,[39m [32m'--stdin'[39m][33m,[39m file [33m+[39m [32m'\n'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 15 |[39m     expect(result[33m.[39mstatus)[33m.[39mtoBe([35m0[39m)[33m;[39m
+     [90m    |[39m                           [31m[1m^[22m[39m
+     [90m 16 |[39m     expect(result[33m.[39mstdout[33m.[39mtrim())[33m.[39mtoBe(file)[33m;[39m
+     [90m 17 |[39m   })[33m;[39m
+     [90m 18 |[39m[0m
+
+      at toBe (tests/security-audit.test.ts:15:27)
+
+  ● Protección de archivos de configuración › .env.production queda fuera de Git
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 1
+
+    [0m [90m 13 |[39m   test[33m.[39meach(privateFiles)([32m'%s queda fuera de Git'[39m[33m,[39m (file) [33m=>[39m {
+     [90m 14 |[39m     [36mconst[39m result [33m=[39m git([[32m'check-ignore'[39m[33m,[39m [32m'--no-index'[39m[33m,[39m [32m'--stdin'[39m][33m,[39m file [33m+[39m [32m'\n'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 15 |[39m     expect(result[33m.[39mstatus)[33m.[39mtoBe([35m0[39m)[33m;[39m
+     [90m    |[39m                           [31m[1m^[22m[39m
+     [90m 16 |[39m     expect(result[33m.[39mstdout[33m.[39mtrim())[33m.[39mtoBe(file)[33m;[39m
+     [90m 17 |[39m   })[33m;[39m
+     [90m 18 |[39m[0m
+
+      at toBe (tests/security-audit.test.ts:15:27)
+
+  ● Protección de archivos de configuración › .env.test queda fuera de Git
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 1
+
+    [0m [90m 13 |[39m   test[33m.[39meach(privateFiles)([32m'%s queda fuera de Git'[39m[33m,[39m (file) [33m=>[39m {
+     [90m 14 |[39m     [36mconst[39m result [33m=[39m git([[32m'check-ignore'[39m[33m,[39m [32m'--no-index'[39m[33m,[39m [32m'--stdin'[39m][33m,[39m file [33m+[39m [32m'\n'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 15 |[39m     expect(result[33m.[39mstatus)[33m.[39mtoBe([35m0[39m)[33m;[39m
+     [90m    |[39m                           [31m[1m^[22m[39m
+     [90m 16 |[39m     expect(result[33m.[39mstdout[33m.[39mtrim())[33m.[39mtoBe(file)[33m;[39m
+     [90m 17 |[39m   })[33m;[39m
+     [90m 18 |[39m[0m
+
+      at toBe (tests/security-audit.test.ts:15:27)
+
+  ● Protección de archivos de configuración › config/.env.local queda fuera de Git
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 1
+
+    [0m [90m 13 |[39m   test[33m.[39meach(privateFiles)([32m'%s queda fuera de Git'[39m[33m,[39m (file) [33m=>[39m {
+     [90m 14 |[39m     [36mconst[39m result [33m=[39m git([[32m'check-ignore'[39m[33m,[39m [32m'--no-index'[39m[33m,[39m [32m'--stdin'[39m][33m,[39m file [33m+[39m [32m'\n'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 15 |[39m     expect(result[33m.[39mstatus)[33m.[39mtoBe([35m0[39m)[33m;[39m
+     [90m    |[39m                           [31m[1m^[22m[39m
+     [90m 16 |[39m     expect(result[33m.[39mstdout[33m.[39mtrim())[33m.[39mtoBe(file)[33m;[39m
+     [90m 17 |[39m   })[33m;[39m
+     [90m 18 |[39m[0m
+
+      at toBe (tests/security-audit.test.ts:15:27)
+
+  ● el detalle de una incidencia no devuelve datos privados fuera del contrato
+
+    expect(received).not.toHaveProperty(path)
+
+    Expected path: not "contactEmail"
+
+    Received value: "persona@example.invalid"
+
+    [0m [90m 50 |[39m
+     [90m 51 |[39m   expect(detail)[33m.[39mnot[33m.[39mtoBeNull()[33m;[39m
+    [31m[1m>[22m[39m[90m 52 |[39m   expect(detail)[33m.[39mnot[33m.[39mtoHaveProperty([32m'contactEmail'[39m)[33m;[39m
+     [90m    |[39m                      [31m[1m^[22m[39m
+     [90m 53 |[39m   expect(detail)[33m.[39mnot[33m.[39mtoHaveProperty([32m'privateNote'[39m)[33m;[39m
+     [90m 54 |[39m   expect(detail)[33m.[39mtoMatchObject({ id[33m:[39m input[33m.[39mid[33m,[39m description[33m:[39m input[33m.[39mdescription })[33m;[39m
+     [90m 55 |[39m   expect([36mawait[39m repository[33m.[39mfindById([32m'missing'[39m))[33m.[39mtoBeNull()[33m;[39m[0m
+
+      at Object.toHaveProperty (tests/security-audit.test.ts:52:22)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+Test Suites: 1 failed, 1 total
+Tests:       5 failed, 3 passed, 8 total
+Snapshots:   0 total
+Time:        12.26 s
+Ran all test suites matching /tests\\security-audit.test.ts/i.
+Codigo de salida: 1

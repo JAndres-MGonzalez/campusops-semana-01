@@ -1,0 +1,25 @@
+Fecha: 2026-09-25T00:09:37.842275+00:00
+Commit: 2385b30c1332767bd89e0c5177c69940a889965b
+El codigo 1 de check-ignore para .env.example significa que la plantilla no esta ignorada.
+
+Comando: git status --short --untracked-files=all -- .env .env.*
+Codigo de salida: 0
+
+Comando: git check-ignore --no-index .env .env.local .env.production .env.test config/.env.local
+.env
+.env.local
+.env.production
+.env.test
+config/.env.local
+Codigo de salida: 0
+
+Comando: git check-ignore --no-index .env.example
+Codigo de salida: 1
+
+Comando: git ls-files -- .env .env.* :(glob)**/.env :(glob)**/.env.*
+.env.example
+Codigo de salida: 0
+
+Revision adicional: scan_secrets de tools/course_public_evaluator.py
+Patrones: private_key, github_token, aws_access_key, public_secret_name
+Coincidencias: []

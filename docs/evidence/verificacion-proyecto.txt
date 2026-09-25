@@ -1,0 +1,53 @@
+Commit: 2385b30c1332767bd89e0c5177c69940a889965b
+Fecha: 2026-09-25T00:07:32.442570+00:00
+
+Comando: npm run typecheck
+
+> dmi-react-native-starter@1.0.0 typecheck
+> tsc --noEmit
+
+
+Codigo de salida: 0
+
+Comando: npm run lint
+
+> dmi-react-native-starter@1.0.0 lint
+> eslint .
+
+
+Codigo de salida: 0
+
+Comando: npm test -- --ci --runInBand course-tests/smoke.test.tsx evidence/week-02/list-detail.test.tsx
+
+> dmi-react-native-starter@1.0.0 test
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx evidence/week-02/list-detail.test.tsx
+
+PASS course-tests/smoke.test.tsx
+PASS evidence/week-02/list-detail.test.tsx
+
+Test Suites: 2 passed, 2 total
+Tests:       5 passed, 5 total
+Snapshots:   0 total
+Time:        2.17 s, estimated 9 s
+Ran all test suites matching /course-tests\\smoke.test.tsx|evidence\\week-02\\list-detail.test.tsx/i.
+
+Codigo de salida: 0
+
+Comando: npm run backend:self-test
+
+> dmi-react-native-starter@1.0.0 backend:self-test
+> node course-backend/self-test.mjs
+
+CampusOps backend contracts: roles, reassignment conflict, lost response, idempotency, evidence and geocoding PASS.
+Controlled backend self-test passed.
+
+Codigo de salida: 0
+
+Comando: npm run check:architecture
+
+> dmi-react-native-starter@1.0.0 check:architecture
+> node tools/check-boundaries.mjs
+
+OK: 13 dependencias internas respetan los límites (ui/application/domain/infrastructure).
+
+Codigo de salida: 0

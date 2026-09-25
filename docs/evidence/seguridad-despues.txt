@@ -1,0 +1,52 @@
+Commit: 2385b30c1332767bd89e0c5177c69940a889965b
+Fecha: 2026-09-25T00:07:29.055581+00:00
+
+Comando: npm run test:security
+
+> dmi-react-native-starter@1.0.0 test:security
+> npm test -- --ci --runInBand tests/security-audit.test.ts && node --test tests/security-backend.test.mjs
+
+
+> dmi-react-native-starter@1.0.0 test
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand tests/security-audit.test.ts
+
+PASS tests/security-audit.test.ts
+  √ el detalle de una incidencia no devuelve datos privados fuera del contrato (2 ms)
+  Protección de archivos de configuración
+    √ .env queda fuera de Git (64 ms)
+    √ .env.local queda fuera de Git (58 ms)
+    √ .env.production queda fuera de Git (61 ms)
+    √ .env.test queda fuera de Git (62 ms)
+    √ config/.env.local queda fuera de Git (75 ms)
+    √ la plantilla sin secretos se puede versionar (69 ms)
+    √ no hay archivos de entorno privados en el índice de Git (59 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       8 passed, 8 total
+Snapshots:   0 total
+Time:        1.508 s, estimated 2 s
+Ran all test suites matching /tests\\security-audit.test.ts/i.
+TAP version 13
+# Subtest: un Host malformado no detiene el backend
+ok 1 - un Host malformado no detiene el backend
+  ---
+  duration_ms: 118.2908
+  type: 'test'
+  ...
+# Subtest: una URL malformada devuelve 400 y el backend sigue disponible
+ok 2 - una URL malformada devuelve 400 y el backend sigue disponible
+  ---
+  duration_ms: 109.4335
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 331.3836
+
+Codigo de salida: 0

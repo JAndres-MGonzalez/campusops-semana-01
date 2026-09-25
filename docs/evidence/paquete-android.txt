@@ -1,0 +1,20 @@
+Commit: 2385b30c1332767bd89e0c5177c69940a889965b
+Fecha: 2026-09-25T00:07:49.784491+00:00
+Comando: npm run bundle:release
+
+> dmi-react-native-starter@1.0.0 bundle:release
+> expo export --platform android --output-dir dist/export
+
+Starting Metro Bundler
+
+Android Bundled 5190ms index.ts (587 modules)
+
+› android bundles (1):
+_expo/static/js/android/index-4dcff0ffa06a693b41e9f18684cf6cbe.hbc (1.4MB)
+
+› Files (1):
+metadata.json (150B)
+
+Exported: dist/export
+
+Codigo de salida: 0

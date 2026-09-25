@@ -1,0 +1,91 @@
+Comando: node --test tests/security-backend.test.mjs
+Commit: 7601804feb5a488c3c34ab6ea825e6f120162b47
+Fecha: 2026-09-24T18:04:57.6349454-06:00
+
+TAP version 13
+# Subtest: un Host malformado no detiene el backend
+not ok 1 - un Host malformado no detiene el backend
+  ---
+  duration_ms: 128.6699
+  type: 'test'
+  location: 'C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\tests\\security-backend.test.mjs:63:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    La petición interrumpió el servicio: read ECONNRESET
+    node:internal/url:827
+          href = bindingUrl.parse(input, base, true);
+                            ^
+
+    TypeError: Invalid URL
+        at new URL (node:internal/url:827:25)
+        at Server.<anonymous> (file:///C:/Users/Ra1zeR/Documents/ChatGPT/Semana%2001%20%E2%80%94%20Diagn%C3%B3stico%20reproducible%20y%20definici%C3%B3n%20t%C3%A9cnica/course-backend/server.mjs:31:15)
+        at Server.emit (node:events:519:28)
+        at parserOnIncoming (node:_http_server:1186:12)
+        at HTTPParser.parserOnHeadersComplete (node:_http_common:122:17) {
+      code: 'ERR_INVALID_URL',
+      input: '/health',
+      base: 'http://['
+    }
+
+    Node.js v22.22.0
+
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    new URL (node:internal/url:827:25)
+    Server.<anonymous> (file:///C:/Users/Ra1zeR/Documents/ChatGPT/Semana%2001%20%E2%80%94%20Diagn%C3%B3stico%20reproducible%20y%20definici%C3%B3n%20t%C3%A9cnica/course-backend/server.mjs:31:15)
+    Server.emit (node:events:519:28)
+    parserOnIncoming (node:_http_server:1186:12)
+    HTTPParser.parserOnHeadersComplete (node:_http_common:122:17) {
+    TestContext.<anonymous> (file:///C:/Users/Ra1zeR/Documents/ChatGPT/Semana%2001%20%E2%80%94%20Diagn%C3%B3stico%20reproducible%20y%20definici%C3%B3n%20t%C3%A9cnica/tests/security-backend.test.mjs:69:13)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: una URL malformada devuelve 400 y el backend sigue disponible
+not ok 2 - una URL malformada devuelve 400 y el backend sigue disponible
+  ---
+  duration_ms: 112.0012
+  type: 'test'
+  location: 'C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\tests\\security-backend.test.mjs:63:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    La petición interrumpió el servicio: read ECONNRESET
+    node:internal/url:827
+          href = bindingUrl.parse(input, base, true);
+                            ^
+
+    TypeError: Invalid URL
+        at new URL (node:internal/url:827:25)
+        at Server.<anonymous> (file:///C:/Users/Ra1zeR/Documents/ChatGPT/Semana%2001%20%E2%80%94%20Diagn%C3%B3stico%20reproducible%20y%20definici%C3%B3n%20t%C3%A9cnica/course-backend/server.mjs:31:15)
+        at Server.emit (node:events:519:28)
+        at parserOnIncoming (node:_http_server:1186:12)
+        at HTTPParser.parserOnHeadersComplete (node:_http_common:122:17) {
+      code: 'ERR_INVALID_URL',
+      input: 'http://[',
+      base: 'http://127.0.0.1'
+    }
+
+    Node.js v22.22.0
+
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    new URL (node:internal/url:827:25)
+    Server.<anonymous> (file:///C:/Users/Ra1zeR/Documents/ChatGPT/Semana%2001%20%E2%80%94%20Diagn%C3%B3stico%20reproducible%20y%20definici%C3%B3n%20t%C3%A9cnica/course-backend/server.mjs:31:15)
+    Server.emit (node:events:519:28)
+    parserOnIncoming (node:_http_server:1186:12)
+    HTTPParser.parserOnHeadersComplete (node:_http_common:122:17) {
+    TestContext.<anonymous> (file:///C:/Users/Ra1zeR/Documents/ChatGPT/Semana%2001%20%E2%80%94%20Diagn%C3%B3stico%20reproducible%20y%20definici%C3%B3n%20t%C3%A9cnica/tests/security-backend.test.mjs:69:13)
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 0
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 346.1209
+Codigo de salida: 1

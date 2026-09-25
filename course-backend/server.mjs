@@ -28,7 +28,12 @@ async function readJson(request) {
 }
 
 const server = createServer(async (request, response) => {
-  const url = new URL(request.url ?? '/', `http://${request.headers.host ?? `${host}:${port}`}`);
+  let url;
+  try {
+    url = new URL(request.url ?? '/', 'http://localhost');
+  } catch {
+    return send(response, 400, { code: 'invalid_request' });
+  }
   const scenario = request.headers['x-course-scenario'] ?? 'success';
 
   if (request.method === 'OPTIONS') return send(response, 204, '');

@@ -52,7 +52,17 @@ export class InMemoryIncidentRepository implements IncidentRepository {
   private readonly items: IncidentDetail[];
 
   constructor(items: readonly IncidentDetail[] = SEED) {
-    this.items = items.map((item) => ({ ...item }));
+    this.items = items.map((item) => ({
+      id: item.id,
+      title: item.title,
+      category: item.category,
+      status: item.status,
+      locationLabel: item.locationLabel,
+      description: item.description,
+      reportedBy: item.reportedBy,
+      createdAt: item.createdAt,
+      updatedAt: item.updatedAt,
+    }));
   }
 
   async list(): Promise<readonly IncidentSummary[]> {

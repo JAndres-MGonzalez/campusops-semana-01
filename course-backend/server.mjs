@@ -1,7 +1,7 @@
 import { createServer } from 'node:http';
 import { Buffer } from 'node:buffer';
 import { handleCampusOps } from './campusops.mjs';
-import { refreshToken0, refreshToken1, validToken } from './env.mjs';
+import { corsOrigin, refreshToken0, refreshToken1, validToken } from './env.mjs';
 
 const host = process.env.COURSE_BACKEND_HOST ?? '127.0.0.1';
 const port = Number(process.env.COURSE_BACKEND_PORT ?? 4310);
@@ -10,7 +10,7 @@ const completedOperations = new Map();
 function send(response, status, body, headers = {}) {
   const value = typeof body === 'string' ? body : JSON.stringify(body);
   response.writeHead(status, {
-    'access-control-allow-origin': '*',
+    ...(corsOrigin ? { 'access-control-allow-origin': corsOrigin, vary: 'Origin' } : {}),
     'content-type': typeof body === 'string' ? 'application/json' : 'application/json; charset=utf-8',
     ...headers,
   });
@@ -31,8 +31,20 @@ async function readJson(request) {
 const server = createServer(async (request, response) => {
   const url = new URL(request.url ?? '/', `http://${request.headers.host ?? `${host}:${port}`}`);
   const scenario = request.headers['x-course-scenario'] ?? 'success';
+  const requestOrigin = request.headers.origin;
 
-  if (request.method === 'OPTIONS') return send(response, 204, '');
+  // CORS restringido: solo se acepta el origen configurado (dev localhost).
+  if (requestOrigin && corsOrigin && requestOrigin !== corsOrigin) {
+    return send(response, 403, { code: 'origin_not_allowed' });
+  }
+
+  if (request.method === 'OPTIONS') {
+    return send(response, 204, '', {
+      'access-control-allow-methods': 'GET, POST, OPTIONS',
+      'access-control-allow-headers': 'authorization, content-type, idempotency-key, x-course-actor, x-course-scenario',
+      'access-control-max-age': '600',
+    });
+  }
   if (request.method === 'GET' && url.pathname === '/health') {
     return send(response, 200, { ok: true, service: 'dmi-controlled-backend', contractVersion: 1 });
   }

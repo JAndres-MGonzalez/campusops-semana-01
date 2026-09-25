@@ -39,3 +39,7 @@ const fromEnv = (name) => process.env[name] ?? dotEnv[name] ?? '';
 export const validToken = fromEnv('COURSE_VALID_TOKEN');
 export const refreshToken0 = fromEnv('COURSE_REFRESH_TOKEN_0');
 export const refreshToken1 = fromEnv('COURSE_REFRESH_TOKEN_1');
+
+// Origen permitido para CORS (configurable). Por defecto solo el origen de
+// desarrollo de Expo/Metro; nunca "*" para no abrir el backend a cualquier sitio.
+export const corsOrigin = fromEnv('COURSE_BACKEND_CORS_ORIGIN') || 'http://localhost:8081';

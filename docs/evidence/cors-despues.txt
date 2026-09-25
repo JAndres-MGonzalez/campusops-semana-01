@@ -1,0 +1,42 @@
+Hallazgo 2 — DESPUÉS: CORS restringido a un origen configurable
+================================================================
+Archivos: course-backend/server.mjs y course-backend/env.mjs
+
+El encabezado ya NO es `*`: se envía únicamente el origen configurado
+(`COURSE_BACKEND_CORS_ORIGIN`, por defecto solo el origen de desarrollo
+de Expo/Metro: http://localhost:8081). Si una petición trae un Origin
+distinto, se responde 403.
+
+--- course-backend/env.mjs (después) ---
+  export const corsOrigin = fromEnv('COURSE_BACKEND_CORS_ORIGIN') || 'http://localhost:8081';
+
+--- course-backend/server.mjs (después) ---
+  function send(response, status, body, headers = {}) {
+    const value = typeof body === 'string' ? body : JSON.stringify(body);
+    response.writeHead(status, {
+      ...(corsOrigin ? { 'access-control-allow-origin': corsOrigin, vary: 'Origin' } : {}),
+      'content-type': ...,
+      ...headers,
+    });
+    response.end(value);
+  }
+
+  const requestOrigin = request.headers.origin;
+
+  // CORS restringido: solo se acepta el origen configurado (dev localhost).
+  if (requestOrigin && corsOrigin && requestOrigin !== corsOrigin) {
+    return send(response, 403, { code: 'origin_not_allowed' });
+  }
+
+  if (request.method === 'OPTIONS') {
+    return send(response, 204, '', {
+      'access-control-allow-methods': 'GET, POST, OPTIONS',
+      'access-control-allow-headers': 'authorization, content-type, idempotency-key, x-course-actor, x-course-scenario',
+      'access-control-max-age': '600',
+    });
+  }
+
+--- .env.example (después; solo nombre) ---
+  COURSE_BACKEND_CORS_ORIGIN=
+
+Ver también: cors-restricted.txt (salida real de las peticiones).

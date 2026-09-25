@@ -1,0 +1,23 @@
+Hallazgo 2 — ANTES: CORS abierto a cualquier origen
+====================================================
+Archivo: course-backend/server.mjs
+
+El servidor respondía a TODAS las peticiones con el encabezado
+`access-control-allow-origin: *`:
+
+--- course-backend/server.mjs (antes) ---
+  function send(response, status, body, headers = {}) {
+    const value = typeof body === 'string' ? body : JSON.stringify(body);
+    response.writeHead(status, {
+      'access-control-allow-origin': '*',
+      'content-type': ...,
+      ...headers,
+    });
+    response.end(value);
+  }
+
+  ...
+  if (request.method === 'OPTIONS') return send(response, 204, '');
+
+Riesgo: cualquier sitio web podría hacer peticiones al backend local y leer
+las respuestas, aunque no fuera el origen legítimo de la aplicación.

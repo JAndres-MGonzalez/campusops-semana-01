@@ -1,0 +1,32 @@
+Hallazgo 1 — ANTES: tokens escritos directamente en el código
+===============================================================
+Archivos: course-backend/server.mjs y course-backend/campusops.mjs
+(además course-backend/self-test.mjs y course-backend/campusops-self-test.mjs)
+
+Los tokens de acceso del backend didáctico estaban escritos literalmente
+en los archivos fuente del repositorio:
+
+--- course-backend/server.mjs (antes) ---
+  if (request.headers.authorization !== 'Bearer course-valid-token') {
+  ...
+  if (!input || input.refreshToken !== 'course-refresh-0' || scenario === 'invalid_refresh') {
+  ...
+  return send(response, 200, { accessToken: 'course-valid-token', refreshToken: 'course-refresh-1', expiresIn: 60 });
+
+--- course-backend/campusops.mjs (antes) ---
+  return send(response, 200, { actorId: input.actorId, role: actors[input.actorId], accessToken: 'course-valid-token', refreshToken: 'course-refresh-0', expiresIn: 60 });
+  ...
+  if (request.headers.authorization !== 'Bearer course-valid-token' || !Object.hasOwn(actors, actorId)) {
+
+--- course-backend/self-test.mjs (antes) ---
+  headers: { Authorization: 'Bearer course-valid-token', 'X-Course-Scenario': 'nullable' },
+
+--- course-backend/campusops-self-test.mjs (antes) ---
+  headers: { Authorization: 'Bearer course-valid-token', 'X-Course-Actor': actor,
+  ...
+  headers: { Authorization: 'Bearer course-valid-token', 'X-Course-Actor': 'coordinator-1',
+  ...
+  const malformed = await fetch(..., { headers: { Authorization: 'Bearer course-valid-token', ... } });
+
+NOTA: los valores son ficticios (uso docente), pero estaban expuestos en el
+repositorio, por lo que cualquiera con acceso podría conocerlos.

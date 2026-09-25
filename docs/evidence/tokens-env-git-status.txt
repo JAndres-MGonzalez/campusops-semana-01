@@ -1,0 +1,41 @@
+Hallazgo 1 — Evidencia: `.env` NO se sube al repositorio
+=========================================================
+Comandos ejecutados:
+
+  git status --porcelain=v1 --branch
+  git check-ignore -v .env
+  git add -n .          (simulación: muestra qué archivos se subirían)
+
+Salida:
+
+  ## week4/security-audit-kevin
+   M .env.example
+   M course-backend/campusops-self-test.mjs
+   M course-backend/campusops.mjs
+   M course-backend/self-test.mjs
+   M course-backend/server.mjs
+  ?? course-backend/env.mjs
+  ?? docs/evidence/
+
+  --- check-ignore ---
+  .gitignore:8:.env	.env
+
+  --- add -n (simulación) ---
+  add '.env.example'
+  add 'course-backend/campusops-self-test.mjs'
+  add 'course-backend/campusops.mjs'
+  add 'course-backend/self-test.mjs'
+  add 'course-backend/server.mjs'
+  add 'course-backend/env.mjs'
+  add 'docs/evidence/tokens-env-antes.txt'
+  add 'docs/evidence/tokens-env-despues.txt'
+  add 'docs/evidence/tokens-env-self-test.txt'
+
+Conclusión:
+- La simulación `git add -n .` NO incluye `.env`: el archivo está ignorado
+  por la regla `.env` del `.gitignore` (línea 8), confirmado por
+  `git check-ignore -v .env`.
+- Solo se subirían `.env.example` (con nombres, sin valores) y los archivos
+  de código corregidos.
+
+(Esta misma comprobación también está como captura: tokens-env-git-status.png)

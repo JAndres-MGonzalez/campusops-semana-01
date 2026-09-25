@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 import { testCampusOps } from './campusops-self-test.mjs';
+import { validToken } from './env.mjs';
 
 const child = spawn(process.execPath, ['course-backend/server.mjs'], {
   cwd: process.cwd(),
@@ -31,7 +32,7 @@ try {
   if (health.contractVersion !== 1) throw new Error('health contract mismatch');
   await expectStatus('/v1/resources', 401);
   const resources = await expectStatus('/v1/resources', 200, {
-    headers: { Authorization: 'Bearer course-valid-token', 'X-Course-Scenario': 'nullable' },
+    headers: { Authorization: `Bearer ${validToken}`, 'X-Course-Scenario': 'nullable' },
   });
   if (resources.items[0].payload !== null) throw new Error('nullable scenario mismatch');
   const action = { method: 'POST', headers: { 'Content-Type': 'application/json', 'Idempotency-Key': 'self-test-operation' }, body: JSON.stringify({ resourceId: 'resource-1' }) };

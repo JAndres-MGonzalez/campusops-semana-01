@@ -1,0 +1,36 @@
+﻿=== PETICION 1: Origin permitido (http://localhost:8081) -> GET /health ===
+HTTP/1.1 200 OK
+access-control-allow-origin: http://localhost:8081
+vary: Origin
+content-type: application/json; charset=utf-8
+Date: Fri, 25 Sep 2026 02:27:17 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"ok":true,"service":"dmi-controlled-backend","contractVersion":1}
+
+=== PETICION 2: Origin NO permitido (http://malicious.example) -> GET /health ===
+HTTP/1.1 403 Forbidden
+access-control-allow-origin: http://localhost:8081
+vary: Origin
+content-type: application/json; charset=utf-8
+Date: Fri, 25 Sep 2026 02:27:17 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"code":"origin_not_allowed"}
+
+=== PETICION 3: Preflight OPTIONS con Origin permitido ===
+HTTP/1.1 204 No Content
+access-control-allow-origin: http://localhost:8081
+vary: Origin
+content-type: application/json
+access-control-allow-methods: GET, POST, OPTIONS
+access-control-allow-headers: authorization, content-type, idempotency-key, x-course-actor, x-course-scenario
+access-control-max-age: 600
+Date: Fri, 25 Sep 2026 02:27:17 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+

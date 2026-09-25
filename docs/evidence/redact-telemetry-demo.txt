@@ -1,0 +1,76 @@
+﻿
+> dmi-react-native-starter@1.0.0 test
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand src/course-evaluation/redact-demo.test.ts
+
+  console.log
+    ANTES (telemetria con datos sensibles):
+
+      at Object.log (src/course-evaluation/redact-demo.test.ts:16:11)
+
+  console.log
+    {
+      "request": {
+        "headers": {
+          "authorization": "Bearer token-ficticio-123",
+          "accept": "application/json"
+        }
+      },
+      "profile": {
+        "email": "persona@campusops.test",
+        "displayName": "Persona Ficticia"
+      },
+      "incidentId": "campus-inc-001",
+      "location": "Zona ficticia",
+      "photos": [
+        "foto-sintetica-1"
+      ],
+      "internalComments": [
+        "Nota interna ficticia"
+      ],
+      "status": "open",
+      "attempt": 2
+    }
+
+      at Object.log (src/course-evaluation/redact-demo.test.ts:17:11)
+
+  console.log
+    DESPUES (telemetria sanitizada):
+
+      at Object.log (src/course-evaluation/redact-demo.test.ts:19:11)
+
+  console.log
+    {
+      "request": {
+        "headers": {
+          "authorization": "[REDACTED]",
+          "accept": "application/json"
+        }
+      },
+      "profile": {
+        "email": "[REDACTED]",
+        "displayName": "[REDACTED]"
+      },
+      "incidentId": "campus-inc-001",
+      "location": "[REDACTED]",
+      "photos": "[REDACTED]",
+      "internalComments": "[REDACTED]",
+      "status": "open",
+      "attempt": 2
+    }
+
+      at Object.log (src/course-evaluation/redact-demo.test.ts:20:11)
+
+npm.cmd : PASS src/course-evaluation/redact-demo.test.ts
+En línea: 1 Carácter: 1
++ npm.cmd test -- --ci --runInBand src/course-evaluation/redact-demo.te ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (PASS src/course...ct-demo.test.ts:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  ÔêÜ demo auditoria: redactForTelemetry antes/despues (datos ficticios) (29 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        2.123 s
+Ran all test suites matching /src\\course-evaluation\\redact-demo.test.ts/i.

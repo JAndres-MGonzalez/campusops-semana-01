@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
+import { validToken } from './env.mjs';
 
 export async function testCampusOps(baseUrl) {
   async function call(path, status, actor = 'coordinator-1', body, key, scenario = 'success') {
     const response = await fetch(`${baseUrl}${path}`, {
       method: body ? 'POST' : 'GET',
-      headers: { Authorization: 'Bearer course-valid-token', 'X-Course-Actor': actor,
+      headers: { Authorization: `Bearer ${validToken}`, 'X-Course-Actor': actor,
         'Content-Type': 'application/json', 'X-Course-Scenario': scenario,
         ...(key ? { 'Idempotency-Key': key } : {}) },
       ...(body ? { body: JSON.stringify(body) } : {}),
@@ -34,7 +35,7 @@ export async function testCampusOps(baseUrl) {
   const close = { action: 'close', baseVersion: 4 };
   await assert.rejects(fetch(`${baseUrl}${actionPath}`, {
     method: 'POST', signal: AbortSignal.timeout(250),
-    headers: { Authorization: 'Bearer course-valid-token', 'X-Course-Actor': 'coordinator-1',
+    headers: { Authorization: `Bearer ${validToken}`, 'X-Course-Actor': 'coordinator-1',
       'Content-Type': 'application/json', 'Idempotency-Key': 'close-lost-response', 'X-Course-Scenario': 'timeout_after_commit' },
     body: JSON.stringify(close),
   }));
@@ -62,7 +63,7 @@ export async function testCampusOps(baseUrl) {
   assert.equal((await call('/v1/geocoding?q=zona', 200, 'reporter-1', undefined, undefined, 'incomplete')).latitude, undefined);
   assert.equal((await call('/v1/geocoding?q=zona', 200, 'reporter-1', undefined, undefined, 'invalid_coordinates')).latitude, 999);
   await call('/v1/geocoding', 422);
-  const malformed = await fetch(`${baseUrl}/v1/geocoding?q=zona`, { headers: { Authorization: 'Bearer course-valid-token', 'X-Course-Actor': 'reporter-1', 'X-Course-Scenario': 'malformed' } });
+  const malformed = await fetch(`${baseUrl}/v1/geocoding?q=zona`, { headers: { Authorization: `Bearer ${validToken}`, 'X-Course-Actor': 'reporter-1', 'X-Course-Scenario': 'malformed' } });
   await assert.rejects(malformed.json());
   process.stdout.write('CampusOps backend contracts: roles, reassignment conflict, lost response, idempotency, evidence and geocoding PASS.\n');
 }

@@ -1,0 +1,45 @@
+Hallazgo 3 — ANTES / DESPUÉS: redactForTelemetry
+=================================================
+Archivo: src/course-evaluation/index.ts
+
+--- ANTES (stub sin implementar) ---
+  export function redactForTelemetry(_input: unknown): unknown {
+    return pending('redactForTelemetry');
+  }
+
+La sanitización prevista para telemetría no existía: si se registraran logs o
+telemetría con datos de usuario o de incidencias, la información sensible
+(emails, tokens, ubicaciones, fotos) quedaría expuesta.
+
+--- DESPUÉS (implementación) ---
+  const SENSITIVE_KEYS = new Set([
+    'authorization', 'password', 'token', 'accesstoken', 'refreshtoken',
+    'email', 'displayname', 'name', 'userid', 'reporterid', 'technicianid',
+    'assignedtechnicianid', 'location', 'latitude', 'longitude', 'photos',
+    'evidence', 'internalcomments', 'assignmenthistory',
+  ]);
+
+  function normalizeKey(key: string): string {
+    return key.toLowerCase().replace(/[_-]/g, '');
+  }
+
+  export function redactForTelemetry(input: unknown): unknown {
+    if (Array.isArray(input)) return input.map((item) => redactForTelemetry(item));
+    if (input !== null && typeof input === 'object') {
+      return Object.fromEntries(
+        Object.entries(input).map(([key, value]) =>
+          SENSITIVE_KEYS.has(normalizeKey(key))
+            ? [key, '[REDACTED]']
+            : [key, redactForTelemetry(value)],
+        ),
+      );
+    }
+    return input;
+  }
+
+Comportamiento (verificado en redact-telemetry-demo.txt y
+redact-telemetry-test.txt):
+- No muta la entrada (devuelve un objeto nuevo; copia los arrays).
+- Normaliza claves a minúsculas sin `_` ni `-` (p. ej. `user_id`, `access-token`).
+- Reemplaza el valor completo por `[REDACTED]` en las claves sensibles.
+- Conserva campos técnicos no sensibles: `incidentId`, `status`, `attempt`, etc.

@@ -1,5 +1,5 @@
 command: npm.cmd test -- --ci --runInBand course-tests/public/week-04.test.ts
-startedAt: 2026-09-28T23:26:28.810094+00:00
+startedAt: 2026-09-28T23:34:04.280253+00:00
 exitCode: 1
 
 
@@ -7,7 +7,7 @@ exitCode: 1
 > jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-04.test.ts
 
 FAIL course-tests/public/week-04.test.ts
-  × CampusOps redacts personal and incident-sensitive data while preserving technical context (7 ms)
+  × CampusOps redacts personal and incident-sensitive data while preserving technical context (6 ms)
 
   ● CampusOps redacts personal and incident-sensitive data while preserving technical context
 
@@ -41,5 +41,5 @@ FAIL course-tests/public/week-04.test.ts
 Test Suites: 1 failed, 1 total
 Tests:       1 failed, 1 total
 Snapshots:   0 total
-Time:        1.44 s
+Time:        0.943 s, estimated 1 s
 Ran all test suites matching /course-tests\\public\\week-04.test.ts/i.

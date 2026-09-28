@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "week": 4,
+  "teamId": "9A-E08",
+  "members": [
+    {
+      "studentId": "3523110092",
+      "name": "Kevin Armando Montalvo Marcial",
+      "commitShas": [
+        "8671bcbb66990857843993d44a3ac0690d7c3133",
+        "09e389c1a90958f3710f5f89bef7cebef210b1ec"
+      ],
+      "files": [
+        "src/course-evaluation/index.ts",
+        "reports/week-04/negative-tests.json",
+        "evidence/week-04/reports/3523110092.md"
+      ],
+      "tests": [
+        "Cinco pruebas de sanitización registradas por Kevin en su reporte original."
+      ],
+      "reviews": [
+        "Contrato de claves sensibles de CampusOps."
+      ],
+      "prediction": "Los valores sensibles deben ocultarse y el contexto técnico debe conservarse.",
+      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/redact-manual.test.ts",
+      "observedResult": "Kevin registró 3 fallos de 5 pruebas con una implementación temporal sin redacción y 5 de 5 al restaurarla. El archivo de prueba original era temporal; su reporte se conserva en evidence/week-04/logs/kevin-negative-tests.json. La integración dejó una suite permanente en evidence/week-04/sanitization.test.ts.",
+      "explanation": "La función revisa objetos y listas y reemplaza los valores privados. Esto permite conservar datos útiles del diagnóstico sin registrar credenciales o datos de la incidencia."
+    },
+    {
+      "studentId": "3523110741",
+      "name": "Jose Ismael Montalvo Lopez",
+      "commitShas": [
+        "4181e4b9e5b8e4b1369f203df55d2857bbced67f",
+        "b2974d0dd93f92563219c6895dd123e71fba7d6e"
+      ],
+      "files": [
+        "docs/security-controls.md",
+        "reports/week-04/secret-scan.json",
+        "evidence/week-04/reports/3523110741.md"
+      ],
+      "tests": [
+        "Escaneo oficial con marcador ficticio y escaneo limpio registrados en su reporte y PR #3."
+      ],
+      "reviews": [
+        "Controles AL-1 a AL-5 y SAN-1 a SAN-4."
+      ],
+      "prediction": "Un marcador con nombre de secreto debe ser detectado y el escaneo debe quedar limpio al retirarlo.",
+      "command": "python -c \"import sys; sys.path.insert(0,'tools'); from pathlib import Path; import course_public_evaluator as e; h=e.scan_secrets(Path('.')); print('hits='+str(h)); sys.exit(1 if h else 0)\"",
+      "observedResult": "Ismael registró código 1 con App.tmp.txt:public_secret_name y código 0 después de retirarlo. Fuente: evidence/week-04/logs/ismael-secret-scan.json y PR #3.",
+      "explanation": "El escaneo identifica patrones que no deben publicarse. La prueba con un dato ficticio demuestra que el control detecta el caso y que el repositorio vuelve a quedar limpio."
+    },
+    {
+      "studentId": "3523110131",
+      "name": "Juan Andrés Medina González",
+      "commitShas": [
+        "515600a977393aafeaec5af258e2879c5bbe23cf"
+      ],
+      "files": [
+        "App.tsx",
+        "src/infrastructure/telemetry/safe-telemetry.ts",
+        "src/ui/IncidentApp.tsx",
+        "evidence/week-04/reproduce-security.py",
+        "evidence/week-04/error-telemetry.test.tsx",
+        "evidence/week-04/reports/3523110131.md"
+      ],
+      "tests": [
+        "Prueba pública antes y después de la falla.",
+        "Cinco casos permanentes de sanitización y dos errores de la app.",
+        "Escaneo con marcador ficticio y escaneo limpio."
+      ],
+      "reviews": [
+        "Requisitos del ZIP, controles de almacenamiento y esquemas de evidencia."
+      ],
+      "prediction": "Si authorization deja de ser sensible, la prueba pública debe fallar; después de restaurarla debe pasar. Los errores completos no deben aparecer en el registro ni en pantalla.",
+      "command": "python evidence/week-04/reproduce-security.py",
+      "observedResult": "La sanitización falló con código 1 y pasó con código 0 al restaurar el archivo. El escaneo detectó el marcador ficticio y quedó limpio. Se comprobaron también los caminos de error de lista y detalle.",
+      "explanation": "Ocultar un dato en pantalla no basta si el error lo guarda en un log. La app registra la operación que falló y oculta el error completo. La prueba compara la salida y confirma que los datos ficticios privados no aparecen."
+    }
+  ]
+}

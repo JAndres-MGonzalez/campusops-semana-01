@@ -1,0 +1,20 @@
+[
+  {
+    "operation": "list",
+    "output": {
+      "event": "incident_load_failed",
+      "operation": "list",
+      "error": "[REDACTED]"
+    },
+    "result": "pass"
+  },
+  {
+    "operation": "detail",
+    "output": {
+      "event": "incident_load_failed",
+      "operation": "detail",
+      "error": "[REDACTED]"
+    },
+    "result": "pass"
+  }
+]

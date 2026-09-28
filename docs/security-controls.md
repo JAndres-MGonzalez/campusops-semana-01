@@ -69,7 +69,7 @@ En el hito actual los datos de CampusOps viven en memoria durante la ejecución;
 |---|---|---|---|
 | SAN-1 | Redacción de claves sensibles con `[REDACTED]` | `npm.cmd test -- --ci --runInBand course-tests/public/week-04.test.ts` | La prueba pública de Semana 4 pasa |
 | SAN-2 | Conservación de campos técnicos (`incidentId`, etc.) | Misma prueba pública (verifica que `incidentId` no cambia) | Pasa |
-| SAN-3 | Normalización de claves y no mutación de la entrada | Pruebas negativas de Semana 4 (`reports/week-04/negative-tests.json`) y `make PYTHON=python verify-week-04` | Sin fallos |
+| SAN-3 | Normalización de claves y no mutación de la entrada | `git grep -n -e normalizeKey -e SENSITIVE_KEYS -e "Object.fromEntries" -- src/course-evaluation/index.ts` (muestra la normalización, la lista sensible y la construcción de copias); evidencia de las pruebas negativas de Kevin en `reports/week-04/negative-tests.json`, cuyas pruebas usaron un archivo temporal ya retirado | Las tres referencias aparecen en `src/`; el JSON registra la falla y la corrección |
 | SAN-4 | No registrar datos sensibles en logs | `git grep -n console -- src` | Sin resultados |
 | AL-1 | Archivos sensibles ignorados por Git | `git check-ignore -v .env release.jks node_modules .jest-cache` | Cada ruta muestra su regla |
 | AL-2 | Sin archivos de credenciales versionados | `git ls-files \| Select-String -Pattern '(^\|/)\.env$\|\.jks$\|\.keystore$'` | Sin resultados |

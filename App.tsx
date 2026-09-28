@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { getIncidentDetail, getIncidentList } from './src/application/incidents/use-cases';
 import { getBackendHealth } from './src/api/courseBackend';
 import { InMemoryIncidentRepository } from './src/infrastructure/incidents/in-memory-incident-repository';
+import { reportIncidentFailure } from './src/infrastructure/telemetry/safe-telemetry';
 import { IncidentApp } from './src/ui/IncidentApp';
 
 const repository = new InMemoryIncidentRepository();
@@ -32,7 +33,7 @@ export default function App() {
         <Text>Incidencias del campus · entorno académico ficticio</Text>
         <Text testID="backend-status">Backend: {status}</Text>
       </View>
-      <IncidentApp loadList={loadList} loadDetail={loadDetail} />
+      <IncidentApp loadList={loadList} loadDetail={loadDetail} reportFailure={reportIncidentFailure} />
       <StatusBar style="auto" />
     </View>
   );

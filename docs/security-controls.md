@@ -18,11 +18,13 @@ Criterio de la semana: qué se guarda, qué se registra en logs y qué se redact
 
 ## 2. Controles de almacenamiento seguro
 
-En el hito actual los datos de CampusOps viven en memoria durante la ejecución; no hay base de datos real ni datos personales reales en el repositorio.
+Se conserva el repositorio en memoria con incidencias ficticias. La app todavía no inicia sesiones reales ni guarda tokens en preferencias o archivos. Para este hito se eligió no persistir información privada: se reduce lo que podría quedar en el dispositivo, a cambio de perder el estado al cerrar el proceso. Esto no equivale a almacenamiento cifrado de credenciales.
+
+Si después se necesita mantener una sesión real, sus credenciales deberán ir al almacenamiento protegido del sistema. Permanece el riesgo de inspección de memoria en un dispositivo comprometido y de que nuevas rutas guarden datos sin aplicar estos controles.
 
 | ID | Control | Qué reduce | Verificación (comando real) |
 |---|---|---|---|
-| AL-1 | `.gitignore` excluye `node_modules/`, `.env`, `*.jks`, `*.keystore`, `*.p8`, `*.p12`, `.jest-cache/` y `.expo/` | Subir secretos, llaves de firma o dependencias al repositorio | `git check-ignore -v .env release.jks node_modules .jest-cache` (cada ruta debe mostrar la regla que la ignora) |
+| AL-1 | `.gitignore` excluye `node_modules/`, `.env`, `*.jks`, `*.keystore`, `*.p8`, `*.p12`, `.jest-cache/` y `.expo/` | Subir secretos, llaves de firma o dependencias al repositorio | `git check-ignore -v .env release.jks node_modules/ .jest-cache/` (cada ruta debe mostrar la regla que la ignora) |
 | AL-2 | No se versionan archivos de credenciales | Filtración de tokens y llaves | `git ls-files \| Select-String -Pattern '(^\|/)\.env$\|\.jks$\|\.keystore$\|\.p12$\|\.p8$'` (sin resultados) |
 | AL-3 | Escaneo de secretos del evaluador (`secret_scan`: llaves privadas, tokens de GitHub, llaves AWS y variables `EXPO_PUBLIC_*` con nombre secreto) | Credenciales en código o documentos | `make PYTHON=python verify-week-04` (el check `secret_scan` debe pasar) y la evidencia de falla controlada en `reports/week-04/secret-scan.json` |
 | AL-4 | Permisos mínimos del workflow de CI (`contents: read`) | Que un workflow comprometido escriba en el repositorio | `git grep -n "contents: read" -- .github/workflows` |
@@ -61,17 +63,25 @@ En el hito actual los datos de CampusOps viven en memoria durante la ejecución;
 
 **Campos técnicos que se conservan:** `incidentId`, `correlationId`, `status`, `attempt`, `durationMs`.
 
-**Límite:** la lista es un mínimo de prueba, no permiso para registrar texto libre sin sanitizar. Por eso el código de `src/` no usa `console` para volcar datos.
+**Límite:** la lista es un mínimo de prueba, no permiso para registrar texto libre sin sanitizar. Los errores completos se descartan del registro: se conserva el tipo de evento y la operación, y `error` queda como `[REDACTED]`. Esto evita filtrar también información incluida en el texto de un error.
 
-## 4. Tabla control → verificación
+## 4. Integración y verificación
+
+La lógica compartida está en `src/infrastructure/telemetry/safe-telemetry.ts`. El adaptador público `redactForTelemetry` la llama y `App.tsx` inyecta `reportIncidentFailure` en la pantalla. Los errores de lista y detalle pasan por esa misma lógica antes de `console.warn`; la interfaz muestra un mensaje general.
+
+La clave adicional `error` se oculta completa, incluso si contiene texto libre, ubicación o fotografías. No se escribe una copia del error en preferencias ni archivos. El archivo `evidence/week-04/logs/error-telemetry.json` contiene la salida capturada de las pruebas de ambos caminos, ya sanitizada.
+
+Estos controles atienden T1 (exposición de credenciales) y T4 (datos sensibles en registros) del modelo de amenazas. No sustituyen los controles de autorización de T2/T3. La lista de claves no reconoce datos privados en cualquier texto arbitrario: por eso el registro real solo agrega el evento, la operación y el error completo oculto.
+
+## 5. Tabla control → verificación
 
 | ID | Control | Verificación ejecutable | Resultado esperado |
 |---|---|---|---|
 | SAN-1 | Redacción de claves sensibles con `[REDACTED]` | `npm.cmd test -- --ci --runInBand course-tests/public/week-04.test.ts` | La prueba pública de Semana 4 pasa |
 | SAN-2 | Conservación de campos técnicos (`incidentId`, etc.) | Misma prueba pública (verifica que `incidentId` no cambia) | Pasa |
-| SAN-3 | Normalización de claves y no mutación de la entrada | `git grep -n -e normalizeKey -e SENSITIVE_KEYS -e "Object.fromEntries" -- src/course-evaluation/index.ts` (muestra la normalización, la lista sensible y la construcción de copias); evidencia de las pruebas negativas de Kevin en `reports/week-04/negative-tests.json`, cuyas pruebas usaron un archivo temporal ya retirado | Las tres referencias aparecen en `src/`; el JSON registra la falla y la corrección |
-| SAN-4 | No registrar datos sensibles en logs | `git grep -n console -- src` | Sin resultados |
-| AL-1 | Archivos sensibles ignorados por Git | `git check-ignore -v .env release.jks node_modules .jest-cache` | Cada ruta muestra su regla |
+| SAN-3 | Normalización, listas y no mutación | `npm.cmd test -- --ci --runInBand evidence/week-04/sanitization.test.ts` | Cinco casos reproducibles aprobados |
+| SAN-4 | Errores seguros en pantalla y logs | `npm.cmd test -- --ci --runInBand evidence/week-04/error-telemetry.test.tsx` | Errores de lista y detalle sin los datos ficticios privados |
+| AL-1 | Archivos sensibles ignorados por Git | `git check-ignore -v .env release.jks node_modules/ .jest-cache/` | Cada ruta muestra su regla |
 | AL-2 | Sin archivos de credenciales versionados | `git ls-files \| Select-String -Pattern '(^\|/)\.env$\|\.jks$\|\.keystore$'` | Sin resultados |
 | AL-3 | Escaneo de secretos con falla controlada | Comando de `reports/week-04/secret-scan.json` (detecta el marcador sintético y luego queda limpio) | `fail` con marcador, `pass` sin él |
 | AL-4 | Permisos mínimos de CI | `git grep -n "contents: read" -- .github/workflows` | Presente en los workflows |

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "week": 4,
+  "commitSha": "515600a977393aafeaec5af258e2879c5bbe23cf",
+  "decision": "Se mantienen las incidencias ficticias en memoria, sin guardar sesiones ni credenciales en preferencias o archivos. Los errores de lista y detalle pasan por un filtro compartido antes del registro; se conserva la operación y se oculta completo el error.",
+  "alternatives": [
+    "Mantener el estado ficticio en memoria y aplicar un filtro central antes de registrar errores.",
+    "Agregar persistencia protegida por el sistema operativo para una sesión duradera, con borrado al cerrar sesión y controles para cada adaptador."
+  ],
+  "tradeoff": "La memoria evita dejar una copia privada en disco y simplifica este hito, pero pierde el estado al cerrar la app y no protege frente a inspección de memoria. Ocultar el error completo evita filtrar texto libre, a cambio de perder detalles del diagnóstico. Una sesión real persistente requerirá almacenamiento protegido; el filtro no reconoce información privada en cualquier texto arbitrario.",
+  "requirementIds": [
+    "AC-01",
+    "AC-02",
+    "AC-03",
+    "AC-04"
+  ],
+  "verification": [
+    {
+      "command": "npm test -- --ci --runInBand evidence/week-04/sanitization.test.ts evidence/week-04/error-telemetry.test.tsx",
+      "result": "Cinco casos de sanitización y dos caminos de error aprobados.",
+      "evidence": "evidence/week-04/logs/negative-cases.log; evidence/week-04/logs/error-telemetry.json"
+    },
+    {
+      "command": "python evidence/week-04/reproduce-security.py",
+      "result": "Sanitización: código 1 antes y 0 después. Escaneo: código 1 con marcador ficticio y 0 sin él. Archivos protegidos restaurados.",
+      "evidence": "evidence/week-04/logs/restoration.json y logs de falla/corrección"
+    },
+    {
+      "command": "make PYTHON=python feedback",
+      "result": "Tipos, estilo, smoke, umbral crítico de dependencias y paquete de Expo aprobados.",
+      "evidence": "evidence/week-04/logs/feedback.log"
+    },
+    {
+      "command": "make PYTHON=python public-test-week-04",
+      "result": "Las 14 comprobaciones del evaluador público pasaron, incluida la prueba pública de sanitización y los esquemas requeridos.",
+      "evidence": "reports/week-04/public-tests.json"
+    }
+  ]
+}

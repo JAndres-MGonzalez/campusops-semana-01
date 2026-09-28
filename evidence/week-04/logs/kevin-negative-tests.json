@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "week": 4,
+  "commitSha": "8671bcbb66990857843993d44a3ac0690d7c3133",
+  "generatedAt": "2026-09-25T06:09:50.433Z",
+  "checks": [
+    {
+      "id": "negative_technical_fields_kept",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/redact-manual.test.ts",
+      "evidence": "incidentId, correlationId, status, attempt y durationMs se conservan; entrada vacía, null y primitivos pasan sin cambios (subtest 'conserva campos técnicos' OK)"
+    },
+    {
+      "id": "negative_sensitive_values_redacted",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/redact-manual.test.ts",
+      "evidence": "authorization, password, email, displayName y location se reemplazan por el valor completo [REDACTED] (subtest 'redacta el valor completo de claves sensibles' OK)"
+    },
+    {
+      "id": "negative_normalized_keys_boundary",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/redact-manual.test.ts",
+      "evidence": "claves normalizadas: user_id (guion bajo), Authorization (mayusculas) y access-token (guion) se redactan tras normalizarlas a minusculas sin _ ni - (subtest 'normaliza claves' OK)"
+    },
+    {
+      "id": "negative_nested_and_arrays_boundary",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/redact-manual.test.ts",
+      "evidence": "redaccion profunda: request.headers.authorization, perfil.email y arrays de objetos; photos se redacta como valor completo [REDACTED] (subtest 'objetos anidados y arrays' OK)"
+    },
+    {
+      "id": "negative_no_mutation_boundary",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/redact-manual.test.ts",
+      "evidence": "la entrada no se muta: copia con structuredClone antes de llamar y deep-Equal al terminar (subtest 'no muta la entrada' OK)"
+    },
+    {
+      "id": "negative_controlled_failure_before",
+      "status": "fail",
+      "scenarioType": "failure",
+      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/redact-manual.test.ts",
+      "evidence": "con redactForTelemetry devolviendo la entrada sin redactar (sabotaje temporal), la misma suite falla: 3 de 5 tests (valores sensibles quedan expuestos: authorization 'Bearer curso-token', password 'ficticia-123', email, user_id, photos, etc.)"
+    },
+    {
+      "id": "negative_controlled_failure_after",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/redact-manual.test.ts",
+      "evidence": "restaurada la implementacion (revert exacto del sabotaje), la misma suite pasa completa: 5 de 5 tests; los datos sensibles vuelven a quedar [REDACTED]"
+    }
+  ]
+}

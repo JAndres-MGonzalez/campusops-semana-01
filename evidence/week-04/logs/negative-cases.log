@@ -1,0 +1,17 @@
+commitSha: 515600a977393aafeaec5af258e2879c5bbe23cf
+command: npm test -- --ci --runInBand evidence/week-04/sanitization.test.ts evidence/week-04/error-telemetry.test.tsx
+startedAt: 2026-09-28T23:28:01.753369+00:00
+exitCode: 0
+
+
+> dmi-react-native-starter@1.0.0 test
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand evidence/week-04/sanitization.test.ts evidence/week-04/error-telemetry.test.tsx
+
+PASS evidence/week-04/error-telemetry.test.tsx (5.173 s)
+PASS evidence/week-04/sanitization.test.ts
+
+Test Suites: 2 passed, 2 total
+Tests:       7 passed, 7 total
+Snapshots:   0 total
+Time:        7.816 s
+Ran all test suites matching /evidence\\week-04\\sanitization.test.ts|evidence\\week-04\\error-telemetry.test.tsx/i.

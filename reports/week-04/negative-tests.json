@@ -1,57 +1,71 @@
 {
   "schemaVersion": 1,
   "week": 4,
-  "commitSha": "8671bcbb66990857843993d44a3ac0690d7c3133",
-  "generatedAt": "2026-09-25T06:09:50.433Z",
+  "commitSha": "515600a977393aafeaec5af258e2879c5bbe23cf",
+  "generatedAt": "2026-09-28T23:29:45.650338+00:00",
   "checks": [
     {
-      "id": "negative_technical_fields_kept",
+      "id": "technical-context",
       "status": "pass",
       "scenarioType": "nominal",
-      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/redact-manual.test.ts",
-      "evidence": "incidentId, correlationId, status, attempt y durationMs se conservan; entrada vacía, null y primitivos pasan sin cambios (subtest 'conserva campos técnicos' OK)"
+      "command": "npm test -- --ci --runInBand evidence/week-04/sanitization.test.ts evidence/week-04/error-telemetry.test.tsx",
+      "evidence": "Se conservan incidentId, correlationId, status, attempt y durationMs; se aceptan valores simples, null, objetos y listas vacíos. Ver evidence/week-04/logs/negative-cases.log y error-telemetry.json."
     },
     {
-      "id": "negative_sensitive_values_redacted",
+      "id": "sensitive-values",
       "status": "pass",
       "scenarioType": "nominal",
-      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/redact-manual.test.ts",
-      "evidence": "authorization, password, email, displayName y location se reemplazan por el valor completo [REDACTED] (subtest 'redacta el valor completo de claves sensibles' OK)"
+      "command": "npm test -- --ci --runInBand evidence/week-04/sanitization.test.ts evidence/week-04/error-telemetry.test.tsx",
+      "evidence": "Las 19 claves sensibles del contrato se sustituyen por el valor completo [REDACTED]. Ver evidence/week-04/logs/negative-cases.log y error-telemetry.json."
     },
     {
-      "id": "negative_normalized_keys_boundary",
+      "id": "normalized-keys",
       "status": "pass",
       "scenarioType": "boundary",
-      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/redact-manual.test.ts",
-      "evidence": "claves normalizadas: user_id (guion bajo), Authorization (mayusculas) y access-token (guion) se redactan tras normalizarlas a minusculas sin _ ni - (subtest 'normaliza claves' OK)"
+      "command": "npm test -- --ci --runInBand evidence/week-04/sanitization.test.ts evidence/week-04/error-telemetry.test.tsx",
+      "evidence": "Authorization, access_token, USER-ID y refresh-token se ocultan. Ver evidence/week-04/logs/negative-cases.log y error-telemetry.json."
     },
     {
-      "id": "negative_nested_and_arrays_boundary",
+      "id": "nested-and-arrays",
       "status": "pass",
       "scenarioType": "boundary",
-      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/redact-manual.test.ts",
-      "evidence": "redaccion profunda: request.headers.authorization, perfil.email y arrays de objetos; photos se redacta como valor completo [REDACTED] (subtest 'objetos anidados y arrays' OK)"
+      "command": "npm test -- --ci --runInBand evidence/week-04/sanitization.test.ts evidence/week-04/error-telemetry.test.tsx",
+      "evidence": "Se ocultan claves dentro de listas y objetos; photos se oculta completo. Ver evidence/week-04/logs/negative-cases.log y error-telemetry.json."
     },
     {
-      "id": "negative_no_mutation_boundary",
+      "id": "input-not-mutated",
       "status": "pass",
       "scenarioType": "boundary",
-      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/redact-manual.test.ts",
-      "evidence": "la entrada no se muta: copia con structuredClone antes de llamar y deep-Equal al terminar (subtest 'no muta la entrada' OK)"
+      "command": "npm test -- --ci --runInBand evidence/week-04/sanitization.test.ts evidence/week-04/error-telemetry.test.tsx",
+      "evidence": "Una entrada congelada conserva su contenido original; el resultado es una copia. Ver evidence/week-04/logs/negative-cases.log y error-telemetry.json."
     },
     {
-      "id": "negative_controlled_failure_before",
+      "id": "list-error",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand evidence/week-04/sanitization.test.ts evidence/week-04/error-telemetry.test.tsx",
+      "evidence": "La pantalla muestra un error general. El registro real de list contiene event, operation y error=[REDACTED], sin los datos ficticios privados. Ver evidence/week-04/logs/negative-cases.log y error-telemetry.json."
+    },
+    {
+      "id": "detail-error",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand evidence/week-04/sanitization.test.ts evidence/week-04/error-telemetry.test.tsx",
+      "evidence": "La pantalla muestra un error general. El registro real de detail contiene event, operation y error=[REDACTED], sin los datos ficticios privados. Ver evidence/week-04/logs/negative-cases.log y error-telemetry.json."
+    },
+    {
+      "id": "authorization-missing",
       "status": "fail",
       "scenarioType": "failure",
-      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/redact-manual.test.ts",
-      "evidence": "con redactForTelemetry devolviendo la entrada sin redactar (sabotaje temporal), la misma suite falla: 3 de 5 tests (valores sensibles quedan expuestos: authorization 'Bearer curso-token', password 'ficticia-123', email, user_id, photos, etc.)"
+      "command": "python evidence/week-04/reproduce-security.py",
+      "evidence": "Al retirar authorization de la lista sensible, la prueba pública devuelve 1. Ver evidence/week-04/logs/sanitization-failure.log."
     },
     {
-      "id": "negative_controlled_failure_after",
+      "id": "authorization-restored",
       "status": "pass",
       "scenarioType": "nominal",
-      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/redact-manual.test.ts",
-      "evidence": "restaurada la implementacion (revert exacto del sabotaje), la misma suite pasa completa: 5 de 5 tests; los datos sensibles vuelven a quedar [REDACTED]"
+      "command": "python evidence/week-04/reproduce-security.py",
+      "evidence": "Tras restaurar exactamente el archivo, la misma prueba devuelve 0. Ver evidence/week-04/logs/sanitization-corrected.log y restoration.json."
     }
   ]
 }

@@ -22,8 +22,8 @@
         "Contrato de claves sensibles de CampusOps."
       ],
       "prediction": "Los valores sensibles deben ocultarse y el contexto técnico debe conservarse.",
-      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/redact-manual.test.ts",
-      "observedResult": "Kevin registró 3 fallos de 5 pruebas con una implementación temporal sin redacción y 5 de 5 al restaurarla. El archivo de prueba original era temporal; su reporte se conserva en evidence/week-04/logs/kevin-negative-tests.json. La integración dejó una suite permanente en evidence/week-04/sanitization.test.ts.",
+      "command": "npm test -- --ci --runInBand evidence/week-04/sanitization.test.ts",
+      "observedResult": "Reporte de Kevin: 3 fallos de 5 pruebas con una implementación temporal sin redacción y 5 de 5 al restaurarla. Fuente: evidence/week-04/logs/kevin-negative-tests.json. Verificación de integración: los cinco casos equivalentes de la suite permanente también pasaron; el comando indicado permite repetirlos.",
       "explanation": "La función revisa objetos y listas y reemplaza los valores privados. Esto permite conservar datos útiles del diagnóstico sin registrar credenciales o datos de la incidencia."
     },
     {
@@ -53,7 +53,8 @@
       "studentId": "3523110131",
       "name": "Juan Andrés Medina González",
       "commitShas": [
-        "515600a977393aafeaec5af258e2879c5bbe23cf"
+        "dabb3c6fd3ddad5e9d22770db8cebbe70470adc6",
+        "3858e01bfef004514df837ec46130537d4906cae"
       ],
       "files": [
         "App.tsx",

@@ -1,6 +1,6 @@
-commitSha: 515600a977393aafeaec5af258e2879c5bbe23cf
+commitSha: 3858e01bfef004514df837ec46130537d4906cae
 command: make PYTHON=python feedback
-startedAt: 2026-09-28T23:28:18.789437+00:00
+startedAt: 2026-09-28T23:34:47.317024+00:00
 exitCode: 0
 
 npm run typecheck
@@ -18,13 +18,13 @@ npm run test:smoke
 > dmi-react-native-starter@1.0.0 test:smoke
 > jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx
 
-PASS course-tests/smoke.test.tsx (5.53 s)
-  √ renders the reproducible baseline and resolves backend state (459 ms)
+PASS course-tests/smoke.test.tsx
+  √ renders the reproducible baseline and resolves backend state (425 ms)
 
 Test Suites: 1 passed, 1 total
 Tests:       1 passed, 1 total
 Snapshots:   0 total
-Time:        5.838 s
+Time:        1.567 s, estimated 2 s
 Ran all test suites matching /course-tests\\smoke.test.tsx/i.
 npm run audit:ci
 
@@ -77,7 +77,7 @@ npm run bundle:release
 
 Starting Metro Bundler
 
-Android Bundled 9544ms index.ts (588 modules)
+Android Bundled 2744ms index.ts (588 modules)
 
 › android bundles (1):
 _expo/static/js/android/index-b6a7ef7cdff848d128dc80fdafaf10d4.hbc (1.4MB)

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 4,
-  "commitSha": "515600a977393aafeaec5af258e2879c5bbe23cf",
+  "commitSha": "3858e01bfef004514df837ec46130537d4906cae",
   "decision": "Se mantienen las incidencias ficticias en memoria, sin guardar sesiones ni credenciales en preferencias o archivos. Los errores de lista y detalle pasan por un filtro compartido antes del registro; se conserva la operación y se oculta completo el error.",
   "alternatives": [
     "Mantener el estado ficticio en memoria y aplicar un filtro central antes de registrar errores.",

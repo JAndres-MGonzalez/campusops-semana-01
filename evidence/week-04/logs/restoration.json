@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "week": 4,
-  "commitSha": "515600a977393aafeaec5af258e2879c5bbe23cf",
-  "generatedAt": "2026-09-28T23:26:40.674334+00:00",
+  "commitSha": "3858e01bfef004514df837ec46130537d4906cae",
+  "generatedAt": "2026-09-28T23:34:14.121302+00:00",
   "command": "npm.cmd test -- --ci --runInBand course-tests/public/week-04.test.ts",
   "prediction": "Sin authorization en la lista sensible, la prueba debe detectar el valor sin ocultar; al restaurar el archivo debe pasar.",
   "beforeExitCode": 1,

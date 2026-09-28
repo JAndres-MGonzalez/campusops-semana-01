@@ -27,3 +27,53 @@ En el hito actual los datos de CampusOps viven en memoria durante la ejecución;
 | AL-3 | Escaneo de secretos del evaluador (`secret_scan`: llaves privadas, tokens de GitHub, llaves AWS y variables `EXPO_PUBLIC_*` con nombre secreto) | Credenciales en código o documentos | `make PYTHON=python verify-week-04` (el check `secret_scan` debe pasar) y la evidencia de falla controlada en `reports/week-04/secret-scan.json` |
 | AL-4 | Permisos mínimos del workflow de CI (`contents: read`) | Que un workflow comprometido escriba en el repositorio | `git grep -n "contents: read" -- .github/workflows` |
 | AL-5 | Datos de prueba solo sintéticos | Exponer datos personales reales | Revisión del PR: los ejemplos de `course-tests/` usan valores ficticios (`person@campusops.test`, `Persona ficticia`) |
+## 3. Controles de sanitización
+
+`redactForTelemetry` (contrato en `docs/CAMPUSOPS_API.md`, Semana 4) recorre objetos y listas y sustituye el valor completo por `[REDACTED]` cuando la clave coincide con la lista sensible.
+
+**Normalización de la clave:** se convierte a minúsculas y se eliminan `_` y `-`. Así `access_token`, `Access-Token` y `accessToken` se tratan igual.
+
+**Claves que se redactan** (forma del contrato → forma normalizada):
+
+| Contrato | Normalizada |
+|---|---|
+| `authorization` | `authorization` |
+| `password` | `password` |
+| `token` | `token` |
+| `accessToken` | `accesstoken` |
+| `refreshToken` | `refreshtoken` |
+| `email` | `email` |
+| `displayName` | `displayname` |
+| `name` | `name` |
+| `userId` | `userid` |
+| `reporterId` | `reporterid` |
+| `technicianId` | `technicianid` |
+| `assignedTechnicianId` | `assignedtechnicianid` |
+| `location` | `location` |
+| `latitude` | `latitude` |
+| `longitude` | `longitude` |
+| `photos` | `photos` |
+| `evidence` | `evidence` |
+| `internalComments` | `internalcomments` |
+| `assignmentHistory` | `assignmenthistory` |
+
+**No mutación:** la función devuelve una copia; el objeto de entrada no se modifica.
+
+**Campos técnicos que se conservan:** `incidentId`, `correlationId`, `status`, `attempt`, `durationMs`.
+
+**Límite:** la lista es un mínimo de prueba, no permiso para registrar texto libre sin sanitizar. Por eso el código de `src/` no usa `console` para volcar datos.
+
+## 4. Tabla control → verificación
+
+| ID | Control | Verificación ejecutable | Resultado esperado |
+|---|---|---|---|
+| SAN-1 | Redacción de claves sensibles con `[REDACTED]` | `npm.cmd test -- --ci --runInBand course-tests/public/week-04.test.ts` | La prueba pública de Semana 4 pasa |
+| SAN-2 | Conservación de campos técnicos (`incidentId`, etc.) | Misma prueba pública (verifica que `incidentId` no cambia) | Pasa |
+| SAN-3 | Normalización de claves y no mutación de la entrada | Pruebas negativas de Semana 4 (`reports/week-04/negative-tests.json`) y `make PYTHON=python verify-week-04` | Sin fallos |
+| SAN-4 | No registrar datos sensibles en logs | `git grep -n console -- src` | Sin resultados |
+| AL-1 | Archivos sensibles ignorados por Git | `git check-ignore -v .env release.jks node_modules .jest-cache` | Cada ruta muestra su regla |
+| AL-2 | Sin archivos de credenciales versionados | `git ls-files \| Select-String -Pattern '(^\|/)\.env$\|\.jks$\|\.keystore$'` | Sin resultados |
+| AL-3 | Escaneo de secretos con falla controlada | Comando de `reports/week-04/secret-scan.json` (detecta el marcador sintético y luego queda limpio) | `fail` con marcador, `pass` sin él |
+| AL-4 | Permisos mínimos de CI | `git grep -n "contents: read" -- .github/workflows` | Presente en los workflows |
+
+Un control sin verificación ejecutable no se considera cumplido.

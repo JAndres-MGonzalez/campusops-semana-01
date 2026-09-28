@@ -7,9 +7,10 @@ import { IncidentListScreen } from './screens/IncidentListScreen';
 type Props = Readonly<{
   loadList: () => Promise<readonly IncidentSummary[]>;
   loadDetail: (id: string) => Promise<IncidentDetail | null>;
+  reportFailure?: (operation: 'list' | 'detail', error: unknown) => void;
 }>;
 
-export function IncidentApp({ loadList, loadDetail }: Props) {
+export function IncidentApp({ loadList, loadDetail, reportFailure }: Props) {
   const [incidents, setIncidents] = useState<readonly IncidentSummary[]>([]);
   const [selected, setSelected] = useState<IncidentDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -22,15 +23,16 @@ export function IncidentApp({ loadList, loadDetail }: Props) {
           setIncidents(items);
         }
       })
-      .catch(() => {
+      .catch((error: unknown) => {
         if (active) {
+          reportFailure?.('list', error);
           setError('No se pudo cargar la lista de incidencias.');
         }
       });
     return () => {
       active = false;
     };
-  }, [loadList]);
+  }, [loadList, reportFailure]);
 
   const openDetail = useCallback(
     (id: string) => {
@@ -38,9 +40,12 @@ export function IncidentApp({ loadList, loadDetail }: Props) {
       setSelected(null);
       loadDetail(id)
         .then((detail) => setSelected(detail))
-        .catch(() => setError('No se pudo cargar el detalle de la incidencia.'));
+        .catch((error: unknown) => {
+          reportFailure?.('detail', error);
+          setError('No se pudo cargar el detalle de la incidencia.');
+        });
     },
-    [loadDetail],
+    [loadDetail, reportFailure],
   );
 
   const goBack = useCallback(() => {

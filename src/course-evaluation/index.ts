@@ -12,8 +12,50 @@ function pending(name: string): never {
   throw new Error(`${name} must be implemented in the assigned week`);
 }
 
-export function redactForTelemetry(_input: unknown): unknown {
-  return pending('redactForTelemetry');
+const SENSITIVE_KEYS = new Set([
+  'authorization',
+  'password',
+  'token',
+  'accesstoken',
+  'refreshtoken',
+  'email',
+  'displayname',
+  'name',
+  'userid',
+  'reporterid',
+  'technicianid',
+  'assignedtechnicianid',
+  'location',
+  'latitude',
+  'longitude',
+  'photos',
+  'evidence',
+  'internalcomments',
+  'assignmenthistory',
+]);
+
+function normalizeKey(key: string): string {
+  return key.toLowerCase().replace(/[_-]/g, '');
+}
+
+/**
+ * Sanitización de telemetría (Semana 4).
+ * Recorre objetos y listas SIN mutar la entrada: reemplaza por `[REDACTED]`
+ * el valor completo de las claves sensibles (normalizadas a minúsculas y sin
+ * `_` ni `-`) y conserva los campos técnicos no sensibles y el resto del texto.
+ */
+export function redactForTelemetry(input: unknown): unknown {
+  if (Array.isArray(input)) return input.map((item) => redactForTelemetry(item));
+  if (input !== null && typeof input === 'object') {
+    return Object.fromEntries(
+      Object.entries(input).map(([key, value]) =>
+        SENSITIVE_KEYS.has(normalizeKey(key))
+          ? [key, '[REDACTED]']
+          : [key, redactForTelemetry(value)],
+      ),
+    );
+  }
+  return input;
 }
 
 export function parseRemoteResource(_input: unknown): ParseResult {

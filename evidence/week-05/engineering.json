@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 5,
-  "commitSha": "01af4125719b5f0136160204cdc46d586740391f",
+  "commitSha": "cdc1de765912ab4e643fb4c7155487abac4e21de",
   "decision": "Validar el sobre remoto en una función compartida y convertir el payload al modelo de incidencias en el cliente HTTP. La UI usa casos de uso y estados seguros. El parser devuelve ok:false/error:contract; los fallos HTTP se distinguen con IncidentRequestError y se capturan en la UI.",
   "alternatives": [
     "Usar el DTO directamente en las pantallas: menos archivos, pero la UI queda ligada al formato remoto y puede usar datos incompletos.",
@@ -33,6 +33,6 @@
       "evidence": "evidence/week-05/logs/architecture.log; la UI no importa infraestructura."
     }
   ],
-  "generatedAt": "2026-10-05T00:51:52.176874+00:00",
+  "generatedAt": "2026-10-05T00:56:48.459454+00:00",
   "sourceEvidence": "Justificación original de Ismael conservada en evidence/week-05/logs/ismael-engineering-original.json; verificación actualizada durante la integración."
 }

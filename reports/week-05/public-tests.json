@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "week": 5,
   "mode": "public",
-  "commitSha": "01af4125719b5f0136160204cdc46d586740391f",
-  "evaluatedAt": "2026-10-05T00:54:15.010746+00:00",
+  "commitSha": "cdc1de765912ab4e643fb4c7155487abac4e21de",
+  "evaluatedAt": "2026-10-05T00:58:07.855873+00:00",
   "status": "pass",
   "checks": [
     {
@@ -74,7 +74,7 @@
     {
       "id": "toolchain_4",
       "status": "pass",
-      "detail": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts\n> dmi-react-native-starter@1.0.0 test\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-05.test.ts\n\n\nPASS course-tests/public/week-05.test.ts\n  √ CampusOps validates the published incident DTO boundary 0 (2 ms)\n  √ CampusOps validates the published incident DTO boundary 1\n  √ CampusOps validates the published incident DTO boundary 2\n  √ CampusOps validates the published incident DTO boundary 3\n  √ CampusOps validates the published incident DTO boundary 4\n\nTest Suites: 1 passed, 1 total\nTests:       5 passed, 5 total\nSnapshots:   0 total\nTime:        0.857 s, estimated 1 s\nRan all test suites matching /course-tests\\\\public\\\\week-05.test.ts/i."
+      "detail": "npm test -- --ci --runInBand course-tests/public/week-05.test.ts\n> dmi-react-native-starter@1.0.0 test\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-05.test.ts\n\n\nPASS course-tests/public/week-05.test.ts\n  √ CampusOps validates the published incident DTO boundary 0 (2 ms)\n  √ CampusOps validates the published incident DTO boundary 1\n  √ CampusOps validates the published incident DTO boundary 2\n  √ CampusOps validates the published incident DTO boundary 3 (1 ms)\n  √ CampusOps validates the published incident DTO boundary 4\n\nTest Suites: 1 passed, 1 total\nTests:       5 passed, 5 total\nSnapshots:   0 total\nTime:        0.875 s, estimated 1 s\nRan all test suites matching /course-tests\\\\public\\\\week-05.test.ts/i."
     }
   ]
 }

@@ -1,22 +1,44 @@
 {
-    "schemaVersion":  1,
-    "week":  5,
-    "commitSha":  "63546fb33232da98b8b6ff451a63903306a6efea",
-    "generatedAt":  "2026-10-04T22:03:35.493060+00:00",
-    "checks":  [
-                   {
-                       "id":  "nominal-valid-envelope",
-                       "status":  "pass",
-                       "scenarioType":  "nominal",
-                       "command":  "npm.cmd test -- --ci --runInBand src/course-evaluation/week-05-contract-manual.test.ts",
-                       "evidence":  "Sobre valido aceptado. Resultado real: Test Suites: 1 passed, 1 total; Tests:       9 passed, 9 total\r."
-                   },
-                   {
-                       "id":  "boundary-payload-null-and-rejections",
-                       "status":  "pass",
-                       "scenarioType":  "boundary",
-                       "command":  "npm.cmd test -- --ci --runInBand src/course-evaluation/week-05-contract-manual.test.ts",
-                       "evidence":  "payload null aceptado sin inventar datos; campos futuros ignorados; id vacio, version string/negativa/flotante, status vacio, payload incorrecto y entradas no-objeto rechazados con {ok:false,error:\u0027contract\u0027}. Tests:       9 passed, 9 total\r."
-                   }
-               ]
+  "schemaVersion": 1,
+  "week": 5,
+  "commitSha": "01af4125719b5f0136160204cdc46d586740391f",
+  "generatedAt": "2026-10-05T00:51:52.176874+00:00",
+  "checks": [
+    {
+      "id": "nominal-valid-envelope",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm test -- --ci --runInBand evidence/week-05/contract-cases.test.ts",
+      "evidence": "Suite permanente: sobre válido aceptado sin modificar la entrada. Nueve casos PASS; evidence/week-05/logs/backend-and-contract.log."
+    },
+    {
+      "id": "boundary-nullable-envelope",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm test -- --ci --runInBand evidence/week-05/contract-cases.test.ts",
+      "evidence": "payload null y campos futuros aceptados; payload permanece null y el resultado conserva solo los campos del contrato. Nueve casos PASS."
+    },
+    {
+      "id": "failure-invalid-envelope",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand evidence/week-05/contract-cases.test.ts",
+      "evidence": "id/status vacíos, versión string/negativa/fraccionaria, payload array y entrada null devuelven ok:false/error:contract. Nueve casos PASS."
+    },
+    {
+      "id": "nominal-dto-domain-ui",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx",
+      "evidence": "La UI consulta lista/detalle y crea una incidencia mediante casos de uso y HttpIncidentRepository. description/location/reporterId se convierten a title/locationLabel/reportedBy; las fechas ausentes permanecen null. 27 casos PASS."
+    },
+    {
+      "id": "failure-domain-payload",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx",
+      "evidence": "La validación del sobre no sustituye al dominio: un payload sin campos obligatorios provoca error contract y un estado seguro en la UI. 27 casos PASS."
+    }
+  ],
+  "sourceEvidence": "Reporte original de Ismael conservado en evidence/week-05/logs/ismael-contract-tests-original.json. Las comprobaciones permanentes corresponden a la integración final."
 }

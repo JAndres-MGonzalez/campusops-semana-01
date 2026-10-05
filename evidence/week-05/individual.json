@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "week": 5,
   "teamId": "9A-E08",
-  "commitSha": "7e0d82c97962b94d6d7620a5f6c9c47909131976",
+  "commitSha": "01af4125719b5f0136160204cdc46d586740391f",
   "members": [
     {
       "studentId": "3523110092",
@@ -30,9 +30,9 @@
       "studentId": "3523110741",
       "name": "Jose Ismael Montalvo Lopez",
       "commitShas": [
-        "64aaa8ed697bac26c468b5e5ac75bd3b3d682123",
-        "2743467caefb9376a80a86ea55708028234d28db",
-        "454fc6eb4b6eab97b832aa673f678abe5df1163c"
+        "ae1515c9bd4989298b942b97834d11a851f4ffaa",
+        "fb938ab14d6ea965e9e0bb096983c4fad25f6daf",
+        "425a075e399943bbd2156d3db2e62a9bbd53d25c"
       ],
       "files": [
         "reports/week-05/contract-tests.json",
@@ -40,40 +40,48 @@
         "evidence/week-05/reports/3523110741.md"
       ],
       "tests": [
-        "Sus commits registran nueve casos manuales y cinco casos publicos. La prueba manual temporal no esta en su rama publicada."
+        "Ismael registra nueve casos manuales y cinco públicos en su reporte. En la integración se repitieron nueve casos permanentes del contrato."
       ],
       "reviews": [
         "Decision sobre el limite DTO, dominio y errores documentada en engineering.json."
       ],
       "prediction": "Los sobres validos se aceptan y los invalidos devuelven ok:false/error:contract.",
-      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/week-05-contract-manual.test.ts",
-      "observedResult": "Ismael registra 9 casos PASS y 5 publicos PASS en sus commits. El comando manual requiere recuperar el archivo temporal antes de repetirlo.",
-      "explanation": "El reporte justifica validar el DTO en un punto compartido y representar el formato invalido como un dato."
+      "command": "npm test -- --ci --runInBand evidence/week-05/contract-cases.test.ts",
+      "observedResult": "Declaración de Ismael: 9 manuales y 5 públicos PASS. Repetición de integración: 9 permanentes PASS; su prueba temporal original no está versionada.",
+      "explanation": "Ismael documentó los casos del sobre y justificó separar los datos remotos del modelo de la app. El reporte original se conserva y la integración añade un comando repetible."
     },
     {
       "studentId": "3523110131",
       "name": "Juan Andrés Medina González",
       "commitShas": [
-        "7e0d82c97962b94d6d7620a5f6c9c47909131976"
+        "be6fb339263f87ddda54c2f508f75ddc3a4f12ec",
+        "01af4125719b5f0136160204cdc46d586740391f"
       ],
       "files": [
         ".github/workflows/week-05-cliente-cloud-feedback.yml",
+        "App.tsx",
+        "src/domain/remote-resource.ts",
+        "src/infrastructure/incidents/http-incident-repository.ts",
+        "src/ui/IncidentApp.tsx",
+        "src/ui/screens/IncidentCreateScreen.tsx",
         "reports/week-05/failure-matrix.json",
         "evidence/week-05/individual.json",
         "evidence/week-05/backend-failures.test.ts",
         "evidence/week-05/contract-cases.test.ts",
+        "evidence/week-05/http-client-ui.test.tsx",
         "evidence/week-05/reports/3523110131.md"
       ],
       "tests": [
-        "Seis escenarios contra el backend local y nueve casos permanentes del contrato; 15 casos PASS."
+        "Ocho pruebas del backend local, nueve del contrato y diez de cliente/UI: 27 casos PASS."
       ],
       "reviews": [
         "Workflow con checkout explicito, historial de dos commits, permisos contents:read y validacion de la etiqueta final."
       ],
-      "prediction": "Los escenarios permiten distinguir el sobre valido, payload nulo, JSON invalido, HTTP 500, HTTP 429 y timeout sin Internet publico.",
-      "command": "npm.cmd test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts",
-      "observedResult": "Dos suites y 15 casos PASS. La comprobacion valida el backend y el parser; la app aun usa datos en memoria.",
-      "explanation": "La matriz conserva respuestas y resultados repetibles. La validacion del sobre y los fallos del experimento no sustituyen conectar el cliente con la app."
+      "prediction": "El cliente valida y convierte antes de mostrar datos; payload null, formato inválido, timeout y error de servidor producen estados distintos y seguros.",
+      "command": "npm test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx",
+      "observedResult": "3 suites y 27 casos PASS. Lista, detalle, creación y reintento sin duplicados comprobados con el cliente integrado.",
+      "explanation": "La pantalla usa casos de uso; el cliente controla HTTP y valida la respuesta. Si el dato está vacío no se inventa y, si falla, se muestra un error seguro y se permite reintentar."
     }
-  ]
+  ],
+  "generatedAt": "2026-10-05T00:51:52.176874+00:00"
 }

@@ -1,51 +1,65 @@
 {
   "schemaVersion": 1,
   "week": 5,
-  "commitSha": "7e0d82c97962b94d6d7620a5f6c9c47909131976",
-  "generatedAt": "2026-10-05T00:06:00.6941444+00:00",
+  "commitSha": "01af4125719b5f0136160204cdc46d586740391f",
+  "generatedAt": "2026-10-05T00:51:52.176874+00:00",
   "checks": [
     {
+      "id": "nominal-list-detail-create",
       "status": "pass",
-      "command": "npm.cmd test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts",
-      "evidence": "HTTP 200 del backend local; parseRemoteResource acepta el primer sobre. evidence/week-05/logs/success.json y backend-and-contract.log. El cuerpo guardado esta sanitizado.",
       "scenarioType": "nominal",
-      "id": "nominal-backend-envelope"
+      "command": "npm test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx",
+      "evidence": "Lista, detalle y creación mediante el cliente real sobre HTTP local; la clave repetida devuelve la misma incidencia. logs/success.json, creation.json y backend-and-contract.log."
     },
     {
+      "id": "boundary-nullable",
       "status": "pass",
-      "command": "npm.cmd test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts",
-      "evidence": "HTTP 200; payload:null aceptado y conservado como null, sin inventar una incidencia. evidence/week-05/logs/nullable.json y backend-and-contract.log.",
       "scenarioType": "boundary",
-      "id": "boundary-nullable-payload"
+      "command": "npm test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx",
+      "evidence": "HTTP 200 con payload null: lista vacía y detalle null, sin inventar datos. La UI muestra ausencia de información. logs/nullable.json."
     },
     {
+      "id": "failure-malformed",
       "status": "pass",
-      "command": "npm.cmd test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts",
-      "evidence": "HTTP 200 con cuerpo crudo {\"items\": [}; JSON.parse produce SyntaxError y la prueba lo detecta. Un sobre con id vacio devuelve ok:false/error:contract. evidence/week-05/logs/malformed.json y backend-and-contract.log.",
       "scenarioType": "failure",
-      "id": "failure-malformed-json"
+      "command": "npm test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx",
+      "evidence": "HTTP 200 con JSON incompleto: el cliente devuelve error tipado contract y la UI permite reintentar. Un sobre inválido también se rechaza. logs/malformed.json."
     },
     {
+      "id": "failure-server-500",
       "status": "pass",
-      "command": "npm.cmd test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts",
-      "evidence": "HTTP 500 y body.code=controlled_failure observados. evidence/week-05/logs/server_error.json y backend-and-contract.log.",
       "scenarioType": "failure",
-      "id": "failure-server-error-500"
+      "command": "npm test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx",
+      "evidence": "HTTP 500 identificado como server con httpStatus 500; UI segura y log sanitizado; reintento válido recupera la lista. logs/server_error.json."
     },
     {
+      "id": "failure-slow-timeout",
       "status": "pass",
-      "command": "npm.cmd test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts",
-      "evidence": "Solicitud HTTP real del experimento abortada a los 150 ms ante el escenario slow; AbortError capturado por la prueba. evidence/week-05/logs/slow.json y backend-and-contract.log.",
       "scenarioType": "failure",
-      "id": "failure-timeout-slow"
+      "command": "npm test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx",
+      "evidence": "Escenario slow: el cliente cancela a los 150 ms en el experimento y clasifica timeout. La configuración normal es 2000 ms. La UI controla el error y permite reintentar. logs/slow.json."
     },
     {
+      "id": "failure-rate-limit",
       "status": "pass",
-      "command": "npm.cmd test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts",
-      "evidence": "HTTP 429, Retry-After:1 y body.code=rate_limited observados. evidence/week-05/logs/rate_limited.json y backend-and-contract.log.",
       "scenarioType": "failure",
-      "id": "failure-rate-limited-429"
+      "command": "npm test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx",
+      "evidence": "HTTP 429 clasificado rate_limit y Retry-After:1 conservado. El reintento es manual. logs/rate_limited.json."
+    },
+    {
+      "id": "failure-write-timeout",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx",
+      "evidence": "Timeout después de guardar: el reintento con la misma Idempotency-Key recupera el resultado y la lista contiene una sola creación. logs/write-timeout.json."
+    },
+    {
+      "id": "failure-ui-network-and-validation",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx",
+      "evidence": "La UI captura network/contract/server/timeout/rate_limit, conserva el formulario tras fallo y no envía campos vacíos. Logs de errores sanitizados. logs/backend-and-contract.log."
     }
   ],
-  "scope": "Experimentos contra el backend didactico local y el parser compartido. La app conserva el repositorio en memoria; estos resultados no acreditan su integracion HTTP."
+  "scope": "Cliente HTTP, casos de uso y UI integrados. Pruebas con backend didáctico local y transporte simulado predecible; sin dependencia de Internet público. No se realizó una prueba en dispositivo físico."
 }

@@ -1,31 +1,38 @@
 {
-    "schemaVersion":  1,
-    "week":  5,
-    "commitSha":  "63546fb33232da98b8b6ff451a63903306a6efea",
-    "decision":  "El cliente separa el DTO remoto {id,version,status,payload} del modelo de la app: parseRemoteResource centraliza la validacion y devuelve {ok:false,error:\u0027contract\u0027} ante formato invalido, manteniendo payload null sin inventar datos; el error se representa como dato ({ok:false}) y no como excepcion en la UI.",
-    "alternatives":  [
-                         "Opcion 1: usar el DTO sin validar directamente en las pantallas (menos codigo, pero una respuesta malformada rompe la UI y no se distinguen errores).",
-                         "Opcion 2: lanzar excepciones por cada error de parseo y capturarlas en cada pantalla (distingue errores pero acopla el parseo a la UI y duplica el manejo de errores).",
-                         "Opcion 3 (elegida): capa de parseo/validacion unica que devuelve un result tipo {ok:true/value|ok:false/error}, y la UI solo maneja estados seguros."
-                     ],
-    "tradeoff":  "Centralizar la validacion (Opcion 3) agrega una capa y una prueba manual extra, pero desacopla la UI del formato del backend, hace comprobable la separacion DTO-\u003edominio sin servicio real y permite ignorar campos futuros del sobre sin romper.",
-    "requirementIds":  [
-                           "AC-01",
-                           "AC-02",
-                           "AC-03",
-                           "AC-04",
-                           "AC-05"
-                       ],
-    "verification":  [
-                         {
-                             "command":  "npm.cmd test -- --ci --runInBand src/course-evaluation/week-05-contract-manual.test.ts",
-                             "result":  "Test Suites: 1 passed, 1 total; Tests:       9 passed, 9 total\r.",
-                             "evidence":  "reports/week-05/contract-tests.json; evidence/week-05/reports/3523110741.md"
-                         },
-                         {
-                             "command":  "npm.cmd test -- --ci --runInBand course-tests/public/week-05.test.ts",
-                             "result":  "Tests:       5 passed, 5 total\r",
-                             "evidence":  "Reproduccion local y workflow week-05 en CI."
-                         }
-                     ]
+  "schemaVersion": 1,
+  "week": 5,
+  "commitSha": "01af4125719b5f0136160204cdc46d586740391f",
+  "decision": "Validar el sobre remoto en una función compartida y convertir el payload al modelo de incidencias en el cliente HTTP. La UI usa casos de uso y estados seguros. El parser devuelve ok:false/error:contract; los fallos HTTP se distinguen con IncidentRequestError y se capturan en la UI.",
+  "alternatives": [
+    "Usar el DTO directamente en las pantallas: menos archivos, pero la UI queda ligada al formato remoto y puede usar datos incompletos.",
+    "Validar y convertir en cada pantalla: permite detectar errores, pero repite reglas y dificulta comprobarlas.",
+    "Validar el sobre una sola vez y convertirlo en el cliente HTTP: concentra las reglas y permite probarlas con el backend local y respuestas simuladas."
+  ],
+  "tradeoff": "La separación agrega un adaptador y pruebas, pero mantiene HTTP fuera de la UI y evita usar datos inválidos. payload null no crea datos ficticios. El timeout es de 2000 ms; el reintento es manual y la clave de creación se conserva mientras el formulario está abierto, sin persistencia entre reinicios.",
+  "requirementIds": [
+    "AC-01",
+    "AC-02",
+    "AC-03",
+    "AC-04",
+    "AC-05"
+  ],
+  "verification": [
+    {
+      "command": "npm test -- --ci --runInBand evidence/week-05/contract-cases.test.ts",
+      "result": "1 suite, 9 casos PASS.",
+      "evidence": "evidence/week-05/logs/backend-and-contract.log; reports/week-05/contract-tests.json"
+    },
+    {
+      "command": "npm test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx",
+      "result": "3 suites, 27 casos PASS.",
+      "evidence": "evidence/week-05/logs/backend-and-contract.log; consultas y creación con backend local; errores y reintento comprobados en la UI."
+    },
+    {
+      "command": "npm run check:architecture",
+      "result": "PASS; 24 dependencias revisadas.",
+      "evidence": "evidence/week-05/logs/architecture.log; la UI no importa infraestructura."
+    }
+  ],
+  "generatedAt": "2026-10-05T00:51:52.176874+00:00",
+  "sourceEvidence": "Justificación original de Ismael conservada en evidence/week-05/logs/ismael-engineering-original.json; verificación actualizada durante la integración."
 }

@@ -1,4 +1,5 @@
 import { redactTelemetryData } from '../infrastructure/telemetry/safe-telemetry';
+import { validateRemoteResource } from '../domain/remote-resource';
 import type {
   AuthEvent,
   JsonObject,
@@ -18,32 +19,7 @@ export function redactForTelemetry(input: unknown): unknown {
 }
 
 export function parseRemoteResource(input: unknown): ParseResult {
-  if (input === null || typeof input !== 'object' || Array.isArray(input)) {
-    return { ok: false, error: 'contract' };
-  }
-  const record = input as Readonly<Record<string, unknown>>;
-  const { id, version, status, payload } = record;
-  if (typeof id !== 'string' || id.trim().length === 0) {
-    return { ok: false, error: 'contract' };
-  }
-  if (typeof status !== 'string' || status.trim().length === 0) {
-    return { ok: false, error: 'contract' };
-  }
-  if (typeof version !== 'number' || !Number.isInteger(version) || version < 0) {
-    return { ok: false, error: 'contract' };
-  }
-  if (payload !== null && (typeof payload !== 'object' || Array.isArray(payload))) {
-    return { ok: false, error: 'contract' };
-  }
-  return {
-    ok: true,
-    value: {
-      id,
-      version,
-      status,
-      payload: payload as JsonObject | null,
-    },
-  };
+  return validateRemoteResource(input);
 }
 
 export function coordinateRefresh(_events: readonly AuthEvent[]): Readonly<{

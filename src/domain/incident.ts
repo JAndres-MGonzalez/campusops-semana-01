@@ -12,7 +12,13 @@ export type IncidentDetail = Readonly<
   IncidentSummary & {
     description: string;
     reportedBy: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: string | null;
+    updatedAt: string | null;
   }
 >;
+
+export type IncidentDraft = Readonly<{
+  category: IncidentCategory;
+  description: string;
+  location: string;
+}>;

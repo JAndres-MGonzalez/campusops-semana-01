@@ -1,5 +1,6 @@
+commitSha: 01af4125719b5f0136160204cdc46d586740391f
+generatedAt: 2026-10-05T00:53:51.4173497+00:00
 command: make PYTHON=python verify-week-05
-startedAt: 2026-10-05T00:06:08.3492295+00:00
 exitCode: 0
 
 python tools/course_public_evaluator.py --week 05 --mode verify --execute-toolchain
@@ -7,8 +8,8 @@ python tools/course_public_evaluator.py --week 05 --mode verify --execute-toolch
   "schemaVersion": 1,
   "week": 5,
   "mode": "verify",
-  "commitSha": "7e0d82c97962b94d6d7620a5f6c9c47909131976",
-  "evaluatedAt": "2026-10-05T00:06:20.640792+00:00",
+  "commitSha": "01af4125719b5f0136160204cdc46d586740391f",
+  "evaluatedAt": "2026-10-05T00:54:04.144865+00:00",
   "status": "pass",
   "checks": [
     {
@@ -54,7 +55,7 @@ python tools/course_public_evaluator.py --week 05 --mode verify --execute-toolch
     {
       "id": "toolchain_4",
       "status": "pass",
-      "detail": "npm run test:smoke\n> dmi-react-native-starter@1.0.0 test:smoke\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx\n\n\nPASS course-tests/smoke.test.tsx\n  √ renders the reproducible baseline and resolves backend state (383 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       1 passed, 1 total\nSnapshots:   0 total\nTime:        1.427 s, estimated 5 s\nRan all test suites matching /course-tests\\\\smoke.test.tsx/i."
+      "detail": "npm run test:smoke\n> dmi-react-native-starter@1.0.0 test:smoke\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx\n\n  console.warn\n    {\"event\":\"incident_load_failed\",\"operation\":\"list\",\"error\":\"[REDACTED]\"}\n\n    \u001b[0m \u001b[90m 48 |\u001b[39m \u001b[36mexport\u001b[39m \u001b[36mfunction\u001b[39m reportIncidentFailure(operation\u001b[33m:\u001b[39m \u001b[32m'list'\u001b[39m \u001b[33m|\u001b[39m \u001b[32m'detail'\u001b[39m \u001b[33m|\u001b[39m \u001b[32m'create'\u001b[39m\u001b[33m,\u001b[39m error\u001b[33m:\u001b[39m unknown)\u001b[33m:\u001b[39m \u001b[36mvoid\u001b[39m {\n     \u001b[90m 49 |\u001b[39m   \u001b[36mconst\u001b[39m record \u001b[33m=\u001b[39m redactTelemetryData({ event\u001b[33m:\u001b[39m operation \u001b[33m===\u001b[39m \u001b[32m'create'\u001b[39m \u001b[33m?\u001b[39m \u001b[32m'incident_create_failed'\u001b[39m \u001b[33m:\u001b[39m \u001b[32m'incident_load_failed'\u001b[39m\u001b[33m,\u001b[39m operation\u001b[33m,\u001b[39m error })\u001b[33m;\u001b[39m\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 50 |\u001b[39m   console\u001b[33m.\u001b[39mwarn(\u001b[33mJSON\u001b[39m\u001b[33m.\u001b[39mstringify(record))\u001b[33m;\u001b[39m\n     \u001b[90m    |\u001b[39m           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 51 |\u001b[39m }\n     \u001b[90m 52 |\u001b[39m\u001b[0m\n\n      at warn (src/infrastructure/telemetry/safe-telemetry.ts:50:11)\n      at src/ui/IncidentApp.tsx:48:24\n\n\nPASS course-tests/smoke.test.tsx\n  √ renders the reproducible baseline and resolves backend state (263 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       1 passed, 1 total\nSnapshots:   0 total\nTime:        1.244 s, estimated 2 s\nRan all test suites matching /course-tests\\\\smoke.test.tsx/i."
     },
     {
       "id": "toolchain_5",

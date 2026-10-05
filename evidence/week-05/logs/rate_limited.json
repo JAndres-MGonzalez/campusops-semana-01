@@ -5,7 +5,7 @@
   "body": {
     "code": "rate_limited"
   },
-  "generatedAt": "2026-10-05T00:45:39.943Z",
+  "generatedAt": "2026-10-05T00:53:02.867Z",
   "client": {
     "kind": "rate_limit",
     "httpStatus": 429,

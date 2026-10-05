@@ -1,0 +1,10 @@
+commitSha: 01af4125719b5f0136160204cdc46d586740391f
+generatedAt: 2026-10-05T00:53:07.5451512+00:00
+command: npm.cmd run check:architecture
+exitCode: 0
+
+
+> dmi-react-native-starter@1.0.0 check:architecture
+> node tools/check-boundaries.mjs
+
+OK: 24 dependencias internas respetan los límites (ui/application/domain/infrastructure).

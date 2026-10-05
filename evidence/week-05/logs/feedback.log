@@ -1,5 +1,6 @@
+commitSha: 01af4125719b5f0136160204cdc46d586740391f
+generatedAt: 2026-10-05T00:53:07.9725493+00:00
 command: make PYTHON=python feedback
-startedAt: 2026-10-05T00:05:17.7673065+00:00
 exitCode: 0
 
 npm run typecheck
@@ -17,13 +18,26 @@ npm run test:smoke
 > dmi-react-native-starter@1.0.0 test:smoke
 > jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx
 
+  console.warn
+    {"event":"incident_load_failed","operation":"list","error":"[REDACTED]"}
+
+    [0m [90m 48 |[39m [36mexport[39m [36mfunction[39m reportIncidentFailure(operation[33m:[39m [32m'list'[39m [33m|[39m [32m'detail'[39m [33m|[39m [32m'create'[39m[33m,[39m error[33m:[39m unknown)[33m:[39m [36mvoid[39m {
+     [90m 49 |[39m   [36mconst[39m record [33m=[39m redactTelemetryData({ event[33m:[39m operation [33m===[39m [32m'create'[39m [33m?[39m [32m'incident_create_failed'[39m [33m:[39m [32m'incident_load_failed'[39m[33m,[39m operation[33m,[39m error })[33m;[39m
+    [31m[1m>[22m[39m[90m 50 |[39m   console[33m.[39mwarn([33mJSON[39m[33m.[39mstringify(record))[33m;[39m
+     [90m    |[39m           [31m[1m^[22m[39m
+     [90m 51 |[39m }
+     [90m 52 |[39m[0m
+
+      at warn (src/infrastructure/telemetry/safe-telemetry.ts:50:11)
+      at src/ui/IncidentApp.tsx:48:24
+
 PASS course-tests/smoke.test.tsx
-  √ renders the reproducible baseline and resolves backend state (1827 ms)
+  √ renders the reproducible baseline and resolves backend state (328 ms)
 
 Test Suites: 1 passed, 1 total
 Tests:       1 passed, 1 total
 Snapshots:   0 total
-Time:        4.43 s, estimated 15 s
+Time:        1.973 s
 Ran all test suites matching /course-tests\\smoke.test.tsx/i.
 npm run audit:ci
 
@@ -110,7 +124,7 @@ node_modules/braces
           Depends on vulnerable versions of @react-native/jest-preset
           Depends on vulnerable versions of @react-native/virtualized-lists
           node_modules/react-native
-            @react-native/virtualized-lists  >=0.85.0-nightly-20260108-1236b6be4
+            @react-native/virtualized-lists  0.85.0-nightly-20260108-1236b6be4 - 0.87.0-rc.4
             Depends on vulnerable versions of react-native
             node_modules/@react-native/virtualized-lists
     jest-haste-map  18.1.0 - 30.2.0
@@ -189,10 +203,10 @@ npm run bundle:release
 
 Starting Metro Bundler
 
-Android Bundled 5918ms index.ts (588 modules)
+Android Bundled 4425ms index.ts (591 modules)
 
 › android bundles (1):
-_expo/static/js/android/index-b6a7ef7cdff848d128dc80fdafaf10d4.hbc (1.4MB)
+_expo/static/js/android/index-6560fa0b945b38b4db7d2e10f545f664.hbc (1.5MB)
 
 › Files (1):
 metadata.json (150B)

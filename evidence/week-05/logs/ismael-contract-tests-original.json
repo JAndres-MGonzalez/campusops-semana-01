@@ -1,0 +1,22 @@
+{
+    "schemaVersion":  1,
+    "week":  5,
+    "commitSha":  "63546fb33232da98b8b6ff451a63903306a6efea",
+    "generatedAt":  "2026-10-04T22:03:35.493060+00:00",
+    "checks":  [
+                   {
+                       "id":  "nominal-valid-envelope",
+                       "status":  "pass",
+                       "scenarioType":  "nominal",
+                       "command":  "npm.cmd test -- --ci --runInBand src/course-evaluation/week-05-contract-manual.test.ts",
+                       "evidence":  "Sobre valido aceptado. Resultado real: Test Suites: 1 passed, 1 total; Tests:       9 passed, 9 total\r."
+                   },
+                   {
+                       "id":  "boundary-payload-null-and-rejections",
+                       "status":  "pass",
+                       "scenarioType":  "boundary",
+                       "command":  "npm.cmd test -- --ci --runInBand src/course-evaluation/week-05-contract-manual.test.ts",
+                       "evidence":  "payload null aceptado sin inventar datos; campos futuros ignorados; id vacio, version string/negativa/flotante, status vacio, payload incorrecto y entradas no-objeto rechazados con {ok:false,error:\u0027contract\u0027}. Tests:       9 passed, 9 total\r."
+                   }
+               ]
+}

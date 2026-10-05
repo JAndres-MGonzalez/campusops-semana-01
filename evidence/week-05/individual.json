@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "week": 5,
+  "teamId": "9A-E08",
+  "commitSha": "7e0d82c97962b94d6d7620a5f6c9c47909131976",
+  "members": [
+    {
+      "studentId": "3523110092",
+      "name": "Kevin Armando Montalvo Marcial",
+      "commitShas": [
+        "542af68bc9da3666cd1f96d09c2ab474a9b13f35"
+      ],
+      "files": [
+        "src/course-evaluation/index.ts",
+        "docs/api-contract.md",
+        "evidence/week-05/reports/3523110092.md"
+      ],
+      "tests": [
+        "Cinco casos publicos del sobre DTO registrados en su commit y comprobados de nuevo durante la Parte C."
+      ],
+      "reviews": [
+        "Contrato de solicitudes, respuestas y validacion documentado en docs/api-contract.md."
+      ],
+      "prediction": "Un sobre valido con payload null u objeto se acepta; id/status vacios, version no entera y entradas no-objeto se rechazan.",
+      "command": "npm.cmd test -- --ci --runInBand course-tests/public/week-05.test.ts",
+      "observedResult": "Su commit registra 1 suite y 5 casos PASS; la comprobacion de integracion dio el mismo resultado.",
+      "explanation": "El parser valida el sobre y devuelve contract ante formato invalido; un payload nulo valido no permite inventar datos."
+    },
+    {
+      "studentId": "3523110741",
+      "name": "Jose Ismael Montalvo Lopez",
+      "commitShas": [
+        "64aaa8ed697bac26c468b5e5ac75bd3b3d682123",
+        "2743467caefb9376a80a86ea55708028234d28db",
+        "454fc6eb4b6eab97b832aa673f678abe5df1163c"
+      ],
+      "files": [
+        "reports/week-05/contract-tests.json",
+        "evidence/week-05/engineering.json",
+        "evidence/week-05/reports/3523110741.md"
+      ],
+      "tests": [
+        "Sus commits registran nueve casos manuales y cinco casos publicos. La prueba manual temporal no esta en su rama publicada."
+      ],
+      "reviews": [
+        "Decision sobre el limite DTO, dominio y errores documentada en engineering.json."
+      ],
+      "prediction": "Los sobres validos se aceptan y los invalidos devuelven ok:false/error:contract.",
+      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/week-05-contract-manual.test.ts",
+      "observedResult": "Ismael registra 9 casos PASS y 5 publicos PASS en sus commits. El comando manual requiere recuperar el archivo temporal antes de repetirlo.",
+      "explanation": "El reporte justifica validar el DTO en un punto compartido y representar el formato invalido como un dato."
+    },
+    {
+      "studentId": "3523110131",
+      "name": "Juan Andrés Medina González",
+      "commitShas": [
+        "7e0d82c97962b94d6d7620a5f6c9c47909131976"
+      ],
+      "files": [
+        ".github/workflows/week-05-cliente-cloud-feedback.yml",
+        "reports/week-05/failure-matrix.json",
+        "evidence/week-05/individual.json",
+        "evidence/week-05/backend-failures.test.ts",
+        "evidence/week-05/contract-cases.test.ts",
+        "evidence/week-05/reports/3523110131.md"
+      ],
+      "tests": [
+        "Seis escenarios contra el backend local y nueve casos permanentes del contrato; 15 casos PASS."
+      ],
+      "reviews": [
+        "Workflow con checkout explicito, historial de dos commits, permisos contents:read y validacion de la etiqueta final."
+      ],
+      "prediction": "Los escenarios permiten distinguir el sobre valido, payload nulo, JSON invalido, HTTP 500, HTTP 429 y timeout sin Internet publico.",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts",
+      "observedResult": "Dos suites y 15 casos PASS. La comprobacion valida el backend y el parser; la app aun usa datos en memoria.",
+      "explanation": "La matriz conserva respuestas y resultados repetibles. La validacion del sobre y los fallos del experimento no sustituyen conectar el cliente con la app."
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "scenario": "rate_limited",
+  "status": 429,
+  "retryAfter": "1",
+  "body": {
+    "code": "rate_limited"
+  },
+  "generatedAt": "2026-10-05T00:05:16.506Z"
+}

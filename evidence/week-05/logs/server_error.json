@@ -1,0 +1,9 @@
+{
+  "scenario": "server_error",
+  "status": 500,
+  "retryAfter": null,
+  "body": {
+    "code": "controlled_failure"
+  },
+  "generatedAt": "2026-10-05T00:05:16.504Z"
+}

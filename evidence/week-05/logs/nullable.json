@@ -1,0 +1,16 @@
+{
+  "scenario": "nullable",
+  "status": 200,
+  "retryAfter": null,
+  "body": {
+    "items": [
+      {
+        "id": "campus-inc-001",
+        "version": 1,
+        "status": "assigned",
+        "payload": null
+      }
+    ]
+  },
+  "generatedAt": "2026-10-05T00:05:16.491Z"
+}

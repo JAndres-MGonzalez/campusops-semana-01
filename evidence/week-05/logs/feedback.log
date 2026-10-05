@@ -1,0 +1,200 @@
+command: make PYTHON=python feedback
+startedAt: 2026-10-05T00:05:17.7673065+00:00
+exitCode: 0
+
+npm run typecheck
+
+> dmi-react-native-starter@1.0.0 typecheck
+> tsc --noEmit
+
+npm run lint
+
+> dmi-react-native-starter@1.0.0 lint
+> eslint .
+
+npm run test:smoke
+
+> dmi-react-native-starter@1.0.0 test:smoke
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx
+
+PASS course-tests/smoke.test.tsx
+  √ renders the reproducible baseline and resolves backend state (1827 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        4.43 s, estimated 15 s
+Ran all test suites matching /course-tests\\smoke.test.tsx/i.
+npm run audit:ci
+
+> dmi-react-native-starter@1.0.0 audit:ci
+> npm audit --omit=dev --audit-level=critical
+
+# npm audit report
+
+@xmldom/xmldom  <=0.8.14 || 0.9.0-beta.1 - 0.9.11
+Severity: high
+xmldom: XML fragment injection via invalid EntityReference.nodeName during requireWellFormed serialization - https://github.com/advisories/GHSA-6gmq-8vp8-gcm6
+xmldom: XML fragment injection via invalid EntityReference.nodeName during requireWellFormed serialization - https://github.com/advisories/GHSA-6gmq-8vp8-gcm6
+xmldom: HTML raw-text closing-tag case mismatch causes output amplification - https://github.com/advisories/GHSA-6mj3-qw4j-hgrw
+xmldom: Processing Instruction Target Injection Bypasses requireWellFormed - https://github.com/advisories/GHSA-c7q8-3ch8-vqpv
+xmldom: Processing Instruction Target Injection Bypasses requireWellFormed - https://github.com/advisories/GHSA-c7q8-3ch8-vqpv
+xmldom: requireWellFormed element/attribute name validation is bypassable via an embedded line terminator - https://github.com/advisories/GHSA-jxjr-3g7g-3944
+xmldom: DocType `name` Injection Bypasses requireWellFormed - https://github.com/advisories/GHSA-27p8-2357-5qqv
+xmldom: DocType `name` Injection Bypasses requireWellFormed - https://github.com/advisories/GHSA-27p8-2357-5qqv
+xmldom: Creation-time XML Name/QName validation is bypassable via an embedded line terminator, allowing injection on the default serialization path - https://github.com/advisories/GHSA-3px3-54cx-rmw9
+xmldom: requireWellFormed DocType publicId/systemId validation is bypassable via an embedded line terminator - https://github.com/advisories/GHSA-vr34-hp96-76pp
+xmldom: Parser silently accepts a not-well-formed end tag whose name is followed by a line break and trailing content - https://github.com/advisories/GHSA-6h8r-xr42-gp59
+xmldom: Parser silently accepts a not-well-formed end tag whose name is followed by a line break and trailing content - https://github.com/advisories/GHSA-6h8r-xr42-gp59
+xmldom: Quadratic-time attribute deduplication - https://github.com/advisories/GHSA-8344-3jmq-59r6
+xmldom: Quadratic-time attribute deduplication - https://github.com/advisories/GHSA-8344-3jmq-59r6
+xmldom: End-tag Whitespace-Trim Regex ReDoS — quadratic backtracking in the 0.8.x end-tag parser - https://github.com/advisories/GHSA-x4fp-j954-r2f4
+xmldom: Quadratic-memory consumption - https://github.com/advisories/GHSA-965w-775f-mr7g
+xmldom: Quadratic-memory consumption - https://github.com/advisories/GHSA-965w-775f-mr7g
+xmldom: Quadratic-time parsing via the malformed-input recovery path — `parseElementStartPart` re-scan and `normalize()` adjacent-text merge - https://github.com/advisories/GHSA-93r5-fhx6-vmg9
+xmldom: Quadratic-time parsing via the malformed-input recovery path — `parseElementStartPart` re-scan and `normalize()` adjacent-text merge - https://github.com/advisories/GHSA-93r5-fhx6-vmg9
+fix available via `npm audit fix`
+node_modules/@xmldom/xmldom
+node_modules/plist/node_modules/@xmldom/xmldom
+
+brace-expansion  <=1.1.20 || 4.0.0 - 5.0.11
+Severity: high
+brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service - https://github.com/advisories/GHSA-q2hr-2g5m-vwhr
+brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service - https://github.com/advisories/GHSA-q2hr-2g5m-vwhr
+brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion - https://github.com/advisories/GHSA-qhr7-859c-m2p7
+brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion - https://github.com/advisories/GHSA-qhr7-859c-m2p7
+brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion - https://github.com/advisories/GHSA-6j4f-fj2g-mc7p
+brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion - https://github.com/advisories/GHSA-6j4f-fj2g-mc7p
+fix available via `npm audit fix`
+node_modules/@expo/fingerprint/node_modules/brace-expansion
+node_modules/brace-expansion
+node_modules/glob/node_modules/brace-expansion
+
+braces  *
+Severity: high
+braces vulnerable to stack-exhaustion denial of service through deeply nested patterns - https://github.com/advisories/GHSA-vfj7-8cjw-p6xm
+fix available via `npm audit fix --force`
+Will install expo@44.0.6, which is a breaking change
+node_modules/braces
+  micromatch  >=0.2.0
+  Depends on vulnerable versions of braces
+  node_modules/micromatch
+    @expo/metro-file-map  *
+    Depends on vulnerable versions of micromatch
+    node_modules/@expo/metro-file-map
+      @expo/cli  <=0.0.0-canary-20231123-1b19f96-4 || >=0.0.1-canary-20231125-d600e44
+      Depends on vulnerable versions of @expo/code-signing-certificates
+      Depends on vulnerable versions of @expo/metro
+      Depends on vulnerable versions of @expo/metro-config
+      Depends on vulnerable versions of @expo/metro-file-map
+      Depends on vulnerable versions of node-forge
+      node_modules/expo/node_modules/@expo/cli
+        expo  >=45.0.0-beta.1
+        Depends on vulnerable versions of @expo/cli
+        Depends on vulnerable versions of @expo/metro
+        Depends on vulnerable versions of @expo/metro-config
+        node_modules/expo
+    @jest/transform  <=30.2.0
+    Depends on vulnerable versions of jest-haste-map
+    Depends on vulnerable versions of micromatch
+    node_modules/@jest/transform
+      babel-jest  24.2.0-alpha.0 - 30.2.0
+      Depends on vulnerable versions of @jest/transform
+      node_modules/babel-jest
+        @react-native/jest-preset  *
+        Depends on vulnerable versions of babel-jest
+        Depends on vulnerable versions of jest-environment-node
+        node_modules/@react-native/jest-preset
+          react-native  >=0.73.0-nightly-20230506-1af868c52
+          Depends on vulnerable versions of @react-native/community-cli-plugin
+          Depends on vulnerable versions of @react-native/jest-preset
+          Depends on vulnerable versions of @react-native/virtualized-lists
+          node_modules/react-native
+            @react-native/virtualized-lists  >=0.85.0-nightly-20260108-1236b6be4
+            Depends on vulnerable versions of react-native
+            node_modules/@react-native/virtualized-lists
+    jest-haste-map  18.1.0 - 30.2.0
+    Depends on vulnerable versions of micromatch
+    node_modules/jest-haste-map
+    jest-message-util  18.5.0-alpha.7da3df39 - 30.2.0
+    Depends on vulnerable versions of micromatch
+    node_modules/jest-message-util
+      @jest/fake-timers  <=30.2.0
+      Depends on vulnerable versions of jest-message-util
+      node_modules/@jest/fake-timers
+        @jest/environment  <=30.2.0
+        Depends on vulnerable versions of @jest/fake-timers
+        node_modules/@jest/environment
+        jest-environment-node  24.2.0-alpha.0 - 30.2.0
+        Depends on vulnerable versions of @jest/environment
+        Depends on vulnerable versions of @jest/fake-timers
+        node_modules/jest-environment-node
+    metro-file-map  *
+    Depends on vulnerable versions of micromatch
+    node_modules/metro-file-map
+      @expo/metro  *
+      Depends on vulnerable versions of metro
+      Depends on vulnerable versions of metro-config
+      Depends on vulnerable versions of metro-file-map
+      Depends on vulnerable versions of metro-transform-worker
+      node_modules/@expo/metro
+        @expo/metro-config  >=0.21.0-canary-20250630-547cd82
+        Depends on vulnerable versions of @expo/metro
+        node_modules/@expo/metro-config
+      metro  >=0.71.0
+      Depends on vulnerable versions of metro-config
+      Depends on vulnerable versions of metro-file-map
+      Depends on vulnerable versions of metro-transform-worker
+      node_modules/metro
+        @react-native/community-cli-plugin  *
+        Depends on vulnerable versions of metro
+        Depends on vulnerable versions of metro-config
+        node_modules/@react-native/community-cli-plugin
+        metro-config  >=0.71.0
+        Depends on vulnerable versions of metro
+        node_modules/metro-config
+        metro-transform-worker  >=0.71.0
+        Depends on vulnerable versions of metro
+        node_modules/metro-transform-worker
+
+js-yaml  3.0.0 - 3.15.1 || 4.0.0 - 4.3.1
+Severity: high
+js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources - https://github.com/advisories/GHSA-2883-xcg3-v3hh
+js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources - https://github.com/advisories/GHSA-2883-xcg3-v3hh
+fix available via `npm audit fix`
+node_modules/@expo/xcpretty/node_modules/js-yaml
+node_modules/js-yaml
+
+node-forge  *
+Severity: high
+node-forge RSA PKCS#1 v1.5 signature verification accepts extra nested DigestAlgorithm elements - https://github.com/advisories/GHSA-86w9-cpqp-85rv
+fix available via `npm audit fix --force`
+Will install expo@44.0.6, which is a breaking change
+node_modules/node-forge
+  @expo/code-signing-certificates  *
+  Depends on vulnerable versions of node-forge
+  node_modules/@expo/code-signing-certificates
+
+27 high severity vulnerabilities
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+npm run bundle:release
+
+> dmi-react-native-starter@1.0.0 bundle:release
+> expo export --platform android --output-dir dist/export
+
+Starting Metro Bundler
+
+Android Bundled 5918ms index.ts (588 modules)
+
+› android bundles (1):
+_expo/static/js/android/index-b6a7ef7cdff848d128dc80fdafaf10d4.hbc (1.4MB)
+
+› Files (1):
+metadata.json (150B)
+
+Exported: dist/export

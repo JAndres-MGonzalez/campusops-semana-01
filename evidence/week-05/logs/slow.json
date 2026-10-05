@@ -1,0 +1,6 @@
+{
+  "scenario": "slow",
+  "timeoutMs": 150,
+  "observedError": "AbortError",
+  "generatedAt": "2026-10-05T00:05:16.668Z"
+}

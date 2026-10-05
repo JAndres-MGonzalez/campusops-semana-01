@@ -1,0 +1,16 @@
+command: npm.cmd test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts
+startedAt: 2026-10-05T00:05:03.8385647+00:00
+exitCode: 0
+
+
+> dmi-react-native-starter@1.0.0 test
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts
+
+PASS evidence/week-05/backend-failures.test.ts
+PASS evidence/week-05/contract-cases.test.ts
+
+Test Suites: 2 passed, 2 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        5.579 s, estimated 7 s
+Ran all test suites matching /evidence\\week-05\\backend-failures.test.ts|evidence\\week-05\\contract-cases.test.ts/i.

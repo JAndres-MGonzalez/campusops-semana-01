@@ -1,0 +1,26 @@
+{
+  "scenario": "success",
+  "status": 200,
+  "retryAfter": null,
+  "body": {
+    "items": [
+      {
+        "id": "campus-inc-001",
+        "version": 1,
+        "status": "assigned",
+        "payload": {
+          "category": "connectivity",
+          "description": "Sin conexión en laboratorio ficticio",
+          "location": "[REDACTED]",
+          "reporterId": "[REDACTED]",
+          "assignedTechnicianId": "[REDACTED]",
+          "priority": "medium",
+          "notes": [],
+          "evidence": "[REDACTED]",
+          "history": []
+        }
+      }
+    ]
+  },
+  "generatedAt": "2026-10-05T00:05:16.486Z"
+}

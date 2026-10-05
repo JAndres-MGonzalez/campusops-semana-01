@@ -1,0 +1,7 @@
+{
+  "scenario": "malformed",
+  "status": 200,
+  "retryAfter": null,
+  "body": "{\"items\": [}",
+  "generatedAt": "2026-10-05T00:05:16.493Z"
+}

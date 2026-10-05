@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "week": 5,
+  "commitSha": "7e0d82c97962b94d6d7620a5f6c9c47909131976",
+  "generatedAt": "2026-10-05T00:06:00.6941444+00:00",
+  "checks": [
+    {
+      "status": "pass",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts",
+      "evidence": "HTTP 200 del backend local; parseRemoteResource acepta el primer sobre. evidence/week-05/logs/success.json y backend-and-contract.log. El cuerpo guardado esta sanitizado.",
+      "scenarioType": "nominal",
+      "id": "nominal-backend-envelope"
+    },
+    {
+      "status": "pass",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts",
+      "evidence": "HTTP 200; payload:null aceptado y conservado como null, sin inventar una incidencia. evidence/week-05/logs/nullable.json y backend-and-contract.log.",
+      "scenarioType": "boundary",
+      "id": "boundary-nullable-payload"
+    },
+    {
+      "status": "pass",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts",
+      "evidence": "HTTP 200 con cuerpo crudo {\"items\": [}; JSON.parse produce SyntaxError y la prueba lo detecta. Un sobre con id vacio devuelve ok:false/error:contract. evidence/week-05/logs/malformed.json y backend-and-contract.log.",
+      "scenarioType": "failure",
+      "id": "failure-malformed-json"
+    },
+    {
+      "status": "pass",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts",
+      "evidence": "HTTP 500 y body.code=controlled_failure observados. evidence/week-05/logs/server_error.json y backend-and-contract.log.",
+      "scenarioType": "failure",
+      "id": "failure-server-error-500"
+    },
+    {
+      "status": "pass",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts",
+      "evidence": "Solicitud HTTP real del experimento abortada a los 150 ms ante el escenario slow; AbortError capturado por la prueba. evidence/week-05/logs/slow.json y backend-and-contract.log.",
+      "scenarioType": "failure",
+      "id": "failure-timeout-slow"
+    },
+    {
+      "status": "pass",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts",
+      "evidence": "HTTP 429, Retry-After:1 y body.code=rate_limited observados. evidence/week-05/logs/rate_limited.json y backend-and-contract.log.",
+      "scenarioType": "failure",
+      "id": "failure-rate-limited-429"
+    }
+  ],
+  "scope": "Experimentos contra el backend didactico local y el parser compartido. La app conserva el repositorio en memoria; estos resultados no acreditan su integracion HTTP."
+}

@@ -1,21 +1,24 @@
 import { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
-import { getIncidentDetail, getIncidentList } from './src/application/incidents/use-cases';
+import { createIncident, getIncidentDetail, getIncidentList } from './src/application/incidents/use-cases';
+import type { IncidentDraft } from './src/domain/incident';
 import { getBackendHealth } from './src/api/courseBackend';
-import { InMemoryIncidentRepository } from './src/infrastructure/incidents/in-memory-incident-repository';
+import { HttpIncidentRepository } from './src/infrastructure/incidents/http-incident-repository';
 import { reportIncidentFailure } from './src/infrastructure/telemetry/safe-telemetry';
 import { IncidentApp } from './src/ui/IncidentApp';
 
-const repository = new InMemoryIncidentRepository();
+const backendUrl = process.env.EXPO_PUBLIC_COURSE_BACKEND_URL
+  ?? (Platform.OS === 'android' ? 'http://10.0.2.2:4310' : 'http://127.0.0.1:4310');
+const repository = new HttpIncidentRepository(backendUrl);
 
 export default function App() {
   const [status, setStatus] = useState<'checking' | 'available' | 'offline'>('checking');
 
   useEffect(() => {
     let active = true;
-    getBackendHealth()
+    getBackendHealth(backendUrl)
       .then(() => active && setStatus('available'))
       .catch(() => active && setStatus('offline'));
     return () => {
@@ -25,6 +28,7 @@ export default function App() {
 
   const loadList = useCallback(() => getIncidentList(repository), []);
   const loadDetail = useCallback((id: string) => getIncidentDetail(repository, id), []);
+  const saveIncident = useCallback((draft: IncidentDraft, operationId: string) => createIncident(repository, draft, operationId), []);
 
   return (
     <View style={styles.screen}>
@@ -33,7 +37,7 @@ export default function App() {
         <Text>Incidencias del campus · entorno académico ficticio</Text>
         <Text testID="backend-status">Backend: {status}</Text>
       </View>
-      <IncidentApp loadList={loadList} loadDetail={loadDetail} reportFailure={reportIncidentFailure} />
+      <IncidentApp loadList={loadList} loadDetail={loadDetail} createIncident={saveIncident} reportFailure={reportIncidentFailure} />
       <StatusBar style="auto" />
     </View>
   );

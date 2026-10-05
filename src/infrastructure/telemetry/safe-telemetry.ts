@@ -45,7 +45,7 @@ export function redactTelemetryData(input: unknown): unknown {
   return input;
 }
 
-export function reportIncidentFailure(operation: 'list' | 'detail', error: unknown): void {
-  const record = redactTelemetryData({ event: 'incident_load_failed', operation, error });
+export function reportIncidentFailure(operation: 'list' | 'detail' | 'create', error: unknown): void {
+  const record = redactTelemetryData({ event: operation === 'create' ? 'incident_create_failed' : 'incident_load_failed', operation, error });
   console.warn(JSON.stringify(record));
 }

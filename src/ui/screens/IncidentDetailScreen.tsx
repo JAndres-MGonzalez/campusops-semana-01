@@ -5,13 +5,14 @@ import { CATEGORY_LABEL, STATUS_LABEL } from '../incident-labels';
 type Props = Readonly<{
   incident: IncidentDetail | null;
   onBack: () => void;
+  emptyMessage?: string;
 }>;
 
-function formatDate(value: string): string {
-  return new Date(value).toLocaleString('es-MX');
+function formatDate(value: string | null): string {
+  return value === null ? 'No informada por el servidor' : new Date(value).toLocaleString('es-MX');
 }
 
-export function IncidentDetailScreen({ incident, onBack }: Props) {
+export function IncidentDetailScreen({ incident, onBack, emptyMessage = 'Incidencia no encontrada.' }: Props) {
   return (
     <View style={styles.screen}>
       <Pressable accessibilityRole="button" style={styles.back} onPress={onBack}>
@@ -30,7 +31,7 @@ export function IncidentDetailScreen({ incident, onBack }: Props) {
           <Text style={styles.description}>{incident.description}</Text>
         </ScrollView>
       ) : (
-        <Text style={styles.notFound}>Incidencia no encontrada.</Text>
+        <Text style={styles.notFound}>{emptyMessage}</Text>
       )}
     </View>
   );

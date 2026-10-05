@@ -1,0 +1,7 @@
+{
+  "scenario": "create-and-replay",
+  "incidentId": "campus-inc-101",
+  "duplicateCount": 1,
+  "result": "pass",
+  "generatedAt": "2026-10-05T00:45:40.115Z"
+}

@@ -5,5 +5,10 @@
   "body": {
     "code": "rate_limited"
   },
-  "generatedAt": "2026-10-05T00:05:16.506Z"
+  "generatedAt": "2026-10-05T00:45:39.943Z",
+  "client": {
+    "kind": "rate_limit",
+    "httpStatus": 429,
+    "retryAfterSeconds": 1
+  }
 }

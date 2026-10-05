@@ -38,6 +38,9 @@ Toda incidencia viaja como un sobre DTO plano:
 }
 ```
 
+En lista, los sobres están en `items`. El detalle devuelve un sobre. La creación devuelve
+`{ incident, operationId, duplicate }`; el cliente valida el sobre de `incident` antes de usarlo.
+
 - `id` — string no vacío.
 - `version` — entero no negativo (marca de concurrencia para acciones y `409`).
 - `status` — string no vacío (transiciones definidas en `docs/CAMPUSOPS.md`).
@@ -63,7 +66,9 @@ Toda incidencia viaja como un sobre DTO plano:
 
 - **Campos futuros:** el sobre puede incluir claves adicionales (`ignored: 'forward-compatible'`); se **ignoran** y no rompen la validación.
 - **Función pura:** no muta la entrada, no registra logs, no lanza excepciones.
-- **Separación DTO → dominio:** el valor validado se mapea al modelo de la aplicación; la UI nunca consume el DTO crudo. Con `payload: null`, el cliente **no inventa datos**, y así queda representado en el dominio.
+- **Lógica compartida:** `parseRemoteResource` y el cliente utilizan `validateRemoteResource`, en `src/domain/remote-resource.ts`. El adaptador público no mantiene otro parser.
+- **Separación DTO → dominio:** `HttpIncidentRepository` valida además categoría, estado, descripción, ubicación y reportante. Usa la descripción como título, transforma `location` en `locationLabel` y `reporterId` en `reportedBy`. Las fechas ausentes quedan en `null` y la pantalla indica que el servidor no las informó.
+- **Payload nulo:** un sobre válido sin payload no crea un objeto del dominio. La lista omite esos sobres y el detalle muestra ausencia de datos; un formato incorrecto muestra un error distinto.
 
 ## 5. Representación de errores
 
@@ -80,9 +85,21 @@ Errores distinguibles, representados como datos (nunca excepciones sin controlar
 
 Las variantes deterministas se prueban con `X-Course-Scenario`: `success`, `nullable`, `server_error`, `rate_limited`, `malformed`, `slow`, `invalid_coordinates`, `incomplete`, `timeout_after_commit`.
 
+El cliente usa un timeout de 2000 ms y `AbortController`. Los rechazos de transporte,
+HTTP y dominio se convierten en `IncidentRequestError`, con un `kind` distinguible.
+Las pantallas capturan el rechazo y muestran un mensaje seguro; el error completo
+se sanitiza antes de registrar. No se registran respuestas crudas con datos privados.
+El límite 429 conserva `Retry-After`, sin reintentos automáticos.
+
+El formulario conserva sus campos y su `Idempotency-Key` cuando se repite el mismo
+contenido. Si cambian los campos genera otra clave. Esa identidad vive en memoria;
+la persistencia tras reiniciar corresponde al hito de cola offline.
+
 ## 6. Verificación
 
 - Prueba pública: `npm run test -- --ci --runInBand course-tests/public/week-05.test.ts` (5 casos del sobre DTO).
 - Ejecutable del toolchain: `make verify-week-05`, `make public-test-week-05`, `make evidence-week-05` (requiere la etiqueta `week-05-final`).
 - Backend: `npm run backend` y `npm run backend:self-test`.
+- Cliente y UI: `npm test -- --ci --runInBand evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx`.
+- `App.tsx` conecta el repositorio HTTP con los casos de uso. El backend usa `http://10.0.2.2:4310` en emulador Android y `http://127.0.0.1:4310` en el entorno local; `EXPO_PUBLIC_COURSE_BACKEND_URL` permite indicar la dirección de laboratorio de un dispositivo físico. No es una credencial.
 - Evidencia: `reports/week-05/contract-tests.json`, `reports/week-05/failure-matrix.json`, `evidence/week-05/engineering.json`, `evidence/week-05/individual.json`.

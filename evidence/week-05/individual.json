@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "week": 5,
   "teamId": "9A-E08",
-  "commitSha": "01af4125719b5f0136160204cdc46d586740391f",
+  "commitSha": "cdc1de765912ab4e643fb4c7155487abac4e21de",
   "members": [
     {
       "studentId": "3523110092",
@@ -54,8 +54,8 @@
       "studentId": "3523110131",
       "name": "Juan Andrés Medina González",
       "commitShas": [
-        "be6fb339263f87ddda54c2f508f75ddc3a4f12ec",
-        "01af4125719b5f0136160204cdc46d586740391f"
+        "17adb0635bd61f4d114282ff396f55baa7c6d10c",
+        "df07f79810a442860c2879785f6c2edfc0bec657"
       ],
       "files": [
         ".github/workflows/week-05-cliente-cloud-feedback.yml",
@@ -83,5 +83,5 @@
       "explanation": "La pantalla usa casos de uso; el cliente controla HTTP y valida la respuesta. Si el dato está vacío no se inventa y, si falla, se muestra un error seguro y se permite reintentar."
     }
   ],
-  "generatedAt": "2026-10-05T00:51:52.176874+00:00"
+  "generatedAt": "2026-10-05T00:56:48.459454+00:00"
 }

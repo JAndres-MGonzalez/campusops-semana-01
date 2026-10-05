@@ -5,7 +5,7 @@
   "body": {
     "code": "controlled_failure"
   },
-  "generatedAt": "2026-10-05T00:53:02.858Z",
+  "generatedAt": "2026-10-05T00:57:25.460Z",
   "client": {
     "kind": "server",
     "httpStatus": 500

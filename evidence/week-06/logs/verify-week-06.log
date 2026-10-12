@@ -1,0 +1,66 @@
+commitSha: 591ab5263389c3f1b66d6aad371c5cbbc8a3a292
+generatedAt: 2026-10-12T05:34:03.1282750+00:00
+command: make PYTHON=python verify-week-06
+exitCode: 0
+
+python tools/course_public_evaluator.py --week 06 --mode verify --execute-toolchain
+{
+  "schemaVersion": 1,
+  "week": 6,
+  "mode": "verify",
+  "commitSha": "591ab5263389c3f1b66d6aad371c5cbbc8a3a292",
+  "evaluatedAt": "2026-10-12T05:34:20.269672+00:00",
+  "status": "pass",
+  "checks": [
+    {
+      "id": "base_files",
+      "status": "pass",
+      "detail": "missing=[]"
+    },
+    {
+      "id": "react_native_profile",
+      "status": "pass",
+      "detail": "missing packages=[]"
+    },
+    {
+      "id": "toolchain_scripts",
+      "status": "pass",
+      "detail": "missing scripts=[]"
+    },
+    {
+      "id": "workflow_integrity",
+      "status": "pass",
+      "detail": "bypass markers=[]"
+    },
+    {
+      "id": "secret_scan",
+      "status": "pass",
+      "detail": "hits=[]"
+    },
+    {
+      "id": "toolchain_1",
+      "status": "pass",
+      "detail": "npm run typecheck\n> dmi-react-native-starter@1.0.0 typecheck\n> tsc --noEmit"
+    },
+    {
+      "id": "toolchain_2",
+      "status": "pass",
+      "detail": "npm run lint\n> dmi-react-native-starter@1.0.0 lint\n> eslint ."
+    },
+    {
+      "id": "toolchain_3",
+      "status": "pass",
+      "detail": "npm run audit:ci\nersions of node-forge\n        node_modules/expo/node_modules/@expo/cli\n          expo  >=45.0.0-beta.1\n          Depends on vulnerable versions of @expo/cli\n          Depends on vulnerable versions of @expo/metro\n          Depends on vulnerable versions of @expo/metro-config\n          node_modules/expo\n        @expo/metro-config  >=0.21.0-canary-20250630-547cd82\n        Depends on vulnerable versions of @expo/metro\n        node_modules/@expo/metro-config\n      metro  >=0.71.0\n      Depends on vulnerable versions of metro-config\n      Depends on vulnerable versions of metro-file-map\n      Depends on vulnerable versions of metro-transform-worker\n      node_modules/metro\n        @react-native/community-cli-plugin  *\n        Depends on vulnerable versions of metro\n        Depends on vulnerable versions of metro-config\n        node_modules/@react-native/community-cli-plugin\n        metro-config  >=0.71.0\n        Depends on vulnerable versions of metro\n        node_modules/metro-config\n        metro-transform-worker  >=0.71.0\n        Depends on vulnerable versions of metro\n        node_modules/metro-transform-worker\n\ncompression  <1.8.2\nSeverity: high\ncompression vulnerable to Denial of Service via memory leak on premature response close - https://github.com/advisories/GHSA-vc2v-76pw-4v95\nfix available via `npm audit fix`\nnode_modules/compression\n\njs-yaml  3.0.0 - 4.3.1\nSeverity: high\njs-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources - https://github.com/advisories/GHSA-2883-xcg3-v3hh\njs-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources - https://github.com/advisories/GHSA-2883-xcg3-v3hh\nDepends on vulnerable versions of argparse\nfix available via `npm audit fix`\nnode_modules/@expo/xcpretty/node_modules/js-yaml\nnode_modules/js-yaml\n\nnode-forge  *\nSeverity: high\nnode-forge RSA PKCS#1 v1.5 signature verification accepts extra nested DigestAlgorithm elements - https://github.com/advisories/GHSA-86w9-cpqp-85rv\nfix available via `npm audit fix --force`\nWill install expo@44.0.6, which is a breaking change\nnode_modules/node-forge\n  @expo/code-signing-certificates  *\n  Depends on vulnerable versions of node-forge\n  node_modules/@expo/code-signing-certificates\n\nsource-map-js  1.0.0 - 1.2.1\nSeverity: high\nsource-map-js allows event-loop denial of service through indexed source-map section offsets - https://github.com/advisories/GHSA-68fv-2mgg-jv7q\nfix available via `npm audit fix`\nnode_modules/source-map-js\n\nsprintf-js  *\nSeverity: moderate\nsprintf-js vulnerable to denial of service through unbounded precision specifiers - https://github.com/advisories/GHSA-hp3w-g68c-fv3c\nfix available via `npm audit fix`\nnode_modules/sprintf-js\n  argparse  1.0.0 - 1.0.10\n  Depends on vulnerable versions of sprintf-js\n  node_modules/argparse\n\n31 vulnerabilities (2 moderate, 29 high)\n\nTo address issues that do not require attention, run:\n  npm audit fix\n\nTo address all issues (including breaking changes), run:\n  npm audit fix --force"
+    },
+    {
+      "id": "toolchain_4",
+      "status": "pass",
+      "detail": "npm run test:smoke\n> dmi-react-native-starter@1.0.0 test:smoke\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx\n\n  console.warn\n    {\"event\":\"incident_load_failed\",\"operation\":\"list\",\"error\":\"[REDACTED]\"}\n\n    \u001b[0m \u001b[90m 48 |\u001b[39m \u001b[36mexport\u001b[39m \u001b[36mfunction\u001b[39m reportIncidentFailure(operation\u001b[33m:\u001b[39m \u001b[32m'list'\u001b[39m \u001b[33m|\u001b[39m \u001b[32m'detail'\u001b[39m \u001b[33m|\u001b[39m \u001b[32m'create'\u001b[39m\u001b[33m,\u001b[39m error\u001b[33m:\u001b[39m unknown)\u001b[33m:\u001b[39m \u001b[36mvoid\u001b[39m {\n     \u001b[90m 49 |\u001b[39m   \u001b[36mconst\u001b[39m record \u001b[33m=\u001b[39m redactTelemetryData({ event\u001b[33m:\u001b[39m operation \u001b[33m===\u001b[39m \u001b[32m'create'\u001b[39m \u001b[33m?\u001b[39m \u001b[32m'incident_create_failed'\u001b[39m \u001b[33m:\u001b[39m \u001b[32m'incident_load_failed'\u001b[39m\u001b[33m,\u001b[39m operation\u001b[33m,\u001b[39m error })\u001b[33m;\u001b[39m\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 50 |\u001b[39m   console\u001b[33m.\u001b[39mwarn(\u001b[33mJSON\u001b[39m\u001b[33m.\u001b[39mstringify(record))\u001b[33m;\u001b[39m\n     \u001b[90m    |\u001b[39m           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 51 |\u001b[39m }\n     \u001b[90m 52 |\u001b[39m\u001b[0m\n\n      at warn (src/infrastructure/telemetry/safe-telemetry.ts:50:11)\n      at src/ui/IncidentApp.tsx:48:24\n\n\nPASS course-tests/smoke.test.tsx\n  √ renders the reproducible baseline and resolves backend state (222 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       1 passed, 1 total\nSnapshots:   0 total\nTime:        1.182 s, estimated 2 s\nRan all test suites matching /course-tests\\\\smoke.test.tsx/i."
+    },
+    {
+      "id": "toolchain_5",
+      "status": "pass",
+      "detail": "npm run backend:self-test\n> dmi-react-native-starter@1.0.0 backend:self-test\n> node course-backend/self-test.mjs\n\nCampusOps backend contracts: roles, reassignment conflict, lost response, idempotency, evidence and geocoding PASS.\nControlled backend self-test passed."
+    }
+  ]
+}

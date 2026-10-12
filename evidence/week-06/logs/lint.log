@@ -1,0 +1,6 @@
+command: npm.cmd run lint
+exitCode: 0
+
+> dmi-react-native-starter@1.0.0 lint
+> eslint .
+

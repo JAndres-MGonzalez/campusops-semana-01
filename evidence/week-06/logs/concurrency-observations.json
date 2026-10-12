@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "week": 6,
+  "commitSha": "591ab5263389c3f1b66d6aad371c5cbbc8a3a292",
+  "generatedAt": "2026-10-12T05:33:25.705Z",
+  "observations": [
+    {
+      "id": "concurrency-shared-refresh",
+      "scenarioType": "nominal",
+      "expected": {
+        "refreshCalls": 1,
+        "retriedRequestIds": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ]
+      },
+      "observed": {
+        "refreshCalls": 1,
+        "retriedRequestIds": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ]
+      },
+      "status": "pass"
+    },
+    {
+      "id": "concurrency-limited-refresh",
+      "scenarioType": "boundary",
+      "expected": {
+        "refreshCalls": 1
+      },
+      "observed": {
+        "refreshCalls": 1
+      },
+      "status": "pass"
+    },
+    {
+      "id": "concurrency-limited-retries",
+      "scenarioType": "boundary",
+      "expected": {
+        "retriedRequestIds": [
+          "a"
+        ]
+      },
+      "observed": {
+        "retriedRequestIds": [
+          "a",
+          "a",
+          "a"
+        ]
+      },
+      "status": "fail"
+    },
+    {
+      "id": "concurrency-logout-clears-session",
+      "scenarioType": "nominal",
+      "expected": {
+        "status": "anonymous",
+        "persistedSessionPresent": false
+      },
+      "observed": {
+        "status": "anonymous",
+        "persistedSessionPresent": false
+      },
+      "status": "pass"
+    },
+    {
+      "id": "concurrency-manager-single-flight",
+      "scenarioType": "boundary",
+      "expected": {
+        "refreshCalls": 1,
+        "pendingStatus": "renovando",
+        "sameResult": true,
+        "status": "autenticado"
+      },
+      "observed": {
+        "refreshCalls": 1,
+        "pendingStatus": "expirado",
+        "sameResult": true,
+        "status": "autenticado"
+      },
+      "status": "fail"
+    },
+    {
+      "id": "concurrency-refresh-failure",
+      "scenarioType": "failure",
+      "expected": {
+        "refreshCalls": 1,
+        "status": "no_autenticado",
+        "persistedSessionPresent": false
+      },
+      "observed": {
+        "refreshCalls": 1,
+        "status": "no_autenticado",
+        "persistedSessionPresent": false
+      },
+      "status": "pass"
+    },
+    {
+      "id": "concurrency-logout-during-refresh",
+      "scenarioType": "failure",
+      "expected": {
+        "status": "no_autenticado",
+        "persistedSessionPresent": false
+      },
+      "observed": {
+        "status": "autenticado",
+        "persistedSessionPresent": true
+      },
+      "status": "fail"
+    },
+    {
+      "id": "session-backend-contract",
+      "scenarioType": "failure",
+      "expected": {
+        "httpStatus": 200,
+        "responseKeys": [
+          "accessToken",
+          "actorId",
+          "expiresIn",
+          "refreshToken",
+          "role"
+        ],
+        "loginAccepted": true,
+        "status": "autenticado"
+      },
+      "observed": {
+        "httpStatus": 200,
+        "responseKeys": [
+          "accessToken",
+          "actorId",
+          "expiresIn",
+          "refreshToken",
+          "role"
+        ],
+        "loginAccepted": false,
+        "status": "no_autenticado"
+      },
+      "status": "fail"
+    }
+  ]
+}

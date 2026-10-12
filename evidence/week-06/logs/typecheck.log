@@ -1,0 +1,6 @@
+command: npm.cmd run typecheck
+exitCode: 0
+
+> dmi-react-native-starter@1.0.0 typecheck
+> tsc --noEmit
+

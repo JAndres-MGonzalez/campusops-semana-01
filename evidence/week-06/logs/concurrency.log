@@ -1,0 +1,141 @@
+commitSha: 591ab5263389c3f1b66d6aad371c5cbbc8a3a292
+generatedAt: 2026-10-12T05:33:18.6232698+00:00
+command: npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts
+exitCode: 1
+
+
+> dmi-react-native-starter@1.0.0 test
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand evidence/week-06/concurrency.test.ts
+
+FAIL evidence/week-06/concurrency.test.ts (5.91 s)
+  √ cuatro respuestas 401 comparten una renovación (2 ms)
+  √ un 401 de generación anterior no abre otra renovación
+  × cada solicitud se registra para reintentar solo una vez (3 ms)
+  √ logout normal elimina la sesión persistida
+  × el manager comparte una renovación pendiente con reloj controlable (2 ms)
+  √ un refresh fallido elimina la sesión y no entra en un bucle
+  × una renovación pendiente no restaura la sesión después del logout (1 ms)
+  × el manager acepta el login del backend didáctico real (12 ms)
+
+  ● cada solicitud se registra para reintentar solo una vez
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 0
+    + Received  + 2
+
+      Object {
+        "retriedRequestIds": Array [
+          "a",
+    +     "a",
+    +     "a",
+        ],
+      }
+
+      26 |   observations.push({ id, scenarioType, expected, observed,
+      27 |     status: JSON.stringify(expected) === JSON.stringify(observed) ? 'pass' : 'fail' });
+    > 28 |   expect(observed).toEqual(expected);
+         |                    ^
+      29 | }
+      30 |
+      31 | beforeAll(async () => {
+
+      at toEqual (evidence/week-06/concurrency.test.ts:28:20)
+      at Object.check (evidence/week-06/concurrency.test.ts:95:3)
+
+  ● el manager comparte una renovación pendiente con reloj controlable
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "pendingStatus": "renovando",
+    +   "pendingStatus": "expirado",
+        "refreshCalls": 1,
+        "sameResult": true,
+        "status": "autenticado",
+      }
+
+      26 |   observations.push({ id, scenarioType, expected, observed,
+      27 |     status: JSON.stringify(expected) === JSON.stringify(observed) ? 'pass' : 'fail' });
+    > 28 |   expect(observed).toEqual(expected);
+         |                    ^
+      29 | }
+      30 |
+      31 | beforeAll(async () => {
+
+      at toEqual (evidence/week-06/concurrency.test.ts:28:20)
+      at Object.check (evidence/week-06/concurrency.test.ts:126:3)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● una renovación pendiente no restaura la sesión después del logout
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 2
+
+      Object {
+    -   "persistedSessionPresent": false,
+    -   "status": "no_autenticado",
+    +   "persistedSessionPresent": true,
+    +   "status": "autenticado",
+      }
+
+      26 |   observations.push({ id, scenarioType, expected, observed,
+      27 |     status: JSON.stringify(expected) === JSON.stringify(observed) ? 'pass' : 'fail' });
+    > 28 |   expect(observed).toEqual(expected);
+         |                    ^
+      29 | }
+      30 |
+      31 | beforeAll(async () => {
+
+      at toEqual (evidence/week-06/concurrency.test.ts:28:20)
+      at Object.check (evidence/week-06/concurrency.test.ts:164:3)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● el manager acepta el login del backend didáctico real
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 2
+
+      Object {
+        "httpStatus": 200,
+    -   "loginAccepted": true,
+    +   "loginAccepted": false,
+        "responseKeys": Array [
+          "accessToken",
+          "actorId",
+          "expiresIn",
+          "refreshToken",
+          "role",
+        ],
+    -   "status": "autenticado",
+    +   "status": "no_autenticado",
+      }
+
+      26 |   observations.push({ id, scenarioType, expected, observed,
+      27 |     status: JSON.stringify(expected) === JSON.stringify(observed) ? 'pass' : 'fail' });
+    > 28 |   expect(observed).toEqual(expected);
+         |                    ^
+      29 | }
+      30 |
+      31 | beforeAll(async () => {
+
+      at toEqual (evidence/week-06/concurrency.test.ts:28:20)
+      at Object.check (evidence/week-06/concurrency.test.ts:185:3)
+          at Generator.throw (<anonymous>)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _throw (node_modules/@babel/runtime/helpers/asyncToGenerator.js:20:9)
+
+Test Suites: 1 failed, 1 total
+Tests:       4 failed, 4 passed, 8 total
+Snapshots:   0 total
+Time:        6.153 s
+Ran all test suites matching /evidence\\week-06\\concurrency.test.ts/i.

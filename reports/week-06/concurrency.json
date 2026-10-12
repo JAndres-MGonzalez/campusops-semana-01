@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "week": 6,
+  "commitSha": "591ab5263389c3f1b66d6aad371c5cbbc8a3a292",
+  "generatedAt": "2026-10-12T05:33:25.705Z",
+  "checks": [
+    {
+      "id": "concurrency-shared-refresh",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
+      "evidence": "Esperado: {\"refreshCalls\":1,\"retriedRequestIds\":[\"a\",\"b\",\"c\",\"d\"]}. Observado: {\"refreshCalls\":1,\"retriedRequestIds\":[\"a\",\"b\",\"c\",\"d\"]}. evidence/week-06/logs/concurrency-observations.json"
+    },
+    {
+      "id": "concurrency-limited-refresh",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
+      "evidence": "Esperado: {\"refreshCalls\":1}. Observado: {\"refreshCalls\":1}. evidence/week-06/logs/concurrency-observations.json"
+    },
+    {
+      "id": "concurrency-limited-retries",
+      "status": "fail",
+      "scenarioType": "boundary",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
+      "evidence": "Esperado: {\"retriedRequestIds\":[\"a\"]}. Observado: {\"retriedRequestIds\":[\"a\",\"a\",\"a\"]}. evidence/week-06/logs/concurrency-observations.json"
+    },
+    {
+      "id": "concurrency-logout-clears-session",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
+      "evidence": "Esperado: {\"status\":\"anonymous\",\"persistedSessionPresent\":false}. Observado: {\"status\":\"anonymous\",\"persistedSessionPresent\":false}. evidence/week-06/logs/concurrency-observations.json"
+    },
+    {
+      "id": "concurrency-manager-single-flight",
+      "status": "fail",
+      "scenarioType": "boundary",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
+      "evidence": "Esperado: {\"refreshCalls\":1,\"pendingStatus\":\"renovando\",\"sameResult\":true,\"status\":\"autenticado\"}. Observado: {\"refreshCalls\":1,\"pendingStatus\":\"expirado\",\"sameResult\":true,\"status\":\"autenticado\"}. evidence/week-06/logs/concurrency-observations.json"
+    },
+    {
+      "id": "concurrency-refresh-failure",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
+      "evidence": "Esperado: {\"refreshCalls\":1,\"status\":\"no_autenticado\",\"persistedSessionPresent\":false}. Observado: {\"refreshCalls\":1,\"status\":\"no_autenticado\",\"persistedSessionPresent\":false}. evidence/week-06/logs/concurrency-observations.json"
+    },
+    {
+      "id": "concurrency-logout-during-refresh",
+      "status": "fail",
+      "scenarioType": "failure",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
+      "evidence": "Esperado: {\"status\":\"no_autenticado\",\"persistedSessionPresent\":false}. Observado: {\"status\":\"autenticado\",\"persistedSessionPresent\":true}. evidence/week-06/logs/concurrency-observations.json"
+    },
+    {
+      "id": "session-backend-contract",
+      "status": "fail",
+      "scenarioType": "failure",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
+      "evidence": "Esperado: {\"httpStatus\":200,\"responseKeys\":[\"accessToken\",\"actorId\",\"expiresIn\",\"refreshToken\",\"role\"],\"loginAccepted\":true,\"status\":\"autenticado\"}. Observado: {\"httpStatus\":200,\"responseKeys\":[\"accessToken\",\"actorId\",\"expiresIn\",\"refreshToken\",\"role\"],\"loginAccepted\":false,\"status\":\"no_autenticado\"}. evidence/week-06/logs/concurrency-observations.json"
+    }
+  ]
+}

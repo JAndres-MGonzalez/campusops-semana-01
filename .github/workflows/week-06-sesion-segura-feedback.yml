@@ -36,7 +36,7 @@ jobs:
       - name: AC-01 — reproducibility
         run: make verify-week-06
       - name: Session concurrency and lifecycle
-        run: npm test -- --ci --runInBand course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts evidence/week-06/concurrency.test.ts
+        run: npm test -- --ci --runInBand course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx
       - name: AC-02 — public behavior
         run: make public-test-week-06
       - name: AC-03 — declared failure evidence

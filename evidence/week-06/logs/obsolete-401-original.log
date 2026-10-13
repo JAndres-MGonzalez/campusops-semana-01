@@ -1,0 +1,50 @@
+commitSha: 0ca6642053326d1580f92b3479dd1baa3ffa1fa5
+generatedAt: 2026-10-13T04:13:33.4433256+00:00
+command: npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts evidence/week-06/session-integration-review.test.ts evidence/week-06/session-app-review.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx
+exitCode: 1
+
+
+> dmi-react-native-starter@1.0.0 test
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand evidence/week-06/concurrency.test.ts evidence/week-06/session-integration-review.test.ts evidence/week-06/session-app-review.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx
+
+FAIL evidence/week-06/session-integration-review.test.ts
+  ● un HTTP 401 tardío del token anterior no vuelve a renovar la sesión
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+        "incidentCalls": 4,
+    -   "refreshCalls": 1,
+    +   "refreshCalls": 2,
+      }
+
+    [0m [90m 25 |[39m [36mfunction[39m check(id[33m:[39m string[33m,[39m expected[33m:[39m unknown[33m,[39m observed[33m:[39m unknown) {
+     [90m 26 |[39m   observations[33m.[39mpush({ id[33m,[39m expected[33m,[39m observed })[33m;[39m
+    [31m[1m>[22m[39m[90m 27 |[39m   expect(observed)[33m.[39mtoEqual(expected)[33m;[39m
+     [90m    |[39m                    [31m[1m^[22m[39m
+     [90m 28 |[39m }
+     [90m 29 |[39m
+     [90m 30 |[39m beforeAll([36masync[39m () [33m=>[39m {[0m
+
+      at toEqual (evidence/week-06/session-integration-review.test.ts:27:20)
+      at Object.check (evidence/week-06/session-integration-review.test.ts:170:3)
+      at asyncGeneratorStep (..\..\..\..\Documents\ChatGPT\Semana 01 — Diagnóstico reproducible y definición técnica\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+      at _next (..\..\..\..\Documents\ChatGPT\Semana 01 — Diagnóstico reproducible y definición técnica\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+
+PASS evidence/week-06/session-app-review.test.tsx
+PASS evidence/week-05/http-client-ui.test.tsx
+PASS evidence/week-05/backend-failures.test.ts
+PASS course-tests/smoke.test.tsx
+PASS evidence/week-06/concurrency.test.ts
+PASS src/infrastructure/session/session.test.ts
+PASS course-tests/public/week-06.test.ts
+PASS evidence/week-05/contract-cases.test.ts
+
+Test Suites: 1 failed, 8 passed, 9 total
+Tests:       1 failed, 50 passed, 51 total
+Snapshots:   0 total
+Time:        3.965 s, estimated 4 s
+Ran all test suites matching /evidence\\week-06\\concurrency.test.ts|evidence\\week-06\\session-integration-review.test.ts|evidence\\week-06\\session-app-review.test.tsx|course-tests\\public\\week-06.test.ts|src\\infrastructure\\session\\session.test.ts|course-tests\\smoke.test.tsx|evidence\\week-05\\backend-failures.test.ts|evidence\\week-05\\contract-cases.test.ts|evidence\\week-05\\http-client-ui.test.tsx/i.

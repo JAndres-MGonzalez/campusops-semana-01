@@ -1,5 +1,8 @@
-command: npm.cmd ci
+commitSha: 0f9f75b76ce04ba471dba03999a2d56da3d83d5c
+command: make PYTHON=python setup
 exitCode: 0
+
+npm ci
 npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
 npm warn deprecated whatwg-encoding@2.0.0: Use @exodus/bytes instead for a more spec-conformant and faster implementation
 npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
@@ -10,7 +13,7 @@ npm warn deprecated abab@2.0.6: Use your platform's native atob() and btoa() met
 npm warn deprecated domexception@4.0.0: Use your platform's native DOMException instead
 npm warn deprecated eslint@9.39.5: This version is no longer supported. Please see https://eslint.org/version-support for other options.
 
-added 971 packages, and audited 972 packages in 30s
+added 971 packages, and audited 972 packages in 22s
 
 184 packages are looking for funding
   run `npm fund` for details

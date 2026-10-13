@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "week": 6,
-  "commitSha": "5eb9eb70789adaa1db44118f907d0175660f0409",
-  "generatedAt": "2026-10-13T02:48:43.079Z",
+  "commitSha": "f1cb4660bff4be27a4636ed8c0961b17a00b19c2",
+  "generatedAt": "2026-10-13T04:39:43.154Z",
   "checks": [
     {
       "id": "concurrency-shared-refresh",
@@ -20,10 +20,10 @@
     },
     {
       "id": "concurrency-limited-retries",
-      "status": "fail",
+      "status": "pass",
       "scenarioType": "boundary",
       "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
-      "evidence": "Esperado: {\"retriedRequestIds\":[\"a\"]}. Observado: {\"retriedRequestIds\":[\"a\",\"a\",\"a\"]}. evidence/week-06/logs/concurrency-observations.json"
+      "evidence": "Esperado: {\"retriedRequestIds\":[\"a\"]}. Observado: {\"retriedRequestIds\":[\"a\"]}. evidence/week-06/logs/concurrency-observations.json"
     },
     {
       "id": "concurrency-logout-clears-session",
@@ -34,10 +34,10 @@
     },
     {
       "id": "concurrency-manager-single-flight",
-      "status": "fail",
+      "status": "pass",
       "scenarioType": "boundary",
       "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
-      "evidence": "Esperado: {\"refreshCalls\":1,\"pendingStatus\":\"renovando\",\"sameResult\":true,\"status\":\"autenticado\"}. Observado: {\"refreshCalls\":1,\"pendingStatus\":\"expirado\",\"sameResult\":true,\"status\":\"autenticado\"}. evidence/week-06/logs/concurrency-observations.json"
+      "evidence": "Esperado: {\"refreshCalls\":1,\"pendingStatus\":\"renovando\",\"sameResult\":true,\"status\":\"autenticado\"}. Observado: {\"refreshCalls\":1,\"pendingStatus\":\"renovando\",\"sameResult\":true,\"status\":\"autenticado\"}. evidence/week-06/logs/concurrency-observations.json"
     },
     {
       "id": "concurrency-refresh-failure",
@@ -48,17 +48,66 @@
     },
     {
       "id": "concurrency-logout-during-refresh",
-      "status": "fail",
+      "status": "pass",
       "scenarioType": "failure",
       "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
-      "evidence": "Esperado: {\"status\":\"no_autenticado\",\"persistedSessionPresent\":false}. Observado: {\"status\":\"autenticado\",\"persistedSessionPresent\":true}. evidence/week-06/logs/concurrency-observations.json"
+      "evidence": "Esperado: {\"status\":\"no_autenticado\",\"persistedSessionPresent\":false}. Observado: {\"status\":\"no_autenticado\",\"persistedSessionPresent\":false}. evidence/week-06/logs/concurrency-observations.json"
     },
     {
       "id": "session-backend-contract",
-      "status": "fail",
+      "status": "pass",
       "scenarioType": "failure",
       "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
-      "evidence": "Esperado: {\"httpStatus\":200,\"responseKeys\":[\"accessToken\",\"actorId\",\"expiresIn\",\"refreshToken\",\"role\"],\"loginAccepted\":true,\"status\":\"autenticado\"}. Observado: {\"httpStatus\":200,\"responseKeys\":[\"accessToken\",\"actorId\",\"expiresIn\",\"refreshToken\",\"role\"],\"loginAccepted\":false,\"status\":\"no_autenticado\"}. evidence/week-06/logs/concurrency-observations.json"
+      "evidence": "Esperado: {\"httpStatus\":200,\"responseKeys\":[\"accessToken\",\"actorId\",\"expiresIn\",\"refreshToken\",\"role\"],\"loginAccepted\":true,\"status\":\"autenticado\"}. Observado: {\"httpStatus\":200,\"responseKeys\":[\"accessToken\",\"actorId\",\"expiresIn\",\"refreshToken\",\"role\"],\"loginAccepted\":true,\"status\":\"autenticado\"}. evidence/week-06/logs/concurrency-observations.json"
+    },
+    {
+      "id": "real-backend-refresh",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
+      "evidence": "Esperado: {\"refreshCalls\":1,\"tokenPresent\":true,\"status\":\"autenticado\"}. Observado: {\"refreshCalls\":1,\"tokenPresent\":true,\"status\":\"autenticado\"}. evidence/week-06/logs/concurrency-observations.json"
+    },
+    {
+      "id": "logout-blocks-protected-request",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
+      "evidence": "Esperado: {\"status\":\"no_autenticado\",\"storedTokenPresent\":false,\"protectedRequestSucceeded\":false}. Observado: {\"status\":\"no_autenticado\",\"storedTokenPresent\":false,\"protectedRequestSucceeded\":false}. evidence/week-06/logs/concurrency-observations.json"
+    },
+    {
+      "id": "logout-during-pending-storage-write",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
+      "evidence": "Esperado: {\"status\":\"no_autenticado\",\"storedTokenPresent\":false}. Observado: {\"status\":\"no_autenticado\",\"storedTokenPresent\":false}. evidence/week-06/logs/concurrency-observations.json"
+    },
+    {
+      "id": "http-401-shared-refresh",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
+      "evidence": "Esperado: {\"refreshCalls\":1,\"incidentCalls\":8,\"successfulRequests\":4}. Observado: {\"refreshCalls\":1,\"incidentCalls\":8,\"successfulRequests\":4}. evidence/week-06/logs/concurrency-observations.json"
+    },
+    {
+      "id": "obsolete-http-401-does-not-renew-again",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
+      "evidence": "Esperado: {\"refreshCalls\":1,\"incidentCalls\":4}. Observado: {\"refreshCalls\":1,\"incidentCalls\":4}. evidence/week-06/logs/concurrency-observations.json"
+    },
+    {
+      "id": "backend-role-authorized-actions",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
+      "evidence": "Esperado: {\"loginStatus\":200,\"actionStatuses\":[201,201,201]}. Observado: {\"loginStatus\":200,\"actionStatuses\":[201,201,201]}. evidence/week-06/logs/concurrency-observations.json"
+    },
+    {
+      "id": "backend-role-denied-actions",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts",
+      "evidence": "Esperado: {\"forbiddenStatus\":403,\"unauthorizedStatus\":401}. Observado: {\"forbiddenStatus\":403,\"unauthorizedStatus\":401}. evidence/week-06/logs/concurrency-observations.json"
     }
   ]
 }

@@ -2,40 +2,43 @@
   "schemaVersion": 1,
   "week": 6,
   "teamId": "9A-E08",
-  "commitSha": "5eb9eb70789adaa1db44118f907d0175660f0409",
-  "generatedAt": "2026-10-13T02:54:15.2282813+00:00",
+  "commitSha": "f1cb4660bff4be27a4636ed8c0961b17a00b19c2",
+  "generatedAt": "2026-10-12T22:40:49.4910439-06:00",
   "members": [
     {
       "studentId": "3523110092",
       "name": "Kevin Armando Montalvo Marcial",
       "commitShas": [
         "aa08958c8803a6fcf3d8e58257b3779cd0baf5d1",
-        "49d976f8ed7bef19ee0d4b6a29056b946064afa7"
+        "86cd95a4ec237143d814cc9ffdc720771e6c9df5",
+        "6f66709a84f35f3df45af0accb6a42a48a788eaa"
       ],
       "files": [
+        "App.tsx",
         "src/course-evaluation/index.ts",
         "src/infrastructure/session/auth-reducer.ts",
         "src/infrastructure/session/manager.ts",
         "src/infrastructure/session/secure-storage.ts",
-        "src/infrastructure/session/memory-storage.ts",
         "src/infrastructure/session/session.test.ts",
+        "src/infrastructure/incidents/http-incident-repository.ts",
         "docs/session-state-machine.mmd",
         "evidence/week-06/reports/3523110092.md"
       ],
       "tests": [
-        "Su reporte registra dos casos públicos y cinco del módulo aprobados. La revisión de integración repitió esas dos suites con el mismo resultado."
+        "Prueba pública: dos casos PASS. Módulo de sesión: ocho casos PASS. Los casos de cliente, renovación tardía y logout se repitieron durante la integración."
       ],
       "reviews": [],
-      "prediction": "Las solicitudes concurrentes comparten una renovación y cerrar sesión elimina el token guardado.",
+      "prediction": "Cada solicitud se reintenta una sola vez y las solicitudes del token anterior reutilizan el token que ya se renovó. Logout elimina la sesión y bloquea las consultas protegidas.",
       "command": "npm.cmd test -- --ci --runInBand course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts",
-      "observedResult": "Los siete casos existentes pasan. La suite adicional de integración detecta cuatro fallos que esas pruebas no cubren: reintentos repetidos, estado durante la renovación, respuesta posterior al logout y contrato del login real.",
-      "explanation": "Compartir una renovación evita llamadas repetidas. Falta impedir que una respuesta tardía recupere la sesión y conectar el formato del backend con el manager."
+      "observedResult": "Diez casos públicos y del módulo PASS; los quince casos adicionales de integración también PASS, incluidos 401 tardío, escritura posterior al logout y contrato del backend.",
+      "explanation": "El cliente utiliza la sesión y comunica el token rechazado al manager. Si otra solicitud ya lo renovó, se usa el token nuevo. Al cerrar sesión se bloquean las consultas y se descartan respuestas pendientes."
     },
     {
       "studentId": "3523110741",
       "name": "Jose Ismael Montalvo Lopez",
       "commitShas": [
-        "eebcc8db68d5c5c4e646f69197ddf2645fd5bf9e"
+        "5dd6f0397b41fc30c1db59b06024c406e121a704",
+        "2ade630549b22fdef8c4184728be552cab2318dc"
       ],
       "files": [
         "reports/week-06/auth-tests.json",
@@ -43,43 +46,43 @@
         "evidence/week-06/reports/3523110741.md"
       ],
       "tests": [
-        "Declara siete casos en una prueba temporal, dos públicos y una falla controlada del logout: un fallo y seis casos aprobados antes de restaurar el código.",
-        "Documenta autorización del backend: HTTP 403 para el perfil sin permiso y HTTP 401 para un token inválido."
+        "Los siete casos documentados por Ismael se conservaron en evidence/week-06/auth-cases.test.ts y se repitieron con resultado PASS. Su reporte conserva la falla controlada original y su reversión."
       ],
       "reviews": [
         "Decisión sobre renovación compartida y cierre seguro documentada en engineering.json."
       ],
       "prediction": "La expiración usa un reloj controlable, la renovación fallida elimina la sesión y el servidor rechaza acciones sin permiso.",
-      "command": "npm.cmd test -- --ci --runInBand src/course-evaluation/week-06-session-manual.test.ts",
-      "observedResult": "Resultado declarado en su reporte: siete casos PASS; falla controlada: un FAIL y seis PASS, con el cambio revertido. La prueba temporal fue borrada antes del commit y no se repitió desde su rama. Sus tres archivos están publicados en el PR 14, pendiente de integración.",
-      "explanation": "El servidor debe comprobar los permisos. Si la renovación falla, la app debe olvidar la sesión y evitar nuevos intentos automáticos. Los resultados declarados se distinguen de las pruebas repetidas durante la integración."
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/auth-cases.test.ts",
+      "observedResult": "Declaración original de Ismael: siete casos PASS y una falla controlada revertida. Repetición asistida de integración: siete casos PASS. El reporte incluye los pasos para reconstruir la prueba original y las salidas con tokens ocultos.",
+      "explanation": "Los permisos se comprueban en el servidor. Una renovación fallida elimina la sesión. La prueba de logout distingue si el token guardado se borra y la telemetría oculta sus valores."
     },
     {
       "studentId": "3523110131",
       "name": "Juan Andrés Medina González",
       "commitShas": [
-        "18615e32728b6fe88234f6f8279cad63fe44261c",
-        "5eb9eb70789adaa1db44118f907d0175660f0409"
+        "32e0dbfbb083634cb9bc930ace8a04402ff0bf9d",
+        "f1cb4660bff4be27a4636ed8c0961b17a00b19c2"
       ],
       "files": [
         ".github/workflows/week-06-sesion-segura-feedback.yml",
         "evidence/week-06/concurrency.test.ts",
+        "evidence/week-06/auth-cases.test.ts",
+        "evidence/week-06/session-app.test.tsx",
         "reports/week-06/concurrency.json",
         "evidence/week-06/individual.json",
-        "evidence/week-06/logs/concurrency.log",
-        "evidence/week-06/logs/concurrency-observations.json",
+        "evidence/week-06/logs/session-integration.log",
         "evidence/week-06/reports/3523110131.md"
       ],
       "tests": [
-        "Ocho casos permanentes de concurrencia, reloj controlable, fallo de renovación, logout y contrato del backend local: cuatro aprobados y cuatro fallidos."
+        "Quince casos de concurrencia, sesión y permisos del backend; siete casos del reporte de Ismael; un caso de inicio y cierre de sesión en la app. La matriz completa incluye también las pruebas anteriores: nueve suites y 61 casos PASS."
       ],
       "reviews": [
         "Workflow con Node 22.22.0, checkout del commit de la rama, permisos contents:read, comprobaciones obligatorias y evidencia al publicar la etiqueta final."
       ],
       "prediction": "Cada solicitud se reintenta una sola vez. Las solicitudes simultáneas comparten la renovación y una respuesta tardía no recupera una sesión cerrada.",
-      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts",
-      "observedResult": "Tres suites: dos aprobadas y una fallida. Quince casos: once PASS y cuatro FAIL; código de salida 1. La ejecución asistida y sus observaciones están guardadas en evidence/week-06/logs/concurrency.log y concurrency-observations.json.",
-      "explanation": "Las pruebas conservan los fallos reales y el workflow detiene el proceso si aparecen. El registro de los tres integrantes se actualizará con los commits de main después de completar la integración."
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx",
+      "observedResult": "Nueve suites y 61 casos PASS; código de salida 0. La ejecución asistida está guardada en evidence/week-06/logs/session-integration.log. concurrency.json contiene quince observaciones esperadas y comprobadas, sin valores de tokens.",
+      "explanation": "Las pruebas reproducen las solicitudes simultáneas y las respuestas tardías con un reloj controlable. El cierre bloquea las consultas y elimina el token. El workflow conserva los reportes y hace fallar el proceso si una comprobación obligatoria falla."
     }
   ]
 }

@@ -134,6 +134,35 @@ test('renew fuerza una renovación single-flight aun sin expirar (rechazo del se
   expect(await storage.read()).toBe('course-token-2');
 });
 
+test('401 de generación anterior reutiliza el token renovado sin abrir otra renovación', async () => {
+  let refreshCalls = 0;
+  const storage = createMemorySessionStorage();
+  const manager = createSessionManager({
+    storage,
+    now: () => 1_000,
+    baseUrl: 'http://127.0.0.1:4310',
+    fetchImpl: async (input) => {
+      const url = String(input);
+      if (url.endsWith('/v1/session/refresh')) {
+        refreshCalls += 1;
+        return jsonResponse({ token: 'course-token-2', generation: 2, expiresInMs: 60_000 });
+      }
+      return jsonResponse({ token: 'course-token-1', generation: 1, expiresInMs: 60_000 });
+    },
+  });
+
+  await manager.login('technician-1');
+  // La primera solicitud recibe 401 del token viejo (course-token-1) y renueva.
+  expect(await manager.renew('course-token-1')).toBe('course-token-2');
+  expect(refreshCalls).toBe(1);
+  // El 401 de la segunda solicitud llega DESPUÉS de la renovación y sigue
+  // referido al token anterior: debe usar el token ya actualizado sin abrir
+  // otra renovación (caso de generación anterior de la guía).
+  expect(await manager.renew('course-token-1')).toBe('course-token-2');
+  expect(refreshCalls).toBe(1);
+  expect(await storage.read()).toBe('course-token-2');
+});
+
 test('logout durante la escritura del token renovado invalida esa escritura', async () => {
   let clock = 1_000;
   let releaseRefreshWrite!: () => void;

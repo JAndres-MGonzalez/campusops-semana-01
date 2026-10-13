@@ -21,8 +21,12 @@ export interface SessionManager {
    * Renovación forzada single-flight: rejuvenece el token aun cuando el reloj
    * local lo dé por vigente (p. ej. el servidor lo rechazó con HTTP 401 por
    * otra causa). Los llamados concurrentes comparten una sola renovación.
+   *
+   * Si se pasa `rejectedToken` (el que el servidor rechazó con 401) y ese token
+   * ya no es el vigente, se reutiliza el token actualizado **sin abrir otra
+   * renovación** (caso de generación anterior).
    */
-  renew(): Promise<string | null>;
+  renew(rejectedToken?: string): Promise<string | null>;
   status(): SessionStatus;
   snapshot(): SessionSnapshot;
 }
@@ -220,9 +224,14 @@ export function createSessionManager(options: SessionManagerOptions): SessionMan
     return refresh();
   }
 
-  async function renew(): Promise<string | null> {
+  async function renew(rejectedToken?: string): Promise<string | null> {
     if (snapshot.token === null) {
       return null;
+    }
+    // Caso de generación anterior: el token rechazado ya no es el vigente; se
+    // reutiliza el token ya actualizado sin abrir otra renovación.
+    if (rejectedToken !== undefined && rejectedToken !== snapshot.token) {
+      return snapshot.token;
     }
     return refresh();
   }

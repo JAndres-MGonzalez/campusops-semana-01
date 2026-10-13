@@ -20,7 +20,7 @@ const session = createSessionManager({
 });
 const repository = new HttpIncidentRepository(backendUrl, {
   tokenProvider: () => session.getValidToken(),
-  onUnauthorized: () => session.renew(),
+  onUnauthorized: (rejectedToken) => session.renew(rejectedToken),
 });
 
 export default function App() {

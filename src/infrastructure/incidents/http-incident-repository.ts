@@ -45,9 +45,11 @@ type Options = Readonly<{
   tokenProvider?: () => Promise<string | null>;
   /**
    * Renovación forzada (single-flight compartido) cuando el servidor responde
-   * HTTP 401; permite reintentar cada solicitud una sola vez con el token nuevo.
+   * HTTP 401, con el token rechazado como argumento: si ese token ya dejó de
+   * ser el vigente (generación anterior), se reutiliza el actual sin renovar.
+   * Permite reintentar cada solicitud una sola vez con el token correcto.
    */
-  onUnauthorized?: () => Promise<string | null>;
+  onUnauthorized?: (rejectedToken: string) => Promise<string | null>;
 }>;
 
 export class HttpIncidentRepository implements IncidentRepository {
@@ -80,9 +82,10 @@ export class HttpIncidentRepository implements IncidentRepository {
         throw new IncidentRequestError('forbidden');
       }
       let response = await this.send(controller, path, init, token);
-      // HTTP 401: renovación forzada compartida y un único reintento por solicitud.
+      // HTTP 401: renovación forzada compartida y un único reintento por
+      // solicitud, siempre con el token que el servidor acaba de rechazar.
       if (response.status === 401 && this.options.onUnauthorized !== undefined) {
-        const renewed = await this.options.onUnauthorized();
+        const renewed = await this.options.onUnauthorized(token);
         if (renewed !== null) {
           response = await this.send(controller, path, init, renewed);
         }

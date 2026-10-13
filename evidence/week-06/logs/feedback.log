@@ -1,5 +1,4 @@
-commitSha: 591ab5263389c3f1b66d6aad371c5cbbc8a3a292
-generatedAt: 2026-10-12T05:33:29.6691913+00:00
+commitSha: f1cb4660bff4be27a4636ed8c0961b17a00b19c2
 command: make PYTHON=python feedback
 exitCode: 0
 
@@ -18,26 +17,13 @@ npm run test:smoke
 > dmi-react-native-starter@1.0.0 test:smoke
 > jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx
 
-  console.warn
-    {"event":"incident_load_failed","operation":"list","error":"[REDACTED]"}
-
-    [0m [90m 48 |[39m [36mexport[39m [36mfunction[39m reportIncidentFailure(operation[33m:[39m [32m'list'[39m [33m|[39m [32m'detail'[39m [33m|[39m [32m'create'[39m[33m,[39m error[33m:[39m unknown)[33m:[39m [36mvoid[39m {
-     [90m 49 |[39m   [36mconst[39m record [33m=[39m redactTelemetryData({ event[33m:[39m operation [33m===[39m [32m'create'[39m [33m?[39m [32m'incident_create_failed'[39m [33m:[39m [32m'incident_load_failed'[39m[33m,[39m operation[33m,[39m error })[33m;[39m
-    [31m[1m>[22m[39m[90m 50 |[39m   console[33m.[39mwarn([33mJSON[39m[33m.[39mstringify(record))[33m;[39m
-     [90m    |[39m           [31m[1m^[22m[39m
-     [90m 51 |[39m }
-     [90m 52 |[39m[0m
-
-      at warn (src/infrastructure/telemetry/safe-telemetry.ts:50:11)
-      at src/ui/IncidentApp.tsx:48:24
-
 PASS course-tests/smoke.test.tsx
-  √ renders the reproducible baseline and resolves backend state (270 ms)
+  √ renders the reproducible baseline and resolves backend state (108 ms)
 
 Test Suites: 1 passed, 1 total
 Tests:       1 passed, 1 total
 Snapshots:   0 total
-Time:        1.382 s, estimated 7 s
+Time:        1.204 s
 Ran all test suites matching /course-tests\\smoke.test.tsx/i.
 npm run audit:ci
 
@@ -224,10 +210,10 @@ npm run bundle:release
 
 Starting Metro Bundler
 
-Android Bundled 7824ms index.ts (591 modules)
+Android Bundled 4603ms index.ts (595 modules)
 
 › android bundles (1):
-_expo/static/js/android/index-6560fa0b945b38b4db7d2e10f545f664.hbc (1.5MB)
+_expo/static/js/android/index-76079d18dd8247b77ab7099645ef4031.hbc (1.5MB)
 
 › Files (1):
 metadata.json (150B)

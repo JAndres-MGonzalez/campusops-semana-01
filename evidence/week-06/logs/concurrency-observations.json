@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "week": 6,
-  "commitSha": "5eb9eb70789adaa1db44118f907d0175660f0409",
-  "generatedAt": "2026-10-13T02:48:43.079Z",
+  "commitSha": "f1cb4660bff4be27a4636ed8c0961b17a00b19c2",
+  "generatedAt": "2026-10-13T04:39:43.154Z",
   "observations": [
     {
       "id": "concurrency-shared-refresh",
@@ -48,12 +48,10 @@
       },
       "observed": {
         "retriedRequestIds": [
-          "a",
-          "a",
           "a"
         ]
       },
-      "status": "fail"
+      "status": "pass"
     },
     {
       "id": "concurrency-logout-clears-session",
@@ -79,11 +77,11 @@
       },
       "observed": {
         "refreshCalls": 1,
-        "pendingStatus": "expirado",
+        "pendingStatus": "renovando",
         "sameResult": true,
         "status": "autenticado"
       },
-      "status": "fail"
+      "status": "pass"
     },
     {
       "id": "concurrency-refresh-failure",
@@ -108,10 +106,10 @@
         "persistedSessionPresent": false
       },
       "observed": {
-        "status": "autenticado",
-        "persistedSessionPresent": true
+        "status": "no_autenticado",
+        "persistedSessionPresent": false
       },
-      "status": "fail"
+      "status": "pass"
     },
     {
       "id": "session-backend-contract",
@@ -137,10 +135,115 @@
           "refreshToken",
           "role"
         ],
-        "loginAccepted": false,
-        "status": "no_autenticado"
+        "loginAccepted": true,
+        "status": "autenticado"
       },
-      "status": "fail"
+      "status": "pass"
+    },
+    {
+      "id": "real-backend-refresh",
+      "scenarioType": "nominal",
+      "expected": {
+        "refreshCalls": 1,
+        "tokenPresent": true,
+        "status": "autenticado"
+      },
+      "observed": {
+        "refreshCalls": 1,
+        "tokenPresent": true,
+        "status": "autenticado"
+      },
+      "status": "pass"
+    },
+    {
+      "id": "logout-blocks-protected-request",
+      "scenarioType": "nominal",
+      "expected": {
+        "status": "no_autenticado",
+        "storedTokenPresent": false,
+        "protectedRequestSucceeded": false
+      },
+      "observed": {
+        "status": "no_autenticado",
+        "storedTokenPresent": false,
+        "protectedRequestSucceeded": false
+      },
+      "status": "pass"
+    },
+    {
+      "id": "logout-during-pending-storage-write",
+      "scenarioType": "boundary",
+      "expected": {
+        "status": "no_autenticado",
+        "storedTokenPresent": false
+      },
+      "observed": {
+        "status": "no_autenticado",
+        "storedTokenPresent": false
+      },
+      "status": "pass"
+    },
+    {
+      "id": "http-401-shared-refresh",
+      "scenarioType": "nominal",
+      "expected": {
+        "refreshCalls": 1,
+        "incidentCalls": 8,
+        "successfulRequests": 4
+      },
+      "observed": {
+        "refreshCalls": 1,
+        "incidentCalls": 8,
+        "successfulRequests": 4
+      },
+      "status": "pass"
+    },
+    {
+      "id": "obsolete-http-401-does-not-renew-again",
+      "scenarioType": "boundary",
+      "expected": {
+        "refreshCalls": 1,
+        "incidentCalls": 4
+      },
+      "observed": {
+        "refreshCalls": 1,
+        "incidentCalls": 4
+      },
+      "status": "pass"
+    },
+    {
+      "id": "backend-role-authorized-actions",
+      "scenarioType": "nominal",
+      "expected": {
+        "loginStatus": 200,
+        "actionStatuses": [
+          201,
+          201,
+          201
+        ]
+      },
+      "observed": {
+        "loginStatus": 200,
+        "actionStatuses": [
+          201,
+          201,
+          201
+        ]
+      },
+      "status": "pass"
+    },
+    {
+      "id": "backend-role-denied-actions",
+      "scenarioType": "failure",
+      "expected": {
+        "forbiddenStatus": 403,
+        "unauthorizedStatus": 401
+      },
+      "observed": {
+        "forbiddenStatus": 403,
+        "unauthorizedStatus": 401
+      },
+      "status": "pass"
     }
   ]
 }

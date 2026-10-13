@@ -32,7 +32,14 @@ function mapIncident(input: unknown): IncidentDetail | null {
   };
 }
 
-type Options = Readonly<{ actorId?: string; timeoutMs?: number; fetchImpl?: typeof fetch; scenario?: string }>;
+type Options = Readonly<{
+  actorId?: string;
+  timeoutMs?: number;
+  fetchImpl?: typeof fetch;
+  scenario?: string;
+  /** Provee el token de sesión vigente; sin sesión se conserva el token didáctico. */
+  tokenProvider?: () => Promise<string | null>;
+}>;
 
 export class HttpIncidentRepository implements IncidentRepository {
   constructor(private readonly baseUrl: string, private readonly options: Options = {}) {}
@@ -41,10 +48,11 @@ export class HttpIncidentRepository implements IncidentRepository {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), this.options.timeoutMs ?? 2000);
     try {
+      const token = (await this.options.tokenProvider?.()) ?? 'course-valid-token';
       const response = await (this.options.fetchImpl ?? fetch)(`${this.baseUrl}${path}`, {
         ...init, signal: controller.signal,
         headers: {
-          Authorization: 'Bearer course-valid-token',
+          Authorization: `Bearer ${token}`,
           'X-Course-Actor': this.options.actorId ?? 'reporter-1',
           ...(this.options.scenario ? { 'X-Course-Scenario': this.options.scenario } : {}),
           ...init.headers,

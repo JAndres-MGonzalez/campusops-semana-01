@@ -6,12 +6,19 @@ import { createIncident, getIncidentDetail, getIncidentList } from './src/applic
 import type { IncidentDraft } from './src/domain/incident';
 import { getBackendHealth } from './src/api/courseBackend';
 import { HttpIncidentRepository } from './src/infrastructure/incidents/http-incident-repository';
+import { createSessionManager } from './src/infrastructure/session/manager';
+import { createSecureSessionStorage } from './src/infrastructure/session/secure-storage';
 import { reportIncidentFailure } from './src/infrastructure/telemetry/safe-telemetry';
 import { IncidentApp } from './src/ui/IncidentApp';
 
 const backendUrl = process.env.EXPO_PUBLIC_COURSE_BACKEND_URL
   ?? (Platform.OS === 'android' ? 'http://10.0.2.2:4310' : 'http://127.0.0.1:4310');
-const repository = new HttpIncidentRepository(backendUrl);
+const session = createSessionManager({
+  storage: createSecureSessionStorage(),
+  now: () => Date.now(),
+  baseUrl: backendUrl,
+});
+const repository = new HttpIncidentRepository(backendUrl, { tokenProvider: () => session.getValidToken() });
 
 export default function App() {
   const [status, setStatus] = useState<'checking' | 'available' | 'offline'>('checking');

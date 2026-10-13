@@ -24,6 +24,7 @@ export interface SessionStorage {
 
 export interface SessionSnapshot {
   readonly token: string | null;
+  readonly refreshToken: string | null;
   readonly generation: number;
   readonly expiresAt: number | null;
   readonly status: SessionStatus;

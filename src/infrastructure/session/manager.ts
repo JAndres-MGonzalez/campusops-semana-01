@@ -23,12 +23,19 @@ export interface SessionManager {
 
 interface SessionPayload {
   readonly token: string;
+  readonly refreshToken: string | null;
   readonly generation: number;
   readonly expiresInMs: number;
 }
 
 const DEFAULT_EXPIRES_IN_MS = 60_000;
 
+/**
+ * Acepta el formato didáctico del módulo ({ token, generation, expiresInMs })
+ * y el contrato real del backend didáctico ({ accessToken, refreshToken,
+ * expiresIn }, con `expiresIn` en segundos), para que el manager funcione
+ * contra ambos sin conversiones en la capa de la app.
+ */
 function parseSessionPayload(
   input: unknown,
   fallbackGeneration: number,
@@ -38,10 +45,19 @@ function parseSessionPayload(
     return null;
   }
   const record = input as Record<string, unknown>;
-  const token = record.token;
-  if (typeof token !== 'string' || token.length === 0) {
+  const token =
+    typeof record.token === 'string'
+      ? record.token
+      : typeof record.accessToken === 'string'
+        ? record.accessToken
+        : null;
+  if (token === null || token.length === 0) {
     return null;
   }
+  const refreshToken =
+    typeof record.refreshToken === 'string' && record.refreshToken.length > 0
+      ? record.refreshToken
+      : null;
   const generation =
     typeof record.generation === 'number' && Number.isFinite(record.generation)
       ? record.generation
@@ -49,8 +65,10 @@ function parseSessionPayload(
   const expiresInMs =
     typeof record.expiresInMs === 'number' && Number.isFinite(record.expiresInMs)
       ? record.expiresInMs
-      : fallbackExpiresInMs;
-  return { token, generation, expiresInMs };
+      : typeof record.expiresIn === 'number' && Number.isFinite(record.expiresIn) && record.expiresIn > 0
+        ? Math.round(record.expiresIn * 1000)
+        : fallbackExpiresInMs;
+  return { token, refreshToken, generation, expiresInMs };
 }
 
 /**
@@ -68,14 +86,24 @@ export function createSessionManager(options: SessionManagerOptions): SessionMan
 
   let snapshot: SessionSnapshot = {
     token: null,
+    refreshToken: null,
     generation: 0,
     expiresAt: null,
     status: 'no_autenticado',
   };
   let refreshPromise: Promise<string | null> | null = null;
+  /** Incrementa en cada reset: permite descartar una renovación que terminó después de un logout. */
+  let sessionEpoch = 0;
 
   const reset = (): void => {
-    snapshot = { token: null, generation: 0, expiresAt: null, status: 'no_autenticado' };
+    sessionEpoch += 1;
+    snapshot = {
+      token: null,
+      refreshToken: null,
+      generation: 0,
+      expiresAt: null,
+      status: 'no_autenticado',
+    };
   };
 
   const postJson = async (path: string, body: unknown): Promise<Response> =>
@@ -103,6 +131,7 @@ export function createSessionManager(options: SessionManagerOptions): SessionMan
       await storage.write(payload.token);
       snapshot = {
         token: payload.token,
+        refreshToken: payload.refreshToken,
         generation: payload.generation,
         expiresAt: now() + payload.expiresInMs,
         status: 'autenticado',
@@ -115,8 +144,9 @@ export function createSessionManager(options: SessionManagerOptions): SessionMan
   }
 
   async function performRefresh(): Promise<string | null> {
+    const epoch = sessionEpoch;
     try {
-      const response = await postJson('/v1/session/refresh', { generation: snapshot.generation });
+      const response = await postJson('/v1/session/refresh', { refreshToken: snapshot.refreshToken });
       if (!response.ok) {
         await storage.clear();
         reset();
@@ -132,9 +162,15 @@ export function createSessionManager(options: SessionManagerOptions): SessionMan
         reset();
         return null;
       }
+      // Si hubo logout mientras la renovación estaba pendiente, se descarta la
+      // respuesta: no se vuelve a guardar una sesión que ya se cerró.
+      if (sessionEpoch !== epoch) {
+        return null;
+      }
       await storage.write(payload.token);
       snapshot = {
         token: payload.token,
+        refreshToken: payload.refreshToken,
         generation: payload.generation,
         expiresAt: now() + payload.expiresInMs,
         status: 'autenticado',
@@ -149,10 +185,10 @@ export function createSessionManager(options: SessionManagerOptions): SessionMan
 
   /** Renovación single-flight: los llamados concurrentes comparten la misma promesa. */
   function refresh(): Promise<string | null> {
+    snapshot = { ...snapshot, status: 'renovando' };
     if (refreshPromise !== null) {
       return refreshPromise;
     }
-    snapshot = { ...snapshot, status: 'renovando' };
     refreshPromise = performRefresh().finally(() => {
       refreshPromise = null;
     });

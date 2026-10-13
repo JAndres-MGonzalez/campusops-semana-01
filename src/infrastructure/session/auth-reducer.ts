@@ -42,7 +42,7 @@ export function reduceAuthSignals(signals: readonly AuthSignal[]): AuthSummary {
 
   for (const event of signals) {
     if (event.type === 'request401') {
-      if (event.requestId !== undefined) {
+      if (event.requestId !== undefined && !retriedRequestIds.includes(event.requestId)) {
         retriedRequestIds.push(event.requestId);
       }
       if (!refreshInFlight && status !== 'authenticated') {

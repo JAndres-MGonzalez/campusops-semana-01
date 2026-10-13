@@ -1,0 +1,50 @@
+{
+    "schemaVersion":  1,
+    "week":  6,
+    "commitSha":  "49d976f8ed7bef19ee0d4b6a29056b946064afa7",
+    "generatedAt":  "2026-10-13T02:44:26Z",
+    "checks":  [
+                   {
+                       "id":  "auth-nominal-login-token",
+                       "status":  "pass",
+                       "scenarioType":  "nominal",
+                       "command":  "curl.exe -s -w \"\\nHTTP_STATUS:%{http_code}\" -X POST http://127.0.0.1:4310/v1/session/login -H \"Content-Type: application/json\" --data-binary @b-login-tech.json   # cuerpo: {\"actorId\":\"technician-1\"}",
+                       "evidence":  "{\"actorId\":\"technician-1\",\"role\":\"technician\",\"accessToken\":\"course-valid-token\",\"refreshToken\":\"course-refresh-0\",\"expiresIn\":60}\r\nHTTP_STATUS:200"
+                   },
+                   {
+                       "id":  "boundary-expiration-clock",
+                       "status":  "pass",
+                       "scenarioType":  "boundary",
+                       "command":  "npm.cmd test -- --ci --runInBand src/course-evaluation/week-06-session-manual.test.ts",
+                       "evidence":  "Expiracion con now() inyectable (sin sleep real): PASS src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 passed, 1 total | Tests:       7 passed, 7 total"
+                   },
+                   {
+                       "id":  "failure-auth-wrong-role",
+                       "status":  "pass",
+                       "scenarioType":  "failure",
+                       "command":  "curl.exe -s -w \"\\nHTTP_STATUS:%{http_code}\" -X POST http://127.0.0.1:4310/v1/incidents/campus-inc-001/actions -H \"Authorization: Bearer course-valid-token\" -H \"X-Course-Actor: reporter-1\" -H \"Content-Type: application/json\" -H \"Idempotency-Key: wk06-deny-1\" --data-binary @b-deny.json   # cuerpo: {\"action\":\"resolve\",\"baseVersion\":2,\"diagnosis\":\"x\"}",
+                       "evidence":  "{\"code\":\"forbidden\"}\r\nHTTP_STATUS:403"
+                   },
+                   {
+                       "id":  "failure-refresh-then-safe-anonymous",
+                       "status":  "pass",
+                       "scenarioType":  "failure",
+                       "command":  "npm.cmd test -- --ci --runInBand src/course-evaluation/week-06-session-manual.test.ts",
+                       "evidence":  "refreshFailed -\u003e anonymous y persistedToken null: PASS src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 passed, 1 total | Tests:       7 passed, 7 total || Falla controlada (reset de token comentado en auth-reducer.ts): FAIL src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 failed, 1 total | Tests:       1 failed, 6 passed, 7 total (revertida con git checkout)"
+                   },
+                   {
+                       "id":  "boundary-logs-redacted",
+                       "status":  "pass",
+                       "scenarioType":  "boundary",
+                       "command":  "npm.cmd test -- --ci --runInBand src/course-evaluation/week-06-session-manual.test.ts",
+                       "evidence":  "redactForTelemetry deja [REDACTED] y el token no aparece: PASS src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 passed, 1 total | Tests:       7 passed, 7 total"
+                   },
+                   {
+                       "id":  "logout-clears-session",
+                       "status":  "pass",
+                       "scenarioType":  "nominal",
+                       "command":  "npm.cmd test -- --ci --runInBand course-tests/public/week-06.test.ts",
+                       "evidence":  "PASS course-tests/public/week-06.test.ts | Test Suites: 1 passed, 1 total | Tests:       2 passed, 2 total"
+                   }
+               ]
+}

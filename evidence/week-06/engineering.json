@@ -23,7 +23,7 @@
                              "evidence":  "reports/week-06/auth-tests.json; course-tests/public/week-06.test.ts"
                          },
                          {
-                             "command":  "npm.cmd test -- --ci --runInBand src/course-evaluation/week-06-session-manual.test.ts",
+                             "command":  "npm.cmd test -- --ci --runInBand src/course-evaluation/week-06-session-manual.test.ts   # requiere la prueba temporal: ver seccion Reproduccion en evidence/week-06/reports/3523110741.md",
                              "result":  "PASS src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 passed, 1 total | Tests:       7 passed, 7 total | Falla controlada: FAIL src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 failed, 1 total | Tests:       1 failed, 6 passed, 7 total (revertida)",
                              "evidence":  "evidence/week-06/reports/3523110741.md; falla controlada reproducida y revertida."
                          }

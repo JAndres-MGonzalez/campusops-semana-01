@@ -17,6 +17,12 @@ export interface SessionManager {
   logout(): Promise<void>;
   /** Devuelve un token vigente (renovando si expiró) o `null` si no hay sesión. */
   getValidToken(): Promise<string | null>;
+  /**
+   * Renovación forzada single-flight: rejuvenece el token aun cuando el reloj
+   * local lo dé por vigente (p. ej. el servidor lo rechazó con HTTP 401 por
+   * otra causa). Los llamados concurrentes comparten una sola renovación.
+   */
+  renew(): Promise<string | null>;
   status(): SessionStatus;
   snapshot(): SessionSnapshot;
 }
@@ -168,6 +174,12 @@ export function createSessionManager(options: SessionManagerOptions): SessionMan
         return null;
       }
       await storage.write(payload.token);
+      // Hubo logout mientras se escribía el token renovado: se invalida la
+      // escritura y la sesión no vuelve a quedar activa.
+      if (sessionEpoch !== epoch) {
+        await storage.clear();
+        return null;
+      }
       snapshot = {
         token: payload.token,
         refreshToken: payload.refreshToken,
@@ -208,6 +220,13 @@ export function createSessionManager(options: SessionManagerOptions): SessionMan
     return refresh();
   }
 
+  async function renew(): Promise<string | null> {
+    if (snapshot.token === null) {
+      return null;
+    }
+    return refresh();
+  }
+
   async function logout(): Promise<void> {
     await storage.clear();
     reset();
@@ -217,6 +236,7 @@ export function createSessionManager(options: SessionManagerOptions): SessionMan
     login,
     logout,
     getValidToken,
+    renew,
     status: (): SessionStatus => snapshot.status,
     snapshot: (): SessionSnapshot => snapshot,
   };

@@ -37,27 +37,56 @@ type Options = Readonly<{
   timeoutMs?: number;
   fetchImpl?: typeof fetch;
   scenario?: string;
-  /** Provee el token de sesión vigente; sin sesión se conserva el token didáctico. */
+  /**
+   * Provee el token de sesión vigente (renovando si expiró). Si devuelve `null`
+   * la solicitud se BLOQUEA antes de tocar la red. En ausencia de este proveedor
+   * se conserva el token didáctico de las evidencias de la semana 5.
+   */
   tokenProvider?: () => Promise<string | null>;
+  /**
+   * Renovación forzada (single-flight compartido) cuando el servidor responde
+   * HTTP 401; permite reintentar cada solicitud una sola vez con el token nuevo.
+   */
+  onUnauthorized?: () => Promise<string | null>;
 }>;
 
 export class HttpIncidentRepository implements IncidentRepository {
   constructor(private readonly baseUrl: string, private readonly options: Options = {}) {}
 
+  private resolveToken(): Promise<string | null> {
+    const provider = this.options.tokenProvider;
+    return provider === undefined ? Promise.resolve('course-valid-token') : provider();
+  }
+
+  private send(controller: AbortController, path: string, init: RequestInit, token: string): Promise<Response> {
+    return (this.options.fetchImpl ?? fetch)(`${this.baseUrl}${path}`, {
+      ...init, signal: controller.signal,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'X-Course-Actor': this.options.actorId ?? 'reporter-1',
+        ...(this.options.scenario ? { 'X-Course-Scenario': this.options.scenario } : {}),
+        ...init.headers,
+      },
+    });
+  }
+
   private async request(path: string, init: RequestInit = {}): Promise<unknown> {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), this.options.timeoutMs ?? 2000);
     try {
-      const token = (await this.options.tokenProvider?.()) ?? 'course-valid-token';
-      const response = await (this.options.fetchImpl ?? fetch)(`${this.baseUrl}${path}`, {
-        ...init, signal: controller.signal,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'X-Course-Actor': this.options.actorId ?? 'reporter-1',
-          ...(this.options.scenario ? { 'X-Course-Scenario': this.options.scenario } : {}),
-          ...init.headers,
-        },
-      });
+      const token = await this.resolveToken();
+      if (token === null) {
+        // Sin sesión la solicitud se bloquea antes de tocar la red.
+        throw new IncidentRequestError('forbidden');
+      }
+      let response = await this.send(controller, path, init, token);
+      // HTTP 401: renovación forzada compartida y un único reintento por solicitud.
+      if (response.status === 401 && this.options.onUnauthorized !== undefined) {
+        const renewed = await this.options.onUnauthorized();
+        if (renewed !== null) {
+          response = await this.send(controller, path, init, renewed);
+        }
+      }
       if (!response.ok) {
         const kind = response.status === 429 ? 'rate_limit'
           : response.status === 404 ? 'not_found'

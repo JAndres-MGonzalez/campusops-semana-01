@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "week": 6,
   "teamId": "9A-E08",
-  "commitSha": "f1cb4660bff4be27a4636ed8c0961b17a00b19c2",
-  "generatedAt": "2026-10-12T22:40:49.4910439-06:00",
+  "commitSha": "5c347c8180a03c86e9bc9c1c60a9bf497cc60fa6",
+  "generatedAt": "2026-10-13T04:52:43.1897677+00:00",
   "members": [
     {
       "studentId": "3523110092",
@@ -38,7 +38,9 @@
       "name": "Jose Ismael Montalvo Lopez",
       "commitShas": [
         "5dd6f0397b41fc30c1db59b06024c406e121a704",
-        "2ade630549b22fdef8c4184728be552cab2318dc"
+        "2ade630549b22fdef8c4184728be552cab2318dc",
+        "599a608fbe02f0c7bd233835cd3ad02cd173b2a9",
+        "5c347c8180a03c86e9bc9c1c60a9bf497cc60fa6"
       ],
       "files": [
         "reports/week-06/auth-tests.json",
@@ -53,15 +55,15 @@
       ],
       "prediction": "La expiración usa un reloj controlable, la renovación fallida elimina la sesión y el servidor rechaza acciones sin permiso.",
       "command": "npm.cmd test -- --ci --runInBand evidence/week-06/auth-cases.test.ts",
-      "observedResult": "Declaración original de Ismael: siete casos PASS y una falla controlada revertida. Repetición asistida de integración: siete casos PASS. El reporte incluye los pasos para reconstruir la prueba original y las salidas con tokens ocultos.",
+      "observedResult": "Ismael repitió siete casos manuales y ocho del módulo sobre la Parte A corregida, y ejecutó una falla controlada: un FAIL y seis PASS, con el cambio revertido. La integración reprodujo siete casos permanentes PASS y verificó autorización del backend. Los tokens están ocultos en las salidas registradas.",
       "explanation": "Los permisos se comprueban en el servidor. Una renovación fallida elimina la sesión. La prueba de logout distingue si el token guardado se borra y la telemetría oculta sus valores."
     },
     {
       "studentId": "3523110131",
       "name": "Juan Andrés Medina González",
       "commitShas": [
-        "32e0dbfbb083634cb9bc930ace8a04402ff0bf9d",
-        "f1cb4660bff4be27a4636ed8c0961b17a00b19c2"
+        "4453709da3aab76e6b33cec89b1d777bb8ebb0c9",
+        "50a783d3bf815d745c21e44f5d23b99186f6a513"
       ],
       "files": [
         ".github/workflows/week-06-sesion-segura-feedback.yml",

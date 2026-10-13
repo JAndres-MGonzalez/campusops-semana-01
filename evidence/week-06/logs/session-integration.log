@@ -1,5 +1,5 @@
-commitSha: f1cb4660bff4be27a4636ed8c0961b17a00b19c2
-generatedAt: 2026-10-13T04:39:45.7955883+00:00
+commitSha: 5c347c8180a03c86e9bc9c1c60a9bf497cc60fa6
+generatedAt: 2026-10-13T04:52:48.4679452+00:00
 command: npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx
 exitCode: 0
 
@@ -8,17 +8,17 @@ exitCode: 0
 > jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx
 
 PASS evidence/week-06/concurrency.test.ts
-PASS evidence/week-06/session-app.test.tsx
-PASS evidence/week-05/backend-failures.test.ts
-PASS evidence/week-05/http-client-ui.test.tsx
 PASS course-tests/smoke.test.tsx
-PASS evidence/week-06/auth-cases.test.ts
-PASS src/infrastructure/session/session.test.ts
 PASS course-tests/public/week-06.test.ts
+PASS evidence/week-05/backend-failures.test.ts
+PASS evidence/week-06/session-app.test.tsx
+PASS evidence/week-05/http-client-ui.test.tsx
+PASS evidence/week-06/auth-cases.test.ts
 PASS evidence/week-05/contract-cases.test.ts
+PASS src/infrastructure/session/session.test.ts
 
 Test Suites: 9 passed, 9 total
 Tests:       61 passed, 61 total
 Snapshots:   0 total
-Time:        3.889 s, estimated 14 s
+Time:        3.345 s, estimated 5 s
 Ran all test suites matching /evidence\\week-06\\concurrency.test.ts|evidence\\week-06\\auth-cases.test.ts|evidence\\week-06\\session-app.test.tsx|course-tests\\public\\week-06.test.ts|src\\infrastructure\\session\\session.test.ts|course-tests\\smoke.test.tsx|evidence\\week-05\\backend-failures.test.ts|evidence\\week-05\\contract-cases.test.ts|evidence\\week-05\\http-client-ui.test.tsx/i.

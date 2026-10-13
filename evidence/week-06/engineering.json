@@ -1,7 +1,7 @@
 {
     "schemaVersion":  1,
     "week":  6,
-    "commitSha":  "49d976f8ed7bef19ee0d4b6a29056b946064afa7",
+    "commitSha":  "0deeed6925c7cb328e04413eac55c8b10c964761",
     "decision":  "Adoptamos renovacion single-flight por generacion: todas las solicitudes que reciben 401 comparten una unica llamada a refresh y se reintentan una sola vez con la nueva generacion; si el refresh falla, la sesion vuelve de forma segura a no autenticado, se descarta el token persistido y no se reintenta en bucle, evitando tormentas de refresh y estados inconsistentes.",
     "alternatives":  [
                          "Opcion 1: que cada solicitud renueve la sesion por su cuenta (simple de escribir, pero N solicitudes generan N refresh, carrera de generaciones y posible bucle).",
@@ -26,6 +26,11 @@
                              "command":  "npm.cmd test -- --ci --runInBand src/course-evaluation/week-06-session-manual.test.ts   # requiere la prueba temporal: ver seccion Reproduccion en evidence/week-06/reports/3523110741.md",
                              "result":  "PASS src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 passed, 1 total | Tests:       7 passed, 7 total | Falla controlada: FAIL src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 failed, 1 total | Tests:       1 failed, 6 passed, 7 total (revertida)",
                              "evidence":  "evidence/week-06/reports/3523110741.md; falla controlada reproducida y revertida."
+                         },
+                         {
+                             "command":  "npm.cmd test -- --ci --runInBand src/infrastructure/session",
+                             "result":  "PASS src/infrastructure/session/session.test.ts | Test Suites: 1 passed, 1 total | Tests:       8 passed, 8 total",
+                             "evidence":  "reports/week-06/auth-tests.json (check session-module-lifecycle)"
                          }
                      ]
 }

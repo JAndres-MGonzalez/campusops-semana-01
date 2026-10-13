@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
     "week":  6,
-    "commitSha":  "49d976f8ed7bef19ee0d4b6a29056b946064afa7",
-    "generatedAt":  "2026-10-13T04:24:48Z",
+    "commitSha":  "0deeed6925c7cb328e04413eac55c8b10c964761",
+    "generatedAt":  "2026-10-13T04:39:58Z",
     "checks":  [
                    {
                        "id":  "auth-nominal-login-token",
@@ -16,13 +16,13 @@
                        "status":  "pass",
                        "scenarioType":  "boundary",
                        "command":  "npm.cmd test -- --ci --runInBand src/course-evaluation/week-06-session-manual.test.ts   # requiere crear antes la prueba temporal: ver seccion Reproduccion en evidence/week-06/reports/3523110741.md",
-                       "evidence":  "Expiracion con now() inyectable (sin sleep real): PASS src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 passed, 1 total | Tests:       7 passed, 7 total"
+                       "evidence":  "Login valido y expiracion con now() inyectable (sin sleep real): PASS src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 passed, 1 total | Tests:       7 passed, 7 total"
                    },
                    {
                        "id":  "failure-auth-wrong-role",
                        "status":  "pass",
                        "scenarioType":  "failure",
-                       "command":  "\u0027{\"action\":\"resolve\",\"baseVersion\":2,\"diagnosis\":\"x\"}\u0027 | curl.exe -s -w \"\\nHTTP_STATUS:%{http_code}\" -X POST http://127.0.0.1:4310/v1/incidents/campus-inc-001/actions -H \"Authorization: Bearer course-valid-token\" -H \"X-Course-Actor: reporter-1\" -H \"Content-Type: application/json\" -H \"Idempotency-Key: wk06-deny-1\" --data-binary \"@-\"",
+                       "command":  "$tokR = (\u0027{\"actorId\":\"reporter-1\"}\u0027 | curl.exe -s -X POST http://127.0.0.1:4310/v1/session/login -H \"Content-Type: application/json\" --data-binary \"@-\" | ConvertFrom-Json).accessToken; \u0027{\"action\":\"resolve\",\"baseVersion\":2,\"diagnosis\":\"x\"}\u0027 | curl.exe -s -w \"\\nHTTP_STATUS:%{http_code}\" -X POST http://127.0.0.1:4310/v1/incidents/campus-inc-001/actions -H \"Authorization: Bearer $tokR\" -H \"X-Course-Actor: reporter-1\" -H \"Content-Type: application/json\" -H \"Idempotency-Key: wk06-deny-1\" --data-binary \"@-\"",
                        "evidence":  "{\"code\":\"forbidden\"}\r\nHTTP_STATUS:403"
                    },
                    {
@@ -45,6 +45,13 @@
                        "scenarioType":  "nominal",
                        "command":  "npm.cmd test -- --ci --runInBand course-tests/public/week-06.test.ts",
                        "evidence":  "PASS course-tests/public/week-06.test.ts | Test Suites: 1 passed, 1 total | Tests:       2 passed, 2 total"
+                   },
+                   {
+                       "id":  "session-module-lifecycle",
+                       "status":  "pass",
+                       "scenarioType":  "nominal",
+                       "command":  "npm.cmd test -- --ci --runInBand src/infrastructure/session",
+                       "evidence":  "PASS src/infrastructure/session/session.test.ts | Test Suites: 1 passed, 1 total | Tests:       8 passed, 8 total"
                    }
                ]
 }

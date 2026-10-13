@@ -1,0 +1,22 @@
+%% Semana 6 — máquina de estados de la sesión (CampusOps)
+%% Los identificadores coinciden con `SessionStatus` en
+%% src/infrastructure/session/types.ts:
+%% no_autenticado | autenticando | autenticado | expirado | renovando
+stateDiagram-v2
+    [*] --> no_autenticado
+    no_autenticado --> autenticando: login(actorId)
+    autenticando --> autenticado: 200 + token (almacenamiento seguro)
+    autenticando --> no_autenticado: error / payload invalido
+
+    autenticado --> expirado: now() >= expiresAt / 401
+    expirado --> renovando: getValidToken -> refresh (single-flight)
+
+    state single_flight {
+        [*] --> en_curso
+        en_curso --> compartido: N llamados concurrentes comparten la misma promesa
+    }
+
+    renovando --> autenticado: refresh 200 (nueva generation + token)
+    renovando --> no_autenticado: refresh falla (olvida token, sin bucle)
+    autenticado --> no_autenticado: logout (borra estado persistido)
+    no_autenticado --> [*]

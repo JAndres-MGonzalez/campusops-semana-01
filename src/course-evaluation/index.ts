@@ -1,4 +1,5 @@
 import { redactTelemetryData } from '../infrastructure/telemetry/safe-telemetry';
+import { reduceAuthSignals } from '../infrastructure/session/auth-reducer';
 import { validateRemoteResource } from '../domain/remote-resource';
 import type {
   AuthEvent,
@@ -22,14 +23,14 @@ export function parseRemoteResource(input: unknown): ParseResult {
   return validateRemoteResource(input);
 }
 
-export function coordinateRefresh(_events: readonly AuthEvent[]): Readonly<{
+export function coordinateRefresh(events: readonly AuthEvent[]): Readonly<{
   status: 'anonymous' | 'authenticated';
   activeGeneration: number | null;
   refreshCalls: number;
   retriedRequestIds: readonly string[];
   persistedToken: string | null;
 }> {
-  return pending('coordinateRefresh');
+  return reduceAuthSignals(events);
 }
 
 export function resolveSync(

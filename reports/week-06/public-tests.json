@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "week": 6,
   "mode": "public",
-  "commitSha": "591ab5263389c3f1b66d6aad371c5cbbc8a3a292",
-  "evaluatedAt": "2026-10-12T05:34:30.911461+00:00",
+  "commitSha": "5eb9eb70789adaa1db44118f907d0175660f0409",
+  "evaluatedAt": "2026-10-13T02:55:22.631366+00:00",
   "status": "fail",
   "checks": [
     {
@@ -34,12 +34,17 @@
     {
       "id": "required_evidence",
       "status": "fail",
-      "detail": "missing/empty=['reports/week-06/auth-tests.json', 'evidence/week-06/engineering.json', 'evidence/week-06/individual.json']"
+      "detail": "missing/empty=['reports/week-06/auth-tests.json', 'evidence/week-06/engineering.json']"
     },
     {
       "id": "schema:reports/week-06/concurrency.json",
       "status": "pass",
       "detail": "8 checks indexed, 6 boundary/failure; report evaluates HEAD"
+    },
+    {
+      "id": "schema:evidence/week-06/individual.json",
+      "status": "pass",
+      "detail": "three individual evidence records found"
     },
     {
       "id": "toolchain_1",
@@ -59,7 +64,7 @@
     {
       "id": "toolchain_4",
       "status": "pass",
-      "detail": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts\n> dmi-react-native-starter@1.0.0 test\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-06.test.ts\n\n\nPASS course-tests/public/week-06.test.ts\n  √ coalesces concurrent 401s into one refresh and retries each request once (3 ms)\n  √ logout removes persisted session state\n\nTest Suites: 1 passed, 1 total\nTests:       2 passed, 2 total\nSnapshots:   0 total\nTime:        0.822 s, estimated 1 s\nRan all test suites matching /course-tests\\\\public\\\\week-06.test.ts/i."
+      "detail": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts\n> dmi-react-native-starter@1.0.0 test\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-06.test.ts\n\n\nPASS course-tests/public/week-06.test.ts\n  √ coalesces concurrent 401s into one refresh and retries each request once (3 ms)\n  √ logout removes persisted session state (1 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       2 passed, 2 total\nSnapshots:   0 total\nTime:        0.875 s, estimated 1 s\nRan all test suites matching /course-tests\\\\public\\\\week-06.test.ts/i."
     }
   ]
 }

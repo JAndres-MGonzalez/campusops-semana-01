@@ -1,22 +1,13 @@
-commitSha: 591ab5263389c3f1b66d6aad371c5cbbc8a3a292
-generatedAt: 2026-10-12T05:33:18.6232698+00:00
-command: npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts
+commitSha: 5eb9eb70789adaa1db44118f907d0175660f0409
+generatedAt: 2026-10-13T02:48:44.9656500+00:00
+command: npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts
 exitCode: 1
 
 
 > dmi-react-native-starter@1.0.0 test
-> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand evidence/week-06/concurrency.test.ts
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand evidence/week-06/concurrency.test.ts course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts
 
-FAIL evidence/week-06/concurrency.test.ts (5.91 s)
-  √ cuatro respuestas 401 comparten una renovación (2 ms)
-  √ un 401 de generación anterior no abre otra renovación
-  × cada solicitud se registra para reintentar solo una vez (3 ms)
-  √ logout normal elimina la sesión persistida
-  × el manager comparte una renovación pendiente con reloj controlable (2 ms)
-  √ un refresh fallido elimina la sesión y no entra en un bucle
-  × una renovación pendiente no restaura la sesión después del logout (1 ms)
-  × el manager acepta el login del backend didáctico real (12 ms)
-
+FAIL evidence/week-06/concurrency.test.ts (9.579 s)
   ● cada solicitud se registra para reintentar solo una vez
 
     expect(received).toEqual(expected) // deep equality
@@ -134,8 +125,11 @@ FAIL evidence/week-06/concurrency.test.ts (5.91 s)
       at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
       at _throw (node_modules/@babel/runtime/helpers/asyncToGenerator.js:20:9)
 
-Test Suites: 1 failed, 1 total
-Tests:       4 failed, 4 passed, 8 total
+PASS src/infrastructure/session/session.test.ts
+PASS course-tests/public/week-06.test.ts
+
+Test Suites: 1 failed, 2 passed, 3 total
+Tests:       4 failed, 11 passed, 15 total
 Snapshots:   0 total
-Time:        6.153 s
-Ran all test suites matching /evidence\\week-06\\concurrency.test.ts/i.
+Time:        11.999 s
+Ran all test suites matching /evidence\\week-06\\concurrency.test.ts|course-tests\\public\\week-06.test.ts|src\\infrastructure\\session\\session.test.ts/i.

@@ -24,7 +24,7 @@
                          },
                          {
                              "command":  "npm.cmd test -- --ci --runInBand src/course-evaluation/week-06-session-manual.test.ts   # requiere la prueba temporal: ver seccion Reproduccion en evidence/week-06/reports/3523110741.md",
-                             "result":  "PASS src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 passed, 1 total | Tests:       7 passed, 7 total | Falla controlada: FAIL src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 failed, 1 total | Tests:       1 failed, 6 passed, 7 total (revertida)",
+                             "result":  "PASS src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 passed, 1 total | Tests:       7 passed, 7 total | Falla controlada: FAIL src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 failed, 1 total | Tests:       1 failed, 6 passed, 7 total | Received: \"t1\" | ejecutada contra la Parte A de Kevin (d261b22) con persistedToken = null comentado en auth-reducer.ts (linea 74); revertida con git checkout",
                              "evidence":  "evidence/week-06/reports/3523110741.md; falla controlada reproducida y revertida."
                          },
                          {

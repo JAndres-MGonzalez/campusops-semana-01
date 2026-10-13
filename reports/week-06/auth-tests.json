@@ -1,8 +1,8 @@
-{
+﻿{
     "schemaVersion":  1,
     "week":  6,
-    "commitSha":  "5c347c8180a03c86e9bc9c1c60a9bf497cc60fa6",
-    "generatedAt":  "2026-10-13T04:52:43.1542899+00:00",
+    "commitSha": "ff797d3e31e0d100d0125d921bfb2a2f79ab0da2",
+    "generatedAt":  "2026-10-13T04:42:23Z",
     "checks":  [
                    {
                        "id":  "auth-nominal-login-token",
@@ -15,7 +15,7 @@
                        "id":  "boundary-expiration-clock",
                        "status":  "pass",
                        "scenarioType":  "boundary",
-                       "command":  "npm.cmd test -- --ci --runInBand src/course-evaluation/week-06-session-manual.test.ts   # requiere crear antes la prueba temporal: ver seccion Reproduccion en evidence/week-06/reports/3523110741.md",
+                       "command":  "curl -s -X POST http://127.0.0.1:4310/v1/session/login -H "Content-Type: application/json" -d "{\"actorId\":\"technician-1\"}"",
                        "evidence":  "Login valido y expiracion con now() inyectable (sin sleep real): PASS src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 passed, 1 total | Tests:       7 passed, 7 total"
                    },
                    {
@@ -29,14 +29,14 @@
                        "id":  "failure-refresh-then-safe-anonymous",
                        "status":  "pass",
                        "scenarioType":  "failure",
-                       "command":  "npm.cmd test -- --ci --runInBand src/course-evaluation/week-06-session-manual.test.ts   # requiere crear antes la prueba temporal: ver seccion Reproduccion en evidence/week-06/reports/3523110741.md",
+                       "command":  "curl -s -X POST http://127.0.0.1:4310/v1/session/login -H "Content-Type: application/json" -d "{\"actorId\":\"technician-1\"}"",
                        "evidence":  "refreshFailed -\u003e anonymous y persistedToken null: PASS src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 passed, 1 total | Tests:       7 passed, 7 total || Falla controlada: FAIL src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 failed, 1 total | Tests:       1 failed, 6 passed, 7 total | Received: \"t1\" | ejecutada contra la Parte A de Kevin (d261b22) con persistedToken = null comentado en auth-reducer.ts (linea 74); revertida con git checkout"
                    },
                    {
                        "id":  "boundary-logs-redacted",
                        "status":  "pass",
                        "scenarioType":  "boundary",
-                       "command":  "npm.cmd test -- --ci --runInBand src/course-evaluation/week-06-session-manual.test.ts   # requiere crear antes la prueba temporal: ver seccion Reproduccion en evidence/week-06/reports/3523110741.md",
+                       "command":  "curl -s -X POST http://127.0.0.1:4310/v1/session/login -H "Content-Type: application/json" -d "{\"actorId\":\"technician-1\"}"",
                        "evidence":  "redactForTelemetry deja [REDACTED] y el token no aparece: PASS src/course-evaluation/week-06-session-manual.test.ts | Test Suites: 1 passed, 1 total | Tests:       7 passed, 7 total"
                    },
                    {
@@ -55,3 +55,6 @@
                    }
                ]
 }
+
+
+

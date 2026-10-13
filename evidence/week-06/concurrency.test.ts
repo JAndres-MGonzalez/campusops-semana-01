@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { coordinateRefresh, redactForTelemetry } from '../../src/course-evaluation';
 import { createSessionManager } from '../../src/infrastructure/session/manager';
 import { createMemorySessionStorage } from '../../src/infrastructure/session/memory-storage';
+import { HttpIncidentRepository } from '../../src/infrastructure/incidents/http-incident-repository';
 import { fetchFromLocalBackend } from '../week-05/backend-transport';
 
 const command = 'npm.cmd test -- --ci --runInBand evidence/week-06/concurrency.test.ts';
@@ -13,7 +14,7 @@ let backend: ChildProcess;
 let baseUrl: string;
 
 function response(body: unknown, status = 200): Response {
-  return { ok: status >= 200 && status < 300, status, json: async () => body } as Response;
+  return { ok: status >= 200 && status < 300, status, headers: { get: () => null }, json: async () => body } as unknown as Response;
 }
 
 function deferred<T>() {
@@ -184,4 +185,157 @@ test('el manager acepta el login del backend didáctico real', async () => {
   const observed = { httpStatus, responseKeys, loginAccepted, status: manager.status() };
   check('session-backend-contract', 'failure',
     { httpStatus: 200, responseKeys: ['accessToken', 'actorId', 'expiresIn', 'refreshToken', 'role'], loginAccepted: true, status: 'autenticado' }, observed);
+});
+
+test('el contrato real permite renovar una sesión expirada', async () => {
+  let clock = 1000;
+  let refreshCalls = 0;
+  const manager = createSessionManager({ storage: createMemorySessionStorage(), now: () => clock, baseUrl,
+    fetchImpl: async (input, init) => {
+      if (String(input).endsWith('/refresh')) refreshCalls++;
+      return fetchFromLocalBackend(input, init);
+    },
+  });
+  await manager.login('reporter-1');
+  clock = 62000;
+  const token = await manager.getValidToken();
+  check('real-backend-refresh', 'nominal', { refreshCalls: 1, tokenPresent: true, status: 'autenticado' },
+    { refreshCalls, tokenPresent: token !== null, status: manager.status() });
+});
+
+test('después del logout el cliente no obtiene incidencias con un token de respaldo', async () => {
+  const storage = createMemorySessionStorage();
+  const manager = createSessionManager({ storage, now: () => 1000, baseUrl, fetchImpl: fetchFromLocalBackend });
+  await manager.login('reporter-1');
+  const repository = new HttpIncidentRepository(baseUrl, {
+    fetchImpl: fetchFromLocalBackend, tokenProvider: () => manager.getValidToken(),
+  });
+  await manager.logout();
+  let protectedRequestSucceeded = false;
+  try { await repository.list(); protectedRequestSucceeded = true; } catch { /* Se observa el bloqueo. */ }
+  check('logout-blocks-protected-request', 'nominal',
+    { status: 'no_autenticado', storedTokenPresent: false, protectedRequestSucceeded: false },
+    { status: manager.status(), storedTokenPresent: await storage.read() !== null, protectedRequestSucceeded });
+});
+
+test('logout invalida una renovación cuya escritura segura todavía está pendiente', async () => {
+  let clock = 1000;
+  let storedToken: string | null = null;
+  const writeStarted = deferred<void>();
+  const writeRelease = deferred<void>();
+  const manager = createSessionManager({
+    baseUrl, now: () => clock,
+    storage: {
+      read: async () => storedToken,
+      clear: async () => { storedToken = null; },
+      write: async (token) => {
+        if (token === 'course-token-2') { writeStarted.resolve(); await writeRelease.promise; }
+        storedToken = token;
+      },
+    },
+    fetchImpl: async (input) => response({
+      token: String(input).endsWith('/refresh') ? 'course-token-2' : 'course-token-1',
+      generation: 1, expiresInMs: 1000,
+    }),
+  });
+  await manager.login('reporter-1');
+  clock = 2000;
+  const pending = manager.getValidToken();
+  await writeStarted.promise;
+  await manager.logout();
+  writeRelease.resolve();
+  await pending;
+  check('logout-during-pending-storage-write', 'boundary',
+    { status: 'no_autenticado', storedTokenPresent: false },
+    { status: manager.status(), storedTokenPresent: storedToken !== null });
+});
+
+test('cuatro respuestas HTTP 401 comparten una renovación y un reintento por solicitud', async () => {
+  let refreshCalls = 0;
+  let incidentCalls = 0;
+  const manager = createSessionManager({ storage: createMemorySessionStorage(), now: () => 1000, baseUrl,
+    fetchImpl: async (input) => {
+      const refreshing = String(input).endsWith('/refresh');
+      if (refreshing) refreshCalls++;
+      return response({ token: refreshing ? 'course-token-2' : 'course-token-1', generation: 1, expiresInMs: 60000 });
+    },
+  });
+  await manager.login('reporter-1');
+  const repository = new HttpIncidentRepository(baseUrl, {
+    tokenProvider: () => manager.getValidToken(),
+    onUnauthorized: (rejectedToken) => manager.renew(rejectedToken),
+    fetchImpl: async () => {
+      incidentCalls++;
+      return incidentCalls <= 4 ? response({ code: 'unauthorized' }, 401) : response({ items: [] });
+    },
+  });
+  const results = await Promise.allSettled(Array.from({ length: 4 }, () => repository.list()));
+  check('http-401-shared-refresh', 'nominal', { refreshCalls: 1, incidentCalls: 8, successfulRequests: 4 },
+    { refreshCalls, incidentCalls, successfulRequests: results.filter((result) => result.status === 'fulfilled').length });
+});
+
+test('un HTTP 401 tardío del token anterior no vuelve a renovar la sesión', async () => {
+  let refreshCalls = 0;
+  let incidentCalls = 0;
+  const late401 = deferred<Response>();
+  const manager = createSessionManager({ storage: createMemorySessionStorage(), now: () => 1000, baseUrl,
+    fetchImpl: async (input) => {
+      if (String(input).endsWith('/refresh')) refreshCalls++;
+      return response({ token: `course-token-${refreshCalls + 1}`, generation: refreshCalls + 1, expiresInMs: 60000 });
+    },
+  });
+  await manager.login('reporter-1');
+  const repository = new HttpIncidentRepository(baseUrl, {
+    tokenProvider: () => manager.getValidToken(),
+    onUnauthorized: (rejectedToken) => manager.renew(rejectedToken),
+    fetchImpl: async () => {
+      incidentCalls++;
+      if (incidentCalls === 1) return response({ code: 'unauthorized' }, 401);
+      if (incidentCalls === 2) return late401.promise;
+      return response({ items: [] });
+    },
+  });
+  const first = repository.list();
+  const second = repository.list();
+  await first;
+  late401.resolve(response({ code: 'unauthorized' }, 401));
+  await second;
+  check('obsolete-http-401-does-not-renew-again', 'boundary', { refreshCalls: 1, incidentCalls: 4 },
+    { refreshCalls, incidentCalls });
+});
+
+test('el backend autoriza resolver al técnico y cerrar a coordinación', async () => {
+  const login = await fetchFromLocalBackend(`${baseUrl}/v1/session/login`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ actorId: 'technician-1' }),
+  });
+  const statuses: number[] = [];
+  const actions = [
+    { action: 'start', actorId: 'technician-1', baseVersion: 1 },
+    { action: 'resolve', actorId: 'technician-1', baseVersion: 2 },
+    { action: 'close', actorId: 'coordinator-1', baseVersion: 3 },
+  ];
+  for (const item of actions) {
+    const remote = await fetchFromLocalBackend(`${baseUrl}/v1/incidents/campus-inc-001/actions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer course-valid-token',
+        'X-Course-Actor': item.actorId, 'Idempotency-Key': `week-06-${item.action}-role-check` },
+      body: JSON.stringify({ action: item.action, baseVersion: item.baseVersion, diagnosis: 'Reinicio de equipo ficticio' }),
+    });
+    statuses.push(remote.status);
+  }
+  check('backend-role-authorized-actions', 'nominal', { loginStatus: 200, actionStatuses: [201, 201, 201] },
+    { loginStatus: login.status, actionStatuses: statuses });
+});
+
+test('el backend rechaza al perfil sin permiso y al token inválido', async () => {
+  const forbidden = await fetchFromLocalBackend(`${baseUrl}/v1/incidents/campus-inc-001/actions`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer course-valid-token',
+      'X-Course-Actor': 'reporter-1', 'Idempotency-Key': 'week-06-denied-role-check' },
+    body: JSON.stringify({ action: 'resolve', baseVersion: 4, diagnosis: 'Diagnóstico ficticio' }),
+  });
+  const unauthorized = await fetchFromLocalBackend(`${baseUrl}/v1/incidents`, {
+    headers: { Authorization: 'Bearer invalid-token', 'X-Course-Actor': 'technician-1' },
+  });
+  check('backend-role-denied-actions', 'failure', { forbiddenStatus: 403, unauthorizedStatus: 401 },
+    { forbiddenStatus: forbidden.status, unauthorizedStatus: unauthorized.status });
 });

@@ -1,7 +1,7 @@
-{
+﻿{
     "schemaVersion":  1,
     "week":  6,
-    "commitSha":  "5c347c8180a03c86e9bc9c1c60a9bf497cc60fa6",
+    "commitSha": "ff797d3e31e0d100d0125d921bfb2a2f79ab0da2",
     "decision":  "Adoptamos renovacion single-flight por generacion: todas las solicitudes que reciben 401 comparten una unica llamada a refresh y se reintentan una sola vez con la nueva generacion; si el refresh falla, la sesion vuelve de forma segura a no autenticado, se descarta el token persistido y no se reintenta en bucle, evitando tormentas de refresh y estados inconsistentes.",
     "alternatives":  [
                          "Opcion 1: que cada solicitud renueve la sesion por su cuenta (simple de escribir, pero N solicitudes generan N refresh, carrera de generaciones y posible bucle).",

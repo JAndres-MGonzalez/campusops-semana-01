@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "week": 6,
   "mode": "public",
-  "commitSha": "f1cb4660bff4be27a4636ed8c0961b17a00b19c2",
-  "evaluatedAt": "2026-10-13T04:42:34.788150+00:00",
+  "commitSha": "5c347c8180a03c86e9bc9c1c60a9bf497cc60fa6",
+  "evaluatedAt": "2026-10-13T04:53:26.355045+00:00",
   "status": "pass",
   "checks": [
     {
@@ -39,7 +39,7 @@
     {
       "id": "schema:reports/week-06/auth-tests.json",
       "status": "pass",
-      "detail": "6 checks indexed, 4 boundary/failure; report evaluates HEAD"
+      "detail": "7 checks indexed, 4 boundary/failure; report evaluates HEAD"
     },
     {
       "id": "schema:reports/week-06/concurrency.json",
@@ -74,7 +74,7 @@
     {
       "id": "toolchain_4",
       "status": "pass",
-      "detail": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts\n> dmi-react-native-starter@1.0.0 test\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-06.test.ts\n\n\nPASS course-tests/public/week-06.test.ts\n  √ coalesces concurrent 401s into one refresh and retries each request once (2 ms)\n  √ logout removes persisted session state\n\nTest Suites: 1 passed, 1 total\nTests:       2 passed, 2 total\nSnapshots:   0 total\nTime:        0.834 s, estimated 1 s\nRan all test suites matching /course-tests\\\\public\\\\week-06.test.ts/i."
+      "detail": "npm test -- --ci --runInBand course-tests/public/week-06.test.ts\n> dmi-react-native-starter@1.0.0 test\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-06.test.ts\n\n\nPASS course-tests/public/week-06.test.ts\n  √ coalesces concurrent 401s into one refresh and retries each request once (2 ms)\n  √ logout removes persisted session state\n\nTest Suites: 1 passed, 1 total\nTests:       2 passed, 2 total\nSnapshots:   0 total\nTime:        0.822 s, estimated 1 s\nRan all test suites matching /course-tests\\\\public\\\\week-06.test.ts/i."
     }
   ]
 }

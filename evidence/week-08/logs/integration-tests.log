@@ -1,0 +1,111 @@
+
+> dmi-react-native-starter@1.0.0 test
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts
+
+PASS src/infrastructure/persistence/week-08-evidence.test.ts
+PASS course-tests/public/week-08.test.ts
+FAIL evidence/week-08/review.test.ts
+  ● reencolar una operación conserva su primer registro
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -1,11 +1,11 @@
+      Array [
+        Object {
+          "attempts": 0,
+          "author": "technician-1",
+          "baseVersion": 1,
+    -     "createdAt": 1793030400000,
+    +     "createdAt": 1793030400001,
+          "incidentId": "campus-inc-001",
+          "operationId": "op-review-001",
+          "payload": Object {
+            "action": "start",
+            "note": "Revisión del equipo de prueba",
+
+      19 |   await queue.enqueue({ ...operation, createdAt: operation.createdAt + 1 });
+      20 |
+    > 21 |   expect(await queue.getAll()).toEqual([operation]);
+         |                                ^
+      22 | });
+      23 |
+      24 | test('dos escrituras simultáneas conservan ambas operaciones', async () => {
+
+      at Object.toEqual (evidence/week-08/review.test.ts:21:32)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● dos escrituras simultáneas conservan ambas operaciones
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 0
+
+      Array [
+    -   "op-review-001",
+        "op-review-002",
+      ]
+
+      28 |   await Promise.all([queue.enqueue(operation), queue.enqueue(second)]);
+      29 |
+    > 30 |   expect((await queue.getAll()).map((item) => item.operationId).sort()).toEqual([
+         |                                                                         ^
+      31 |     'op-review-001',
+      32 |     'op-review-002',
+      33 |   ]);
+
+      at Object.toEqual (evidence/week-08/review.test.ts:30:73)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● objetos JSON con las mismas propiedades no generan un conflicto por su orden
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 7
+    + Received  + 4
+
+      Object {
+    -   "fields": Object {
+    -     "note": Object {
+    -       "building": "A",
+    -       "room": "1",
+    -     },
+    -   },
+    -   "kind": "merged",
+    +   "fields": Array [
+    +     "note",
+    +   ],
+    +   "kind": "conflict",
+      }
+
+      39 |   const remote = { ...base, version: 2, fields: { note: { room: '1', building: 'A' } } };
+      40 |
+    > 41 |   expect(resolveSync(base, local, remote)).toEqual({
+         |                                            ^
+      42 |     kind: 'merged',
+      43 |     fields: { note: { building: 'A', room: '1' } },
+      44 |   });
+
+      at Object.toEqual (evidence/week-08/review.test.ts:41:44)
+
+PASS course-tests/smoke.test.tsx
+PASS evidence/week-06/concurrency.test.ts
+PASS course-tests/public/week-06.test.ts
+PASS evidence/week-05/backend-failures.test.ts
+PASS evidence/week-06/session-app.test.tsx
+PASS evidence/week-05/http-client-ui.test.tsx
+PASS evidence/week-05/contract-cases.test.ts
+PASS src/infrastructure/session/session.test.ts
+PASS evidence/week-06/auth-cases.test.ts
+
+Test Suites: 1 failed, 11 passed, 12 total
+Tests:       3 failed, 69 passed, 72 total
+Snapshots:   0 total
+Time:        4.64 s, estimated 5 s
+Ran all test suites matching /evidence\\week-06\\concurrency.test.ts|evidence\\week-06\\auth-cases.test.ts|evidence\\week-06\\session-app.test.tsx|course-tests\\public\\week-06.test.ts|src\\infrastructure\\session\\session.test.ts|course-tests\\smoke.test.tsx|evidence\\week-05\\backend-failures.test.ts|evidence\\week-05\\contract-cases.test.ts|evidence\\week-05\\http-client-ui.test.tsx|course-tests\\public\\week-08.test.ts|src\\infrastructure\\persistence\\week-08-evidence.test.ts|evidence\\week-08\\review.test.ts/i.
+Test results written to: reports\week-08\generated-review-tests.json

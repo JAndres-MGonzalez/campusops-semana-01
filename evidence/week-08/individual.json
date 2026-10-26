@@ -35,39 +35,38 @@
     },
     {
       "studentId": "3523110741",
-      "name": "Ismael Montalvo Lopez",
-      "commitShas": ["5c347c8180a03c86e9bc9c1c60a9bf497cc60fa6"],
-      "files": [
-        "evidence/week-06/engineering.json",
-        "evidence/week-06/reports/3523110741.md",
-        "reports/week-06/auth-tests.json"
-      ],
+      "name": "Jose Ismael Montalvo Lopez",
+      "commitShas": [],
+      "files": [],
       "tests": [],
-      "reviews": [
-        "Sin aportacion registrada en la semana 8. El SHA listado es su ultimo commit real en el repositorio (semana 6), se conserva solo para no dejar el campo vacio."
-      ],
-      "prediction": "Sin prediccion de semana 8 registrada por este integrante.",
-      "command": "Sin comando de semana 8 registrado por este integrante.",
-      "observedResult": "Sin resultado observado de semana 8 registrado por este integrante.",
-      "explanation": "Este registro no acredita trabajo de la semana 8: no existen commits, reportes ni pruebas de su parte en la version entregada. Se declara explicitamente para no atribuirle evidencia que no produjo."
+      "reviews": [],
+      "prediction": "Pendiente de evidencia propia de semana 8.",
+      "command": "Pendiente de comando registrado por el integrante.",
+      "observedResult": "No hay rama, commit ni reporte de semana 8 de este integrante en la revisión actual.",
+      "explanation": "No se reutilizan los commits de semana 6 para acreditar una aportación de semana 8."
     },
     {
       "studentId": "3523110131",
-      "name": "Juan Andres Medina Gonzalez",
-      "commitShas": ["0af94c2adca1937cb1b23ae5f50d0c36427fe965"],
+      "name": "Juan Andrés Medina González",
+      "commitShas": [
+        "13175155addec4bf6435d199409d107d3c0a9264"
+      ],
       "files": [
-        "evidence/week-06/engineering.json",
-        "evidence/week-06/individual.json",
-        "evidence/week-06/reports/3523110131.md"
+        "docs/data-model.md",
+        "docs/sync-policy.md",
+        ".github/workflows/week-08-persistencia-sincronizacion-feedback.yml",
+        "evidence/week-08/review.test.ts"
       ],
-      "tests": [],
+      "tests": [
+        "evidence/week-08/review.test.ts"
+      ],
       "reviews": [
-        "Sin aportacion registrada en la semana 8. El SHA listado es su ultimo commit real en el repositorio (semana 6), se conserva solo para no dejar el campo vacio."
+        "evidence/week-08/reports/3523110131.md"
       ],
-      "prediction": "Sin prediccion de semana 8 registrada por este integrante.",
-      "command": "Sin comando de semana 8 registrado por este integrante.",
-      "observedResult": "Sin resultado observado de semana 8 registrado por este integrante.",
-      "explanation": "Este registro no acredita trabajo de la semana 8: no existen commits, reportes ni pruebas de su parte en la version entregada. Se declara explicitamente para no atribuirle evidencia que no produjo."
+      "prediction": "La cola debe conservar su primer registro y dos operaciones simultáneas; el mismo contenido JSON no debe generar conflicto por el orden de sus propiedades.",
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts",
+      "observedResult": "69 pruebas aprobadas y 3 fallidas. Pasaron 3 públicas de semana 8, 5 del núcleo y 61 anteriores. Fallaron los 3 casos de revisión de cola y comparación JSON. make feedback y arquitectura terminaron con código 0.",
+      "explanation": "Integré la parte A sin cambiar sus SHAs, revisé el modelo y la política contra el código y agregué casos que reproducen pérdidas de cola y un conflicto falso. Separé la prueba en memoria del reinicio real y registré los límites antes de fijar una versión final."
     }
   ]
 }

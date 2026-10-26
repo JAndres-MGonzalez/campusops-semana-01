@@ -1,0 +1,2 @@
+Comando: rg -n 'migrate|pendingQueue|createPersistentQueue|resolveSync|/actions' App.tsx src/application src/ui
+Resultado: sin coincidencias; código de salida 1.

@@ -1,0 +1,379 @@
+{
+  "commitSha": "13175155addec4bf6435d199409d107d3c0a9264",
+  "generatedAt": "2026-10-26T15:42:37.932159+00:00",
+  "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts",
+  "passedTests": 69,
+  "failedTests": 3,
+  "totalTests": 72,
+  "suites": [
+    {
+      "file": "src/infrastructure/persistence/week-08-evidence.test.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "week-08 parte A: persistencia y sync reinicio: la cola conserva operationId e incidente al recrear la instancia",
+          "status": "passed"
+        },
+        {
+          "name": "week-08 parte A: persistencia y sync migracion fallida: revierte y no deja esquema parcial",
+          "status": "passed"
+        },
+        {
+          "name": "week-08 parte A: persistencia y sync conflicto: reasignacion concurrente conserva ambos hechos y no muta entradas",
+          "status": "passed"
+        },
+        {
+          "name": "week-08 parte A: persistencia y sync combinacion: cambios independientes se fusionan sin mutar entradas",
+          "status": "passed"
+        },
+        {
+          "name": "week-08 parte A: persistencia y sync idempotencia: operationId repetido produce un solo efecto conservando la primera",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "course-tests/public/week-08.test.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "CampusOps detects offline start versus remote reassignment without mutating either record",
+          "status": "passed"
+        },
+        {
+          "name": "merges independent field changes and reports same-field conflict",
+          "status": "passed"
+        },
+        {
+          "name": "deduplicates a replayed operation by stable identity",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "evidence/week-08/review.test.ts",
+      "status": "failed",
+      "tests": [
+        {
+          "name": "reencolar una operación conserva su primer registro",
+          "status": "failed",
+          "failureMessages": [
+            "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 1\n\n@@ -1,11 +1,11 @@\n  Array [\n    Object {\n      \"attempts\": 0,\n      \"author\": \"technician-1\",\n      \"baseVersion\": 1,\n-     \"createdAt\": 1793030400000,\n+     \"createdAt\": 1793030400001,\n      \"incidentId\": \"campus-inc-001\",\n      \"operationId\": \"op-review-001\",\n      \"payload\": Object {\n        \"action\": \"start\",\n        \"note\": \"Revisión del equipo de prueba\",\n    at Object.toEqual (C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\evidence\\week-08\\review.test.ts:21:32)\n    at Generator.next (<anonymous>)\n    at asyncGeneratorStep (C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\node_modules\\@babel\\runtime\\helpers\\asyncToGenerator.js:3:17)\n    at _next (C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\node_modules\\@babel\\runtime\\helpers\\asyncToGenerator.js:17:9)"
+          ]
+        },
+        {
+          "name": "dos escrituras simultáneas conservan ambas operaciones",
+          "status": "failed",
+          "failureMessages": [
+            "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 0\n\n  Array [\n-   \"op-review-001\",\n    \"op-review-002\",\n  ]\n    at Object.toEqual (C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\evidence\\week-08\\review.test.ts:30:73)\n    at Generator.next (<anonymous>)\n    at asyncGeneratorStep (C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\node_modules\\@babel\\runtime\\helpers\\asyncToGenerator.js:3:17)\n    at _next (C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\node_modules\\@babel\\runtime\\helpers\\asyncToGenerator.js:17:9)"
+          ]
+        },
+        {
+          "name": "objetos JSON con las mismas propiedades no generan un conflicto por su orden",
+          "status": "failed",
+          "failureMessages": [
+            "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 7\n+ Received  + 4\n\n  Object {\n-   \"fields\": Object {\n-     \"note\": Object {\n-       \"building\": \"A\",\n-       \"room\": \"1\",\n-     },\n-   },\n-   \"kind\": \"merged\",\n+   \"fields\": Array [\n+     \"note\",\n+   ],\n+   \"kind\": \"conflict\",\n  }\n    at Object.toEqual (C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\evidence\\week-08\\review.test.ts:41:44)\n    at Promise.then.completed (C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\node_modules\\jest-circus\\build\\utils.js:231:10)\n    at _callCircusTest (C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\node_modules\\jest-circus\\build\\run.js:316:40)\n    at _runTest (C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\node_modules\\jest-circus\\build\\run.js:252:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\node_modules\\jest-circus\\build\\run.js:126:9)\n    at run (C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\node_modules\\jest-circus\\build\\run.js:71:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:122:21)\n    at jestAdapter (C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapter.js:79:19)\n    at runTestInternal (C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\node_modules\\jest-runner\\build\\runTest.js:367:16)\n    at runTest (C:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\node_modules\\jest-runner\\build\\runTest.js:444:34)"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "course-tests/smoke.test.tsx",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "renders the reproducible baseline and resolves backend state",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "evidence/week-06/concurrency.test.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "cuatro respuestas 401 comparten una renovación",
+          "status": "passed"
+        },
+        {
+          "name": "un 401 de generación anterior no abre otra renovación",
+          "status": "passed"
+        },
+        {
+          "name": "cada solicitud se registra para reintentar solo una vez",
+          "status": "passed"
+        },
+        {
+          "name": "logout normal elimina la sesión persistida",
+          "status": "passed"
+        },
+        {
+          "name": "el manager comparte una renovación pendiente con reloj controlable",
+          "status": "passed"
+        },
+        {
+          "name": "un refresh fallido elimina la sesión y no entra en un bucle",
+          "status": "passed"
+        },
+        {
+          "name": "una renovación pendiente no restaura la sesión después del logout",
+          "status": "passed"
+        },
+        {
+          "name": "el manager acepta el login del backend didáctico real",
+          "status": "passed"
+        },
+        {
+          "name": "el contrato real permite renovar una sesión expirada",
+          "status": "passed"
+        },
+        {
+          "name": "después del logout el cliente no obtiene incidencias con un token de respaldo",
+          "status": "passed"
+        },
+        {
+          "name": "logout invalida una renovación cuya escritura segura todavía está pendiente",
+          "status": "passed"
+        },
+        {
+          "name": "cuatro respuestas HTTP 401 comparten una renovación y un reintento por solicitud",
+          "status": "passed"
+        },
+        {
+          "name": "un HTTP 401 tardío del token anterior no vuelve a renovar la sesión",
+          "status": "passed"
+        },
+        {
+          "name": "el backend autoriza resolver al técnico y cerrar a coordinación",
+          "status": "passed"
+        },
+        {
+          "name": "el backend rechaza al perfil sin permiso y al token inválido",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "course-tests/public/week-06.test.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "coalesces concurrent 401s into one refresh and retries each request once",
+          "status": "passed"
+        },
+        {
+          "name": "logout removes persisted session state",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "evidence/week-05/backend-failures.test.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "success: el backend entrega un sobre que acepta el parser compartido",
+          "status": "passed"
+        },
+        {
+          "name": "nullable: el payload nulo es válido y no se reemplaza por datos inventados",
+          "status": "passed"
+        },
+        {
+          "name": "malformed: el cuerpo no es JSON válido y el parser rechaza el objeto inválido",
+          "status": "passed"
+        },
+        {
+          "name": "server_error: se observa HTTP 500 y su código de error",
+          "status": "passed"
+        },
+        {
+          "name": "rate_limited: se observa HTTP 429 y Retry-After",
+          "status": "passed"
+        },
+        {
+          "name": "slow: el cliente real aborta al llegar al límite de espera y devuelve un error de timeout",
+          "status": "passed"
+        },
+        {
+          "name": "crea, consulta y repite la misma operación sin duplicar la incidencia",
+          "status": "passed"
+        },
+        {
+          "name": "recupera una creación cuya respuesta se perdió sin duplicarla al repetir la clave",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "evidence/week-06/session-app.test.tsx",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "la app inicia sesión, muestra incidencias y elimina la sesión al salir",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "evidence/week-05/http-client-ui.test.tsx",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "consulta lista y detalle y crea una incidencia desde la pantalla mediante el cliente",
+          "status": "passed"
+        },
+        {
+          "name": "la lista y el detalle con payload nulo muestran ausencia de datos",
+          "status": "passed"
+        },
+        {
+          "name": "el error 500 mantiene la UI segura, sanitiza el log y permite reintentar",
+          "status": "passed"
+        },
+        {
+          "name": "el error 429 mantiene la UI segura, sanitiza el log y permite reintentar",
+          "status": "passed"
+        },
+        {
+          "name": "el error json mantiene la UI segura, sanitiza el log y permite reintentar",
+          "status": "passed"
+        },
+        {
+          "name": "el error domain mantiene la UI segura, sanitiza el log y permite reintentar",
+          "status": "passed"
+        },
+        {
+          "name": "el error timeout mantiene la UI segura, sanitiza el log y permite reintentar",
+          "status": "passed"
+        },
+        {
+          "name": "el error network mantiene la UI segura, sanitiza el log y permite reintentar",
+          "status": "passed"
+        },
+        {
+          "name": "el formulario conserva sus datos y la clave de operación al repetir una creación fallida",
+          "status": "passed"
+        },
+        {
+          "name": "los datos incompletos del formulario se rechazan antes de enviar HTTP",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "evidence/week-05/contract-cases.test.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "contrato: sobre válido",
+          "status": "passed"
+        },
+        {
+          "name": "contrato: payload nulo y campo futuro",
+          "status": "passed"
+        },
+        {
+          "name": "contrato: id vacío",
+          "status": "passed"
+        },
+        {
+          "name": "contrato: status vacío",
+          "status": "passed"
+        },
+        {
+          "name": "contrato: version textual",
+          "status": "passed"
+        },
+        {
+          "name": "contrato: version negativa",
+          "status": "passed"
+        },
+        {
+          "name": "contrato: version decimal",
+          "status": "passed"
+        },
+        {
+          "name": "contrato: payload de tipo incorrecto",
+          "status": "passed"
+        },
+        {
+          "name": "contrato: entrada nula",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "src/infrastructure/session/session.test.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "login guarda el token en almacenamiento seguro y queda autenticado",
+          "status": "passed"
+        },
+        {
+          "name": "expiración con reloj inyectable: renueva sin esperas reales",
+          "status": "passed"
+        },
+        {
+          "name": "renovación single-flight: llamadas concurrentes comparten una sola renovación",
+          "status": "passed"
+        },
+        {
+          "name": "refresh fallido vuelve de forma segura a no autenticado y olvida el token",
+          "status": "passed"
+        },
+        {
+          "name": "renew fuerza una renovación single-flight aun sin expirar (rechazo del servidor)",
+          "status": "passed"
+        },
+        {
+          "name": "401 de generación anterior reutiliza el token renovado sin abrir otra renovación",
+          "status": "passed"
+        },
+        {
+          "name": "logout durante la escritura del token renovado invalida esa escritura",
+          "status": "passed"
+        },
+        {
+          "name": "logout borra el estado persistido",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "evidence/week-06/auth-cases.test.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "week-06 session manual nominal: 401 concurrentes comparten una sola renovacion",
+          "status": "passed"
+        },
+        {
+          "name": "week-06 session manual boundary: una segunda generacion de 401 no dispara otra renovacion",
+          "status": "passed"
+        },
+        {
+          "name": "week-06 session manual failure: refreshFailed vuelve a no autenticado y olvida el token",
+          "status": "passed"
+        },
+        {
+          "name": "week-06 session manual failure: logout borra el estado persistido",
+          "status": "passed"
+        },
+        {
+          "name": "week-06 session manual boundary: expiracion con reloj controlable",
+          "status": "passed"
+        },
+        {
+          "name": "week-06 session manual boundary: los tokens no quedan en claro para telemetria",
+          "status": "passed"
+        },
+        {
+          "name": "week-06 session manual extra failure: logout tras una renovacion exitosa borra el token persistido",
+          "status": "passed"
+        }
+      ]
+    }
+  ]
+}

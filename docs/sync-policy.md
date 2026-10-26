@@ -83,3 +83,38 @@ estado para que la capa de sincronización decida. Un reintento reutiliza el mis
   respalda esos casos.
 - `course-tests/public/week-08.test.ts` valida el contrato público de
   `resolveSync` y `deduplicateOperations` (3/3 en verde).
+
+## Aporte Parte B (Ismael, 3523110741): observaciones reproducidas
+
+Base: rama `week-08/parte-b-ismael` sobre `2b964f4`. Se ejecutó
+`npm.cmd test -- --ci --runInBand --verbose src/infrastructure/persistence/week-08-evidence.test.ts`
+(5 de 5 en verde) y cada caso por separado con `-t reinicio|migracion|conflicto|combinacion|idempotencia`
+(1 passed, 4 skipped en cada uno). `typecheck` y `course-tests/public/week-08.test.ts` (3 de 3) también en verde.
+
+### Observado al ejecutar
+
+- **Reinicio:** se simula creando otra instancia de `createPersistentQueue` sobre el mismo
+  `createMemoryStorage`. Recupera `op-inicio-001`, `inc-0001`, autor y payload idénticos. No se cierra
+  la app real, así que la persistencia entre procesos no se verificó con esta prueba.
+- **Migración fallida:** con `migrate({ injectFailure: true })` el resultado es `success=false` y
+  `rolledBack=true`; la versión queda en 0 y se conservan la incidencia y la operación pendiente.
+  Un segundo `migrate()` sin inyección termina con `success=true`, versión 1 y los mismos datos.
+  Hoy solo existe el salto 0 a 1, que crea estructuras vacías si faltan; no transforma datos.
+- **Conflicto:** `resolveSyncReal` devuelve `{ kind: 'conflict', fields: ['work'] }` y las tres entradas
+  conservan su JSON original. Ambos hechos (inicio local y reasignación remota) quedan disponibles
+  porque la función no escribe ninguno; decidir cuál aplicar le toca a la capa de aplicación.
+- **Combinación:** campos distintos desde la misma base dan `{ title: 'Local', priority: 2 }`.
+- **Idempotencia:** `deduplicateOperationsReal` pasa de 3 a 2 operaciones, conserva el payload
+  `primera` y no muta el arreglo de entrada.
+
+### Observado al leer el código (no ejecutado)
+
+- `enqueue` reemplaza una operación con el mismo `operationId` y se queda con la **última**, mientras
+  que `deduplicateOperationsReal` se queda con la **primera**. Reencolar el mismo `operationId` con
+  otro payload sobrescribe el original en la cola. Conviene acordar con Kevin y Andrés cuál regla vale.
+
+### Sin cobertura en estas pruebas
+
+- Que solo se retire lo confirmado (`remove`), que `markFailed` o un conflicto no la retiren y el uso de
+  `attempts`: la política lo describe, pero ninguna prueba lo ejecuta.
+- La autorización por perfil de la Semana 6: no se ejerce en estos casos.

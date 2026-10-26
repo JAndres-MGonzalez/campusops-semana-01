@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "week": 8,
+  "commitSha": "c61f7018748bf7c5d92bac7ef7d41ef3b3bd81e4",
+  "generatedAt": "2026-10-26T05:39:03Z",
+  "checks": [
+    {
+      "id": "restart-offline-queue",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts",
+      "evidence": "Caso 'reinicio': se encola op-inicio-001 (inc-0001, tecnico-1) y se reconstruye createPersistentQueue sobre el mismo almacenamiento. getAll() devuelve 1 operacion con operationId 'op-inicio-001', incidentId 'inc-0001' y payload identico al encolado. Tests: 5 passed, 5 total."
+    },
+    {
+      "id": "migration-success",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts",
+      "evidence": "Segundo intento de migrate() sin inyeccion: success=true, getCurrentSchemaVersion() devuelve 1 (SCHEMA_VERSION). Se conservan 1 incidencia y 1 operacion en cola."
+    },
+    {
+      "id": "migration-failure-rollback",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts",
+      "evidence": "migrate({ injectFailure: true }) devuelve success=false, rolledBack=true. Tras la falla la version sigue en 0 y siguen presentes { id: 'inc-0001' } y op-inicio-001: no queda esquema parcial."
+    },
+    {
+      "id": "concurrent-reassignment-conflict",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts",
+      "evidence": "resolveSync(base, local, remote) con local.status='in_progress' y remote.assignedTechnicianId='technician-2' devuelve { kind: 'conflict', fields: ['work'] }. Los tres registros de entrada conservan exactamente su JSON original (no hay mutacion)."
+    },
+    {
+      "id": "independent-changes-merge",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts",
+      "evidence": "local cambia title a 'Local' y remote cambia priority a 2 desde la misma base. Resultado: { kind: 'merged', fields: { title: 'Local', priority: 2 } }, sin mutar las entradas."
+    },
+    {
+      "id": "replay-idempotency",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts",
+      "evidence": "Dos operaciones con operationId 'op-inicio-001' y una con 'op-inicio-002': deduplicateOperations devuelve 2 elementos, conserva el payload 'primera' y deja intacto el arreglo de entrada (3 elementos)."
+    },
+    {
+      "id": "public-contract-week-08",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npx.cmd jest --ci --runInBand course-tests/public/week-08.test.ts",
+      "evidence": "PASS course-tests/public/week-08.test.ts | Test Suites: 1 passed, 1 total | Tests: 3 passed, 3 total (conflicto sin mutacion, combinacion de campos independientes y deduplicacion por identidad estable)."
+    }
+  ]
+}

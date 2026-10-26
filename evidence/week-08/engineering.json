@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "week": 8,
+  "commitSha": "c61f7018748bf7c5d92bac7ef7d41ef3b3bd81e4",
+  "decision": "El nucleo resuelve la sincronizacion comparando campo por campo contra la base con igualdad JSON y orden alfabetico. Si solo una parte cambio un campo, se conserva ese cambio; si ambas cambiaron el mismo campo a valores distintos, se declara conflicto con los campos ordenados y no se impone el valor remoto ni se descarta la intencion local. La operacion pendiente se identifica por operationId estable y solo se retira de la cola mediante remove() cuando hay confirmacion; marcar failed o detectar conflicto solo cambia el estado. Asi una reasignacion concurrente conserva ambos hechos y un reenvio no produce doble efecto.",
+  "alternatives": [
+    "Ultima escritura gana: aplicar siempre el registro remoto. Es simple, pero descarta la intencion local del tecnico y pierde informacion sin dejar rastro del conflicto.",
+    "Bloquear la sincronizacion hasta que el usuario resuelva cada diferencia. Evita sobrescrituras, pero deja la cola detenida y no distingue cambios independientes que si podrian combinarse.",
+    "Resolucion por campo con deteccion de conflicto (elegida): combinar los campos que cambiaron en una sola parte, reportar ordenados los que difieren en ambas y mantener la operacion en cola hasta confirmacion."
+  ],
+  "tradeoff": "La comparacion por campo agrega un recorrido completo de claves y obliga a definir que se hace con los conflictos en la capa de aplicacion, pero evita perdidas silenciosas: los cambios independientes se combinan, el conflicto queda visible con los campos afectados y la cola no se vacia sin confirmacion. El costo es que el nucleo no resuelve el conflicto por si solo y requiere que la UI informe y decida.",
+  "requirementIds": ["AC-01", "AC-02", "AC-03", "AC-04", "AC-05"],
+  "verification": [
+    {
+      "command": "npx.cmd jest --ci --runInBand course-tests/public/week-08.test.ts",
+      "result": "PASS course-tests/public/week-08.test.ts | Test Suites: 1 passed, 1 total | Tests: 3 passed, 3 total",
+      "evidence": "course-tests/public/week-08.test.ts"
+    },
+    {
+      "command": "npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts",
+      "result": "PASS src/infrastructure/persistence/week-08-evidence.test.ts | Test Suites: 1 passed, 1 total | Tests: 5 passed, 5 total (reinicio, migracion fallida con rollback, conflicto, combinacion e idempotencia)",
+      "evidence": "reports/week-08/migration-tests.json"
+    },
+    {
+      "command": "npm.cmd run typecheck && npm.cmd run lint",
+      "result": "tsc --noEmit sin errores; eslint sin errores (solo advertencias previas de import/first y require en storage.ts)",
+      "evidence": "src/infrastructure/persistence/schema.ts; src/infrastructure/persistence/queue.ts; src/infrastructure/persistence/migrations.ts; src/infrastructure/sync/resolve.ts; src/infrastructure/sync/deduplicate.ts"
+    }
+  ]
+}

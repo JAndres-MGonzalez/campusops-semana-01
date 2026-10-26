@@ -1,93 +1,77 @@
-# Modelo de datos local — Semana 8 (Parte A)
+# Modelo de datos local — Semana 8
 
-Alcance de este documento: el núcleo de persistencia implementado en
-`src/infrastructure/persistence/**`. No describe trabajo de otras partes del
-equipo; si un elemento no aparece aquí, no forma parte de esta entrega.
+## Entidades y relaciones
 
-## Entidades
+| Entidad | Almacenamiento y contenido |
+|---|---|
+| Incidencia | `campusops.data.incidents`: documentos JSON. Cada operación referencia una incidencia mediante `incidentId`. |
+| Actor | `author` identifica al actor sintético que creó la operación. La cola no guarda una tabla de usuarios ni sus credenciales. |
+| Operación pendiente | `campusops.queue.pending`: `operationId`, `incidentId`, `author`, `payload`, `baseVersion`, `createdAt`, `status`, `attempts` e `idempotencyKey` opcional. |
+| Versión de esquema | `campusops.schema.version`: entero del esquema de incidencias y cola. |
+| Respaldo de migración | `campusops.migration.snapshot`: versión, incidencias, cola y fecha anteriores a la migración. |
 
-| Entidad | Dónde vive | Campos |
-|---|---|---|
-| Incidencia | `STORAGE_KEYS.INCIDENTS` (`campusops.data.incidents`) | `id`, estado y campos de trabajo serializados como JSON. El núcleo no impone el modelo de dominio: guarda el documento tal como lo entrega la capa de aplicación. |
-| Operación pendiente | `STORAGE_KEYS.PENDING_QUEUE` (`campusops.queue.pending`) | `operationId`, `incidentId`, `author`, `payload`, `baseVersion`, `createdAt`, `status`, `attempts`, `idempotencyKey?` |
-| Versión de esquema | `STORAGE_KEYS.SCHEMA_VERSION` (`campusops.schema.version`) | Entero. `SCHEMA_VERSION = 1`. |
-| Snapshot de migración | `STORAGE_KEYS.MIGRATION_SNAPSHOT` (`campusops.migration.snapshot`) | `schemaVersion`, `incidents`, `queue`, `timestamp` |
+Una incidencia puede tener varias operaciones. Cada operación conserva su autor y
+la versión de la incidencia usada como base. Una referencia de fotografía dentro
+del contenido identifica un adjunto pendiente; no demuestra que exista un archivo
+persistido ni que se haya enviado.
 
-## Relaciones
+## Almacenamiento
 
-- Una **incidencia** (`incidentId`) agrupa cero o más **operaciones pendientes**.
-- Cada **operación pendiente** referencia a un **autor** (`author`) y declara la
-  `baseVersion` de la incidencia sobre la que se construyó.
-- La **versión de esquema** aplica al conjunto `incidencias + cola`; un snapshot
-  captura ambos para poder restaurarlos juntos.
+`src/infrastructure/persistence/storage.ts` define `PersistenceStorage` e intenta
+cargar `@react-native-async-storage/async-storage`. Si no encuentra ese módulo,
+utiliza `MemoryStorage`, un `Map` dentro del proceso.
 
-## Almacenamiento elegido
+En esta versión, AsyncStorage no figura en `package.json` ni en el archivo de
+versiones fijadas. La alternativa disponible es memoria y no conserva datos al
+cerrar el proceso. Además, `App.tsx` no conecta el almacenamiento, las migraciones
+ni la cola con los casos de uso. La exportación de Expo termina correctamente,
+pero eso no acredita persistencia en el dispositivo.
 
-`src/infrastructure/persistence/storage.ts` define el puerto
-`PersistenceStorage` (`getItem`, `setItem`, `removeItem`, `clear`) y resuelve la
-implementación concreta en este orden:
-
-1. `@react-native-async-storage/async-storage` si está disponible en el entorno
-   (dispositivo / Expo). Es la vía real de persistencia entre reinicios.
-2. `MemoryStorage` como respaldo determinista (pruebas y entornos sin el módulo).
-
-El punto deliberado es que la cola nunca vive en el árbol de componentes ni en un
-array de módulo: siempre se lee y escribe a través del puerto, de modo que
-cambiar el medio no obliga a tocar la lógica de cola o de migración.
+El puerto permite agregar almacenamiento duradero sin cambiar el formato de la
+cola. Para cumplir el reinicio real debe instalarse e integrarse ese adaptador y
+comprobar la reapertura de la app con los mismos datos.
 
 ## Versión de esquema
 
-- `SCHEMA_VERSION = 1` en `schema.ts`. Es la única fuente de verdad.
-- `getCurrentSchemaVersion()` devuelve `Number(valor guardado)` o `0` si no hay
-  versión registrada (instalación nueva o datos de esquema anterior).
-- La versión se incrementa cuando cambia la forma de lo persistido y se agrega un
-  paso en `applyMigration`. Un cambio de forma sin incremento de versión queda
-  prohibido por revisión.
+`SCHEMA_VERSION` vale `1` en `src/infrastructure/persistence/schema.ts`.
+`getCurrentSchemaVersion()` devuelve la versión guardada o `0` si no existe.
+Al cambiar la estructura debe incrementarse la versión y añadirse su migración.
 
-## Estructura de la cola
+La migración actual de `0` a `1` crea los arreglos de incidencias y cola si no
+existen y conserva los datos que ya estaban presentes.
 
-`PendingOperation` es inmutable (`readonly`) y exige:
+## Cola de operaciones
 
-| Campo | Por qué |
-|---|---|
-| `operationId` | Identidad estable de la operación. Es la clave de idempotencia y de deduplicación. |
-| `incidentId` | Liga la operación con la incidencia afectada. |
-| `author` | Actor que originó el cambio; sostiene la autorización por perfil. |
-| `payload` | Contenido del cambio (notas, referencias a fotos pendientes, etc.). |
-| `baseVersion` | Versión sobre la que se construyó; base para detectar conflicto. |
-| `createdAt` | Orden temporal de encolado. |
-| `status` | `pending`, `in_flight` o `failed`. |
-| `attempts` | Conteo de reintentos; se incrementa en `markInFlight`. |
+La cola serializa sus elementos como JSON mediante el puerto de almacenamiento.
+`operationId` identifica la intención; `incidentId`, `author`, `payload` y
+`baseVersion` permiten saber sobre qué incidencia, actor, cambio y versión opera.
+`createdAt` registra su creación. Los estados son `pending`, `in_flight` y `failed`;
+`markInFlight` incrementa `attempts`.
 
-**Por qué es persistente:** `enqueue` serializa la cola completa a
-`campusops.queue.pending`. Al reconstruir la cola (`createPersistentQueue`)
-sobre el mismo almacenamiento se recuperan los mismos `operationId`, incidentes y
-payloads. Una lista en memoria no cumple el requisito del hito.
+`enqueue` actualmente reemplaza el registro anterior con la misma identidad.
+Dos llamadas simultáneas pueden leer la misma cola y sobrescribir una operación.
+Ambos casos fallan en `evidence/week-08/review.test.ts`. El registro inicial debe
+conservarse y las escrituras necesitan coordinación para no perder cambios.
 
-`enqueue` es idempotente por construcción: descarta cualquier elemento previo con
-el mismo `operationId` antes de insertar, así que reencolar no duplica.
+## Migración y recuperación
 
-## Procedimiento de migración y recuperación
+1. Leer la versión y los datos existentes.
+2. Guardar un respaldo de versión, incidencias y cola.
+3. Preparar los arreglos necesarios y escribir la nueva versión al terminar.
+4. Si ocurre una excepción, intentar restaurar el respaldo y devolver el resultado.
 
-`migrations.ts` implementa una migración con snapshot previo:
+`migrate({ injectFailure: true })` devuelve `success: false` y `rolledBack: true`
+en la prueba controlada; se conserva una incidencia y una operación con versión
+`0`. Un segundo intento sin falla completa la versión `1`.
 
-1. **Leer versión actual** (`getCurrentSchemaVersion`). Si ya es
-   `SCHEMA_VERSION`, no hay trabajo que hacer.
-2. **Crear snapshot** de incidencias, cola y versión (`createSnapshot`) y
-   guardarlo en `campusops.migration.snapshot`.
-3. **Aplicar pasos** (`applyMigration`). El paso `0 → 1` garantiza que existan las
-   estructuras de incidencias y cola.
-4. **Commit**: si todos los pasos terminan, se escribe la nueva versión.
-5. **Rollback**: ante cualquier excepción, `restoreFromSnapshot` reescribe
-   incidencias, cola y versión al estado exacto anterior. El resultado reporta
-   `rolledBack: true`.
+Las escrituras se hacen por separado. No hay una transacción del almacenamiento
+ni recuperación automática del respaldo al abrir la app después de una
+interrupción del proceso. La prueba actual comprueba una excepción capturada en
+memoria, no una interrupción de una migración en un dispositivo.
 
-Consecuencia verificable: una falla a mitad de migración no deja el esquema
-mezclado. Las incidencias y la cola previas siguen presentes y la versión sigue
-siendo la anterior; un segundo intento sin falla completa la migración.
+## Comprobación
 
-## Verificación
-
-`src/infrastructure/persistence/week-08-evidence.test.ts` ejecuta los cinco casos
-del hito contra este código. Los comandos y resultados observados están indexados
-en `reports/week-08/migration-tests.json`.
+Los casos y resultados están en `reports/week-08/migration-tests.json` y en
+`evidence/week-08/logs/integration-tests.log`. La prueba de Kevin reconstruye la
+cola sobre el mismo objeto de memoria: conserva su contenido durante ese
+proceso, pero no comprueba cerrar y volver a abrir la aplicación.

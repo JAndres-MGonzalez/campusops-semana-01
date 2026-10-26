@@ -1,85 +1,74 @@
-# Política de sincronización — Semana 8 (Parte A)
+# Política de sincronización — Semana 8
 
-Alcance: la lógica implementada en `src/infrastructure/persistence/**` y
-`src/infrastructure/sync/**`, y su delegación desde
-`src/course-evaluation/index.ts`. La autorización por perfil se hereda de la
-Semana 6 y este documento no la redefine.
+## Regla de combinación
 
-## Identidad estable
+`resolveSync` delega en `src/infrastructure/sync/resolve.ts` y compara cada campo
+local y remoto contra una base común.
 
-La identidad de una operación es `operationId`. No se deriva del contenido ni del
-timestamp: se asigna al crear el cambio y se conserva al reencolar, reintentar o
-reproducir el flujo. `deduplicateOperations` usa esa clave y **conserva la primera
-aparición**, sin mutar las entradas.
-
-## Combinar o declarar conflicto
-
-`resolveSync(base, local, remote)` compara campo por campo contra `base` usando
-igualdad por contenido JSON (`JSON.stringify`). Los campos se recorren en orden
-alfabético, de modo que el reporte sea determinista.
-
-| Situación | Resultado |
+| Cambio observado | Resultado |
 |---|---|
-| Solo `local` cambió el campo | Se toma el valor local |
-| Solo `remote` cambió el campo | Se toma el valor remoto |
-| Ambos cambiaron el campo al **mismo** valor | Se toma ese valor |
-| Ambos cambiaron el campo a valores **distintos** | `{ kind: 'conflict', fields: [...] }` |
+| Sólo cambió local | Conservar el valor local. |
+| Sólo cambió remoto | Conservar el valor remoto. |
+| Ambos tienen el mismo valor | Conservar ese valor. |
+| Ambos cambiaron el campo a valores distintos | Informar el conflicto con los nombres de campos ordenados. |
 
-Reglas adicionales:
+La función no modifica las entradas. Actualmente compara mediante
+`JSON.stringify`; objetos con iguales propiedades en diferente orden producen un
+conflicto falso. Ese límite se reproduce en `evidence/week-08/review.test.ts`.
 
-- Los campos en conflicto se devuelven **ordenados por nombre**.
-- `base`, `local` y `remote` son de solo lectura: la función no muta ninguna
-  entrada.
-- La agrupación de estado y técnico asignado bajo un campo `work` es una decisión
-  del contrato de pruebas, no del algoritmo. `resolveSync` es genérico: funciona
-  con cualquier campo y cualquier anidamiento representable en JSON.
+## Inicio sin conexión y reasignación
 
-## Qué se conserva, qué se combina, qué requiere resolución
+En las pruebas, `work` agrupa estado y técnico asignado. El inicio local de
+atención y la reasignación remota cambian ese campo de manera incompatible.
+La función devuelve `{ kind: 'conflict', fields: ['work'] }` sin cambiar los tres
+registros recibidos.
 
-- **Se conserva:** todo campo sin cambios, y todo cambio que exista en una sola
-  de las dos partes.
-- **Se combina:** cambios en campos distintos, o el mismo cambio con el mismo
-  valor en ambos lados.
-- **Requiere resolución:** un mismo campo cambiado a valores distintos en local y
-  remoto. La función reporta el conflicto; no impone el valor remoto ni descarta
-  la intención local.
+La política es conservar la nueva asignación y mantener la intención local
+pendiente, mostrando el conflicto para revisión. No se debe enviar el inicio
+antiguo como si el técnico siguiera asignado. Esta versión tiene el cálculo del
+conflicto, pero no su presentación ni su resolución conectadas a la app.
 
-En el caso de reasignación concurrente, local (inicio de atención) y remoto
-(nuevo técnico asignado) tocan el mismo campo `work` con valores distintos: se
-declara conflicto y **ambos hechos quedan disponibles** para que la capa de
-aplicación los muestre. El núcleo no elige por el usuario.
+## Identidad y reintentos
 
-## Ciclo de vida en la cola
+Cada intención debe conservar el mismo `operationId`, autor, contenido y versión
+base durante sus reintentos. El encabezado `Idempotency-Key` debe reutilizar esa
+identidad. Reutilizar una clave con otro contenido no es una operación válida.
 
-`PendingOperation.status` modela el estado de envío:
+`deduplicateOperations` conserva la primera aparición por `operationId` y no
+modifica el arreglo original. Sin embargo, `enqueue` reemplaza la operación
+anterior; falta hacer coherentes ambos comportamientos y evitar pérdidas ante
+escrituras simultáneas.
 
-- `pending` → encolada y aún sin intento.
-- `in_flight` → se marcó el intento (`markInFlight`, incrementa `attempts`).
-- `failed` → el intento falló (`markFailed`), permanece en la cola.
+## Confirmación y retiro
 
-**Cuándo se retira una operación:** únicamente por `remove(operationId)`, es
-decir, cuando la capa que sincroniza tiene la confirmación. Marcar `failed` o
-detectar un conflicto **no** retira la operación: solo cambia su estado. Esto
-evita perder cambios por un error transitorio o por un conflicto no resuelto.
+`markFailed` conserva el elemento. `markInFlight` registra el intento.
+La cola expone `remove`, pero todavía no existe un flujo de envío que compruebe
+la confirmación antes de llamarlo. Tener un método para borrar no demuestra esa
+regla.
 
-**Reintento:** el núcleo no impone una política de backoff; expone `attempts` y el
-estado para que la capa de sincronización decida. Un reintento reutiliza el mismo
-`operationId`, por lo que el servidor puede aplicarlo una sola vez.
+Sólo una respuesta confirmada permite retirar la operación. Un timeout, una
+respuesta de error o un conflicto deben conservarla. Si se pierde una respuesta
+cuando el servidor ya aplicó el cambio, el reintento debe usar la misma clave y
+producir un solo efecto. Esa comprobación con la cola y el backend sigue pendiente.
 
-## Idempotencia
+## Autorización
 
-- `operationId` estable + `enqueue` que reemplaza por clave = una sola entrada por
-  operación, aunque se reencole.
-- `deduplicateOperations` colapsa repeticiones conservando la primera.
-- `payload` y `baseVersion` permiten que el receptor verifique que ya aplicó esa
-  operación sin volver a producir el efecto.
+Se conservan los controles de sesión de la semana 6 y sus pruebas. El reportante
+crea sus incidencias; el técnico inicia o resuelve una incidencia que tiene
+asignada; coordinación asigna, reasigna, cierra o reabre según el contrato.
 
-## Vinculación con pruebas
+La futura sincronización debe comprobar el actor y la asignación vigentes antes
+de enviar. Guardar `author` en la cola no sustituye la validación del servidor.
+Un conflicto no autoriza omitir una respuesta `403` o `409` ni imponer un estado
+antiguo.
 
-- `reports/week-08/migration-tests.json` indexa los casos con comando y resultado
-  observado: reinicio de cola, migración válida, migración fallida con rollback,
-  conflicto de reasignación, combinación de campos independientes y deduplicación.
-- `src/infrastructure/persistence/week-08-evidence.test.ts` es el ejecutable que
-  respalda esos casos.
-- `course-tests/public/week-08.test.ts` valida el contrato público de
-  `resolveSync` y `deduplicateOperations` (3/3 en verde).
+## Evidencia
+
+`reports/week-08/migration-tests.json` diferencia los casos aprobados, los fallos
+reproducidos y los flujos aún sin comprobar. Las salidas están en
+`evidence/week-08/logs/integration-tests.log`.
+
+Pasaron las tres pruebas públicas de sincronización y los cinco casos del núcleo
+de Kevin. Los tres casos adicionales de revisión fallaron. La deduplicación de un
+arreglo no demuestra por sí sola idempotencia del servidor, y reconstruir un
+objeto de cola en memoria no demuestra persistencia al reiniciar la app.

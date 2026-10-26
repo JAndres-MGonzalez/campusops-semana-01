@@ -1,57 +1,64 @@
 {
   "schemaVersion": 1,
   "week": 8,
-  "commitSha": "c61f7018748bf7c5d92bac7ef7d41ef3b3bd81e4",
-  "generatedAt": "2026-10-26T05:39:03Z",
+  "commitSha": "0e86020382ad547e296356530d57e36cdced69fc",
+  "generatedAt": "2026-10-26T22:22:38Z",
   "checks": [
     {
       "id": "restart-offline-queue",
       "status": "pass",
       "scenarioType": "boundary",
-      "command": "npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts",
-      "evidence": "Caso 'reinicio': se encola op-inicio-001 (inc-0001, tecnico-1) y se reconstruye createPersistentQueue sobre el mismo almacenamiento. getAll() devuelve 1 operacion con operationId 'op-inicio-001', incidentId 'inc-0001' y payload identico al encolado. Tests: 5 passed, 5 total."
+      "command": "npm.cmd test -- --ci --runInBand --verbose src/infrastructure/persistence/week-08-evidence.test.ts -t reinicio",
+      "evidence": "Rama week-08/parte-b-ismael: 1 passed, 4 skipped. La prueba encola op-inicio-001 (incidente inc-0001, autor tecnico-1), recrea createPersistentQueue sobre el mismo createMemoryStorage y getAll devuelve 1 operacion con el mismo operationId, incidentId, autor y payload. Es un reinicio simulado en memoria; no se cerro la app real."
     },
     {
       "id": "migration-success",
       "status": "pass",
       "scenarioType": "nominal",
-      "command": "npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts",
-      "evidence": "Segundo intento de migrate() sin inyeccion: success=true, getCurrentSchemaVersion() devuelve 1 (SCHEMA_VERSION). Se conservan 1 incidencia y 1 operacion en cola."
+      "command": "npm.cmd test -- --ci --runInBand --verbose src/infrastructure/persistence/week-08-evidence.test.ts -t migracion",
+      "evidence": "1 passed, 4 skipped. Despues de la falla inyectada, un segundo migrate() sin inyeccion devuelve success=true, version 1 y se conservan 1 incidencia y 1 operacion en cola. Hoy solo existe el salto de version 0 a 1, que crea estructuras vacias si faltan."
     },
     {
       "id": "migration-failure-rollback",
       "status": "pass",
       "scenarioType": "failure",
-      "command": "npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts",
-      "evidence": "migrate({ injectFailure: true }) devuelve success=false, rolledBack=true. Tras la falla la version sigue en 0 y siguen presentes { id: 'inc-0001' } y op-inicio-001: no queda esquema parcial."
+      "command": "npm.cmd test -- --ci --runInBand --verbose src/infrastructure/persistence/week-08-evidence.test.ts -t migracion",
+      "evidence": "Antes: version 0 con 1 incidencia (inc-0001) y 1 operacion pendiente. Con migrate({ injectFailure: true }): success=false y rolledBack=true. Despues de la falla: version sigue en 0 y la incidencia y la operacion siguen intactas, sin esquema a medias. Despues de recuperar con migrate() sin inyeccion: version 1 y los mismos datos."
     },
     {
       "id": "concurrent-reassignment-conflict",
       "status": "pass",
       "scenarioType": "boundary",
-      "command": "npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts",
-      "evidence": "resolveSync(base, local, remote) con local.status='in_progress' y remote.assignedTechnicianId='technician-2' devuelve { kind: 'conflict', fields: ['work'] }. Los tres registros de entrada conservan exactamente su JSON original (no hay mutacion)."
+      "command": "npm.cmd test -- --ci --runInBand --verbose src/infrastructure/persistence/week-08-evidence.test.ts -t conflicto",
+      "evidence": "1 passed, 4 skipped. Con local.status=in_progress y remote.assignedTechnicianId=technician-2 sobre el campo work, resolveSyncReal devuelve kind=conflict con fields=[work]. Las tres entradas (base, local, remote) conservan su JSON original, por lo que ambos hechos quedan disponibles. La autorizacion por perfil de Semana 6 no se ejerce en esta prueba."
     },
     {
       "id": "independent-changes-merge",
       "status": "pass",
       "scenarioType": "nominal",
-      "command": "npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts",
-      "evidence": "local cambia title a 'Local' y remote cambia priority a 2 desde la misma base. Resultado: { kind: 'merged', fields: { title: 'Local', priority: 2 } }, sin mutar las entradas."
+      "command": "npm.cmd test -- --ci --runInBand --verbose src/infrastructure/persistence/week-08-evidence.test.ts -t combinacion",
+      "evidence": "1 passed, 4 skipped. Desde la misma base, local cambia title a Local y remote cambia priority a 2. Resultado: kind=merged con fields title=Local y priority=2, sin mutar las entradas."
     },
     {
       "id": "replay-idempotency",
       "status": "pass",
       "scenarioType": "boundary",
-      "command": "npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts",
-      "evidence": "Dos operaciones con operationId 'op-inicio-001' y una con 'op-inicio-002': deduplicateOperations devuelve 2 elementos, conserva el payload 'primera' y deja intacto el arreglo de entrada (3 elementos)."
+      "command": "npm.cmd test -- --ci --runInBand --verbose src/infrastructure/persistence/week-08-evidence.test.ts -t idempotencia",
+      "evidence": "1 passed, 4 skipped. Tres operaciones, dos con operationId op-inicio-001 y una con op-inicio-002: deduplicateOperationsReal devuelve 2, conserva el payload primera y deja el arreglo de entrada con 3 elementos. No se probo retirar de la cola solo lo confirmado."
     },
     {
       "id": "public-contract-week-08",
       "status": "pass",
       "scenarioType": "nominal",
-      "command": "npx.cmd jest --ci --runInBand course-tests/public/week-08.test.ts",
-      "evidence": "PASS course-tests/public/week-08.test.ts | Test Suites: 1 passed, 1 total | Tests: 3 passed, 3 total (conflicto sin mutacion, combinacion de campos independientes y deduplicacion por identidad estable)."
+      "command": "npm.cmd test -- --ci --runInBand course-tests/public/week-08.test.ts",
+      "evidence": "PASS course-tests/public/week-08.test.ts: Test Suites 1 passed, Tests 3 passed, 3 total."
+    },
+    {
+      "id": "typecheck",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "npm.cmd run typecheck",
+      "evidence": "tsc --noEmit termina sin errores sobre la rama week-08/parte-b-ismael."
     }
   ]
 }

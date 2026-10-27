@@ -72,3 +72,11 @@ Pasaron las tres pruebas públicas de sincronización y los cinco casos del núc
 de Kevin. Los tres casos adicionales de revisión fallaron. La deduplicación de un
 arreglo no demuestra por sí sola idempotencia del servidor, y reconstruir un
 objeto de cola en memoria no demuestra persistencia al reiniciar la app.
+
+## Revisión del equipo
+
+Ismael reprodujo los cinco casos del núcleo y las tres pruebas públicas sobre
+`0e86020382ad547e296356530d57e36cdced69fc`. Su reporte está en
+`evidence/week-08/reports/3523110741.md`. Distingue el reinicio de una instancia en
+memoria del cierre real de la app y señala que faltó comprobar la confirmación
+del servidor antes de retirar una operación.

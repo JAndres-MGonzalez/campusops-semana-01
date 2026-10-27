@@ -54,8 +54,10 @@ async function findRemote(
     // Perder la visibilidad de la incidencia es exactamente lo que provoca una
     // reasignación: el backend valida la asignación antes que la versión y
     // responde 403 (o 404 si el recurso dejó de estar disponible).
+    // Una sesión vencida sin respuesta HTTP no demuestra una reasignación.
     if (error instanceof IncidentRequestError
-      && (error.kind === 'forbidden' || error.kind === 'not_found')) {
+      && ((error.kind === 'forbidden' && error.httpStatus === 403)
+        || (error.kind === 'not_found' && error.httpStatus === 404))) {
       throw new OutboxConflictError(operation.operationId, 'reassignment', ['work.assignedTechnicianId']);
     }
     throw error;

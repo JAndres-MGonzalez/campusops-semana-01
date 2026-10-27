@@ -1,0 +1,18 @@
+{
+  "applicationSourceSha": "73b55aed2facd016e819f24bebf62e5a20fc131e",
+  "package": "mx.edu.dmi.engineeringapp",
+  "variant": "release",
+  "signing": "debug keystore de Expo, sólo laboratorio",
+  "abi": "x86_64",
+  "androidApi": 36,
+  "androidVersion": "16",
+  "avd": "CampusOps_W08",
+  "buildPath": "C:\\CampusOps-w08",
+  "jdk": "Temurin 17.0.20.1+1",
+  "node": "22.22.0",
+  "ndk": "27.1.12297006",
+  "apkSha256": "765f1be52bfd0af149b7b942269b3c34c4c301cecd8cdc1be2d595538d45ec88",
+  "apkBytes": 27864784,
+  "networkConfig": "HTTP sólo a 10.0.2.2, overlay en release-config",
+  "graphics": "debug.hwui.drawing_enabled=1"
+}

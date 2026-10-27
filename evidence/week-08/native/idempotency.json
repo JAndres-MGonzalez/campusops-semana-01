@@ -1,0 +1,16 @@
+{
+  "operationId": "start-campus-inc-001-mvq9hg7q-geq8z9",
+  "replayedBody": {
+    "action": "start",
+    "baseVersion": 7,
+    "note": "Revision ficticia sin conexion",
+    "evidenceIds": [
+      "foto://campus-ficticio/pendiente-02.jpg"
+    ]
+  },
+  "duplicate": true,
+  "version": 8,
+  "status": "in_progress",
+  "assignedTechnicianId": "technician-1",
+  "effectsForOperation": 1
+}

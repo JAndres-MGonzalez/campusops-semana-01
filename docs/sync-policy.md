@@ -81,3 +81,10 @@ de retiro, reintento y conflicto de creaciones e inicios de atención. La
 evidencia nativa de cerrar y abrir la app real está en
 `evidence/week-08/native/native-restart.md`, con capturas y el registro de
 `adb`.
+
+## Sesión y reasignación
+
+Un error local de sesión o un HTTP 401 conserva el pendiente, pero no demuestra
+una reasignación. La pérdida de visibilidad sólo se clasifica así ante un 403 o
+404 real del servidor. Los casos de regresión están en
+`evidence/week-08/technician-sync.test.ts`.

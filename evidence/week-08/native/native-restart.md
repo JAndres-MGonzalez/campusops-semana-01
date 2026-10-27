@@ -40,6 +40,14 @@ JavaScript y no necesita servidor de desarrollo. La salida real está en
 4. Se pulsó «Iniciar atención». La operación quedó en AsyncStorage real.
 5. Se leyó la cola de SQLite y se cerró y volvió a abrir el proceso Android:
 
+La interrupción se reprodujo en el emulador de pruebas con esta regla, que se
+retiró al reconectar. No se cambió el firewall de Windows:
+
+```powershell
+adb -s emulator-5554 root
+adb -s emulator-5554 shell iptables -I OUTPUT -p tcp -d 10.0.2.2 --dport 4310 -j REJECT
+```
+
 ```powershell
 adb -s emulator-5554 shell am force-stop mx.edu.dmi.engineeringapp
 adb -s emulator-5554 shell am start -n mx.edu.dmi.engineeringapp/.MainActivity
@@ -60,6 +68,14 @@ tabla `Storage`, clave `campusops.queue.pending`. No se leyeron tokens de sesió
 Mientras la app estaba cerrada y sin acceso al backend, coordinación ejecutó
 `assign` con versión base 5 y `technicianId=technician-2`. La incidencia quedó
 en versión 6. Se restituyó el acceso y se inició sesión nuevamente como técnico.
+
+```powershell
+adb -s emulator-5554 shell iptables -D OUTPUT -p tcp -d 10.0.2.2 --dport 4310 -j REJECT
+```
+
+Las versiones 5 a 8 son las observadas en esta ejecución. En un backend recién
+iniciado la incidencia comienza en 1; se debe consultar la versión actual por
+GET y utilizarla como `baseVersion` en cada acción de coordinación.
 
 La app informó la reasignación y conservó el pendiente. El servidor siguió en
 versión 6 con `technician-2`: la sincronización no impuso la asignación anterior.

@@ -1,0 +1,60 @@
+
+> dmi-react-native-starter@1.0.0 test
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand evidence/week-08/technician-sync.test.ts
+
+FAIL evidence/week-08/technician-sync.test.ts (8.441 s)
+  √ envía un inicio de atención pendiente con su identidad estable (3 ms)
+  × un error de sesión (undefined) no se presenta como reasignación (1 ms)
+  × un error de sesión (401) no se presenta como reasignación
+
+  ● un error de sesión (undefined) no se presenta como reasignación
+
+    expect(received).rejects.toBe(expected) // Object.is equality
+
+    Expected: [IncidentRequestError: forbidden]
+    Received: [OutboxConflictError: reassignment: op-start-expired-session]
+
+      58 |     find: async () => { throw authFailure; },
+      59 |     start,
+    > 60 |   })).rejects.toBe(authFailure);
+         |               ^
+      61 |   expect(start).not.toHaveBeenCalled();
+      62 | });
+      63 |
+
+      at Object.toBe (node_modules/expect/build/index.js:218:22)
+      at toBe (evidence/week-08/technician-sync.test.ts:60:15)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (evidence/week-08/technician-sync.test.ts:62:2)
+
+  ● un error de sesión (401) no se presenta como reasignación
+
+    expect(received).rejects.toBe(expected) // Object.is equality
+
+    Expected: [IncidentRequestError: forbidden]
+    Received: [OutboxConflictError: reassignment: op-start-expired-session]
+
+      58 |     find: async () => { throw authFailure; },
+      59 |     start,
+    > 60 |   })).rejects.toBe(authFailure);
+         |               ^
+      61 |   expect(start).not.toHaveBeenCalled();
+      62 | });
+      63 |
+
+      at Object.toBe (node_modules/expect/build/index.js:218:22)
+      at toBe (evidence/week-08/technician-sync.test.ts:60:15)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (evidence/week-08/technician-sync.test.ts:62:2)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 1 passed, 3 total
+Snapshots:   0 total
+Time:        12.101 s
+Ran all test suites matching /evidence\\week-08\\technician-sync.test.ts/i.

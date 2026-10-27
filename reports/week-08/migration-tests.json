@@ -1,113 +1,120 @@
 {
   "schemaVersion": 1,
   "week": 8,
-  "commitSha": "36021063e87ab0a26d67266dbd5f934777c0fb32",
-  "generatedAt": "2026-10-27T05:06:10.747Z",
+  "commitSha": "ac094940667fb3b63c6ece868de9b8154f0392b0",
+  "generatedAt": "2026-10-27T05:55:23.9405889Z",
   "checks": [
     {
       "id": "queue-recreated-in-process",
       "status": "pass",
       "scenarioType": "boundary",
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "Una cola nueva sobre el mismo almacenamiento de prueba recupera la identidad y contenido. Es recreación de instancias, sin cerrar el proceso de la app. evidence/week-08/logs/integration-tests-outbox-update.log"
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync src/infrastructure/incidents/http-incident-repository.test.ts evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "evidence": "Una cola nueva sobre el mismo almacenamiento de prueba recupera la identidad y contenido. Es recreación de instancias, sin cerrar el proceso de la app. evidence/week-08/logs/integration-tests-final.log"
     },
     {
       "id": "migration-success",
       "status": "pass",
       "scenarioType": "nominal",
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "El segundo migrate() completa versión 1 y conserva incidencia y operación usando el sustituto oficial de AsyncStorage en Jest. evidence/week-08/logs/integration-tests-outbox-update.log"
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync src/infrastructure/incidents/http-incident-repository.test.ts evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "evidence": "El segundo migrate() completa versión 1 y conserva incidencia y operación usando el sustituto oficial de AsyncStorage en Jest. evidence/week-08/logs/integration-tests-final.log"
     },
     {
       "id": "migration-failure-rollback",
       "status": "pass",
       "scenarioType": "failure",
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "La excepción inyectada devuelve success=false y rolledBack=true; conserva versión 0 y datos; la recuperación completa versión 1. evidence/week-08/logs/integration-tests-outbox-update.log"
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync src/infrastructure/incidents/http-incident-repository.test.ts evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "evidence": "La excepción inyectada devuelve success=false y rolledBack=true; conserva versión 0 y datos; la recuperación completa versión 1. evidence/week-08/logs/integration-tests-final.log"
     },
     {
       "id": "reassignment-pure-conflict",
       "status": "pass",
       "scenarioType": "boundary",
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "La función resolveSync devuelve conflicto en work para inicio local y reasignación remota sin mutar los registros. No es todavía un envío de atención desde el outbox. evidence/week-08/logs/integration-tests-outbox-update.log"
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync src/infrastructure/incidents/http-incident-repository.test.ts evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "evidence": "resolveSync detecta cambios incompatibles sin mutar los registros. El outbox conserva el inicio ante una reasignación real. evidence/week-08/logs/integration-tests-final.log y evidence/week-08/native/03-conflict.json"
     },
     {
       "id": "independent-changes",
       "status": "pass",
       "scenarioType": "nominal",
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "La combinación conserva cambios independientes y las pruebas específicas de resolve pasan. evidence/week-08/logs/integration-tests-outbox-update.log"
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync src/infrastructure/incidents/http-incident-repository.test.ts evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "evidence": "La combinación conserva cambios independientes y las pruebas específicas de resolve pasan. evidence/week-08/logs/integration-tests-final.log"
     },
     {
       "id": "deduplicate-first-occurrence",
       "status": "pass",
       "scenarioType": "boundary",
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "La deduplicación conserva la primera operación y la cola también conserva el primer registro al reencolar. evidence/week-08/logs/integration-tests-outbox-update.log"
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync src/infrastructure/incidents/http-incident-repository.test.ts evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "evidence": "La deduplicación conserva la primera operación y la cola también conserva el primer registro al reencolar. evidence/week-08/logs/integration-tests-final.log"
     },
     {
       "id": "public-week-08",
       "status": "pass",
       "scenarioType": "nominal",
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "Las tres pruebas públicas de semana 8 pasan. evidence/week-08/logs/integration-tests-outbox-update.log"
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync src/infrastructure/incidents/http-incident-repository.test.ts evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "evidence": "Las tres pruebas públicas de semana 8 pasan. evidence/week-08/logs/integration-tests-final.log"
     },
     {
       "id": "session-and-http-regression",
       "status": "pass",
       "scenarioType": "nominal",
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync src/infrastructure/incidents/http-incident-repository.test.ts evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
       "evidence": "Las 33 pruebas de sesión, autorización y cliente HTTP siguen pasando, y las 3 del repositorio HTTP (versión, técnico asignado y start) pasan por separado. evidence/week-08/logs/session-regression-start.log y evidence/week-08/logs/http-repository-start.log"
     },
     {
       "id": "queue-first-record",
       "status": "pass",
       "scenarioType": "boundary",
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "La prueba de revisión ahora conserva createdAt=1793030400000 del primer registro aunque se reencole con otro createdAt. evidence/week-08/logs/integration-tests-outbox-update.log"
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync src/infrastructure/incidents/http-incident-repository.test.ts evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "evidence": "La prueba de revisión ahora conserva createdAt=1793030400000 del primer registro aunque se reencole con otro createdAt. evidence/week-08/logs/integration-tests-final.log"
     },
     {
       "id": "queue-concurrent-writes",
       "status": "pass",
       "scenarioType": "failure",
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "Dos escrituras simultáneas conservan op-review-001 y op-review-002. El candado por almacenamiento evita la pérdida anterior. evidence/week-08/logs/integration-tests-outbox-update.log"
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync src/infrastructure/incidents/http-incident-repository.test.ts evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "evidence": "Dos escrituras simultáneas conservan op-review-001 y op-review-002. El candado por almacenamiento evita la pérdida anterior. evidence/week-08/logs/integration-tests-final.log"
     },
     {
       "id": "json-content-order",
       "status": "pass",
       "scenarioType": "boundary",
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "Dos objetos con las mismas propiedades en distinto orden ahora producen merged, no un conflicto falso. evidence/week-08/logs/integration-tests-outbox-update.log"
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync src/infrastructure/incidents/http-incident-repository.test.ts evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "evidence": "Dos objetos con las mismas propiedades en distinto orden ahora producen merged, no un conflicto falso. evidence/week-08/logs/integration-tests-final.log"
     },
     {
       "id": "outbox-create-confirmation",
       "status": "pass",
       "scenarioType": "nominal",
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "Las once pruebas de outbox pasan: creaciones e inicios pendientes, confirmación, conservación ante error/null, conflicto de reasignación, reintento con la misma identidad y un solo flush simultáneo. Usan memoria y respuestas simuladas. evidence/week-08/logs/integration-tests-start.log"
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync src/infrastructure/incidents/http-incident-repository.test.ts evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "evidence": "Las once pruebas de outbox pasan: creaciones e inicios pendientes, confirmación, conservación ante error/null, conflicto de reasignación, reintento con la misma identidad y un solo flush simultáneo. Usan memoria y respuestas simuladas. evidence/week-08/logs/integration-tests-final.log"
     },
     {
       "id": "native-storage-jest-substitute",
       "status": "pass",
       "scenarioType": "failure",
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "El sustituto oficial de AsyncStorage permite ejecutar los ocho casos del núcleo. Se corrigió Native module is null en Jest; no acredita una instalación nativa. evidence/week-08/logs/integration-tests-outbox-update.log"
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync src/infrastructure/incidents/http-incident-repository.test.ts evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "evidence": "El sustituto oficial de AsyncStorage permite ejecutar los ocho casos del núcleo. Se corrigió Native module is null en Jest; no acredita una instalación nativa. evidence/week-08/logs/integration-tests-final.log"
     },
     {
       "id": "technician-start-submission",
       "status": "pass",
       "scenarioType": "failure",
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "El payload start ya llega al envío con su operationId, nota y referencia de fotografía, y se retira sólo si el servidor confirma. Un conflicto de reasignación lo deja failed en la cola sin sobrescribir la asignación vigente. Pasan evidence/week-08/technician-sync.test.ts, src/infrastructure/sync/technician-start.test.ts y src/infrastructure/sync/outbox.test.ts. evidence/week-08/logs/integration-tests-start.log"
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync src/infrastructure/incidents/http-incident-repository.test.ts evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "evidence": "El inicio conserva operationId, nota y referencia de fotografía; sólo se retira con confirmación. Un 403/404 remoto informa conflicto; una sesión vencida no se confunde con reasignación. evidence/week-08/logs/auth-conflict-original.log reproduce las dos fallas y evidence/week-08/logs/integration-tests-final.log registra 110 pruebas aprobadas en 18 suites."
     },
     {
       "id": "native-restart-evidence",
-      "status": "fail",
+      "status": "pass",
       "scenarioType": "boundary",
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "Pendiente: no se completó la captura en la app nativa de cerrar y abrir el proceso. La cola demuestra la recuperación al recrear instancias sobre el mismo almacenamiento y con el sustituto oficial de AsyncStorage, pero eso no acredita por sí solo el reinicio real ni conservar la referencia de fotografía en el dispositivo. evidence/week-08/logs/integration-tests-start.log"
+      "command": "adb -s emulator-5554 shell am force-stop mx.edu.dmi.engineeringapp; adb -s emulator-5554 shell am start -n mx.edu.dmi.engineeringapp/.MainActivity",
+      "evidence": "Android 16, AsyncStorage SQLite real: el PID cambió de 2985 a 3293 y la cola conservó SHA-256 da56ea33b1d2d08609784bd09dfe2411d04b8d6d6940bf6acfb6a07aab354f75, identidad, autor, nota y referencia de fotografía. evidence/week-08/native/native-restart.md, 01-before-close.json y 02-after-restart.json."
+    },
+    {
+      "id": "native-conflict-confirmation-idempotency",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "Procedimiento de evidence/week-08/native/native-restart.md con backend didáctico local y APK Android",
+      "evidence": "La reasignación remota a technician-2 dejó versión 6 y conservó el pendiente. Tras resolver la asignación a technician-1, el inicio confirmado dejó versión 8 y cola vacía; repetir la misma operación devolvió duplicate=true y un solo efecto. evidence/week-08/native/03-conflict.json, remote-after-conflict.json, 04-confirmed.json e idempotency.json."
     }
   ]
 }

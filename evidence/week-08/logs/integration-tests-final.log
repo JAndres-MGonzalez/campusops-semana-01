@@ -1,0 +1,29 @@
+
+> dmi-react-native-starter@1.0.0 test
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync src/infrastructure/incidents/http-incident-repository.test.ts evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts
+
+PASS evidence/week-08/technician-sync.test.ts
+PASS course-tests/smoke.test.tsx
+PASS evidence/week-06/session-app.test.tsx
+PASS evidence/week-05/backend-failures.test.ts
+PASS evidence/week-05/http-client-ui.test.tsx
+PASS src/infrastructure/sync/technician-start.test.ts
+PASS evidence/week-06/concurrency.test.ts
+PASS src/infrastructure/incidents/http-incident-repository.test.ts
+PASS evidence/week-08/review.test.ts
+PASS src/infrastructure/sync/outbox.test.ts
+PASS src/infrastructure/persistence/week-08-evidence.test.ts
+PASS evidence/week-06/auth-cases.test.ts
+PASS evidence/week-05/contract-cases.test.ts
+PASS src/infrastructure/session/session.test.ts
+PASS course-tests/public/week-06.test.ts
+PASS course-tests/public/week-08.test.ts
+PASS src/infrastructure/sync/resolve.test.ts
+PASS src/infrastructure/persistence/queue.test.ts
+
+Test Suites: 18 passed, 18 total
+Tests:       110 passed, 110 total
+Snapshots:   0 total
+Time:        14.276 s, estimated 19 s
+Ran all test suites matching /evidence\\week-06\\concurrency.test.ts|evidence\\week-06\\auth-cases.test.ts|evidence\\week-06\\session-app.test.tsx|course-tests\\public\\week-06.test.ts|src\\infrastructure\\session\\session.test.ts|course-tests\\smoke.test.tsx|evidence\\week-05\\backend-failures.test.ts|evidence\\week-05\\contract-cases.test.ts|evidence\\week-05\\http-client-ui.test.tsx|course-tests\\public\\week-08.test.ts|src\\infrastructure\\persistence|src\\infrastructure\\sync|src\\infrastructure\\incidents\\http-incident-repository.test.ts|evidence\\week-08\\review.test.ts|evidence\\week-08\\technician-sync.test.ts/i.
+Test results written to: reports\week-08\generated-review-tests.json

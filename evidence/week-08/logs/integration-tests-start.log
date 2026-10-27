@@ -1,0 +1,18 @@
+﻿
+> dmi-react-native-starter@1.0.0 test
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts
+
+PASS src/infrastructure/sync/outbox.test.ts
+PASS src/infrastructure/persistence/week-08-evidence.test.ts
+PASS evidence/week-08/review.test.ts
+PASS src/infrastructure/persistence/queue.test.ts
+PASS evidence/week-08/technician-sync.test.ts
+PASS src/infrastructure/sync/resolve.test.ts
+PASS src/infrastructure/sync/technician-start.test.ts
+
+Test Suites: 7 passed, 7 total
+Tests:       41 passed, 41 total
+Snapshots:   0 total
+Time:        3.593 s
+Ran all test suites matching /src\\infrastructure\\persistence|src\\infrastructure\\sync|evidence\\week-08\\review.test.ts|evidence\\week-08\\technician-sync.test.ts/i.
+

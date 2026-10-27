@@ -21,10 +21,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
       - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '22.22.0'
           cache: npm
       - name: Reproducible setup
         run: make setup
@@ -32,9 +35,14 @@ jobs:
         run: npm run bundle:release
       - name: AC-01 — reproducibility
         run: make verify-week-08
+      - name: Session regression
+        run: npm test -- --ci --runInBand course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx
+      - name: Persistence and synchronization
+        run: npm test -- --ci --runInBand src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts
       - name: AC-02 — public behavior
         run: make public-test-week-08
       - name: AC-03 — declared failure evidence
+        if: github.ref == 'refs/tags/week-08-final'
         run: make evidence-week-08
       - name: Upload academic evidence
         if: always()

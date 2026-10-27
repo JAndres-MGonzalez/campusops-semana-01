@@ -1,0 +1,6 @@
+﻿
+> dmi-react-native-starter@1.0.0 check:architecture
+> node tools/check-boundaries.mjs
+
+OK: 91 dependencias internas respetan los l├¡mites (ui/application/domain/infrastructure).
+

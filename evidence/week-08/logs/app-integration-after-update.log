@@ -1,0 +1,3 @@
+Comando: rg -n 'pendingQueue|createPersistentQueue|resolveSync|/actions' App.tsx src/application src/ui
+Resultado: sin coincidencias; código 1.
+App.tsx sí llama a initializePersistence; falta conectar el uso y el envío de la cola.

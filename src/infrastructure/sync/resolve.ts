@@ -1,10 +1,8 @@
+import { isEqualJson } from './canonical-json';
+
 export type JsonObject = Readonly<Record<string, unknown>>;
 
 export type SyncRecord = Readonly<{ id: string; version: number; fields: JsonObject }>;
-
-function isEqualJson(a: unknown, b: unknown): boolean {
-  return JSON.stringify(a) === JSON.stringify(b);
-}
 
 function getValue(fields: JsonObject, key: string): { has: boolean; value: unknown } {
   if (Object.prototype.hasOwnProperty.call(fields, key)) {

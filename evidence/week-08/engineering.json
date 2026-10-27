@@ -1,30 +1,56 @@
 {
   "schemaVersion": 1,
   "week": 8,
-  "commitSha": "c61f7018748bf7c5d92bac7ef7d41ef3b3bd81e4",
-  "decision": "El nucleo resuelve la sincronizacion comparando campo por campo contra la base con igualdad JSON y orden alfabetico. Si solo una parte cambio un campo, se conserva ese cambio; si ambas cambiaron el mismo campo a valores distintos, se declara conflicto con los campos ordenados y no se impone el valor remoto ni se descarta la intencion local. La operacion pendiente se identifica por operationId estable y solo se retira de la cola mediante remove() cuando hay confirmacion; marcar failed o detectar conflicto solo cambia el estado. Asi una reasignacion concurrente conserva ambos hechos y un reenvio no produce doble efecto.",
+  "commitSha": "ac094940667fb3b63c6ece868de9b8154f0392b0",
+  "decision": "Guardar primero la intención local con identidad estable y conservarla hasta recibir confirmación. El envío de start consulta la asignación vigente y usa baseVersion; una reasignación conserva el pendiente y no impone el técnico anterior. Sólo un 403 o 404 remoto indica pérdida de visibilidad: un error de sesión mantiene su tipo y no inventa un conflicto. La cola conserva la primera operación, serializa escrituras y compara JSON por contenido. El cierre real del proceso Android conservó los datos y la resolución posterior produjo un único efecto.",
   "alternatives": [
-    "Ultima escritura gana: aplicar siempre el registro remoto. Es simple, pero descarta la intencion local del tecnico y pierde informacion sin dejar rastro del conflicto.",
-    "Bloquear la sincronizacion hasta que el usuario resuelva cada diferencia. Evita sobrescrituras, pero deja la cola detenida y no distingue cambios independientes que si podrian combinarse.",
-    "Resolucion por campo con deteccion de conflicto (elegida): combinar los campos que cambiaron en una sola parte, reportar ordenados los que difieren en ambas y mantener la operacion en cola hasta confirmacion."
+    "Última escritura gana: es más simple, pero puede borrar el trabajo local o imponer una asignación antigua.",
+    "Detener toda sincronización ante cualquier diferencia: conserva datos, pero impide combinar cambios que son compatibles.",
+    "Combinar por campo y mantener los conflictos pendientes: conserva los cambios independientes y permite revisar una reasignación sin perder la intención local."
   ],
-  "tradeoff": "La comparacion por campo agrega un recorrido completo de claves y obliga a definir que se hace con los conflictos en la capa de aplicacion, pero evita perdidas silenciosas: los cambios independientes se combinan, el conflicto queda visible con los campos afectados y la cola no se vacia sin confirmacion. El costo es que el nucleo no resuelve el conflicto por si solo y requiere que la UI informe y decida.",
-  "requirementIds": ["AC-01", "AC-02", "AC-03", "AC-04", "AC-05"],
+  "tradeoff": "La cola persistente, el candado de escritura y la consulta previa añaden coordinación y una lectura por envío. A cambio se conserva el trabajo ante fallos y se evita repetir efectos o sobrescribir una reasignación. La resolución de asignación requiere una decisión explícita de coordinación. La referencia de fotografía se conserva como metadato; esta entrega no demuestra subir el archivo de imagen.",
+  "requirementIds": [
+    "AC-01",
+    "AC-02",
+    "AC-03",
+    "AC-04",
+    "AC-05"
+  ],
   "verification": [
     {
-      "command": "npx.cmd jest --ci --runInBand course-tests/public/week-08.test.ts",
-      "result": "PASS course-tests/public/week-08.test.ts | Test Suites: 1 passed, 1 total | Tests: 3 passed, 3 total",
-      "evidence": "course-tests/public/week-08.test.ts"
+      "command": "npm.cmd test -- --ci --runInBand src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "result": "41 pruebas aprobadas en 7 suites, incluidas technician-sync.test.ts, technician-start.test.ts y outbox.test.ts. evidence/week-08/logs/integration-tests-start.log",
+      "evidence": "evidence/week-08/logs/integration-tests-start.log"
     },
     {
-      "command": "npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts",
-      "result": "PASS src/infrastructure/persistence/week-08-evidence.test.ts | Test Suites: 1 passed, 1 total | Tests: 5 passed, 5 total (reinicio, migracion fallida con rollback, conflicto, combinacion e idempotencia)",
-      "evidence": "reports/week-08/migration-tests.json"
+      "command": "npm.cmd test -- --ci --runInBand src/infrastructure/incidents/http-incident-repository.test.ts",
+      "result": "3 pruebas aprobadas: el detalle expone versión y técnico asignado, start envía baseVersion, actor vigente e Idempotency-Key, y rechaza entradas inválidas sin tocar la red.",
+      "evidence": "evidence/week-08/logs/http-repository-start.log"
     },
     {
-      "command": "npm.cmd run typecheck && npm.cmd run lint",
-      "result": "tsc --noEmit sin errores; eslint sin errores (solo advertencias previas de import/first y require en storage.ts)",
-      "evidence": "src/infrastructure/persistence/schema.ts; src/infrastructure/persistence/queue.ts; src/infrastructure/persistence/migrations.ts; src/infrastructure/sync/resolve.ts; src/infrastructure/sync/deduplicate.ts"
+      "command": "npm.cmd run typecheck && npm.cmd run lint && npm.cmd run audit:ci && npm.cmd run check:architecture",
+      "result": "Código 0 en las cuatro comprobaciones; 0 errores y 0 advertencias de lint; 91 dependencias internas dentro de los límites.",
+      "evidence": "evidence/week-08/logs/typecheck-start.log, evidence/week-08/logs/lint-start.log, evidence/week-08/logs/audit-start.log y evidence/week-08/logs/architecture-start.log"
+    },
+    {
+      "command": "npm.cmd run test:smoke && npm.cmd run backend:self-test && npm.cmd run bundle:release",
+      "result": "Smoke aprobado, autoprueba del backend aprobada y exportación Android de Expo completada (608 módulos).",
+      "evidence": "evidence/week-08/logs/smoke-start.log, evidence/week-08/logs/backend-self-test-start.log y evidence/week-08/logs/bundle-release-start.log"
+    },
+    {
+      "command": "npm.cmd test -- --ci --runInBand course-tests/public/week-08.test.ts",
+      "result": "3 de 3 pruebas públicas aprobadas. No cubren por sí solas el reinicio nativo del proceso.",
+      "evidence": "evidence/week-08/logs/public-tests-start.log"
+    },
+    {
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync src/infrastructure/incidents/http-incident-repository.test.ts evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "result": "110 pruebas aprobadas en 18 suites, incluidas las dos regresiones que distinguen sesión vencida de reasignación.",
+      "evidence": "evidence/week-08/logs/integration-tests-final.log y evidence/week-08/logs/auth-conflict-original.log"
+    },
+    {
+      "command": "Compilación e instalación del APK y procedimiento de evidence/week-08/native/native-restart.md",
+      "result": "APK compilado e instalado. Cierre real y apertura con cola idéntica; conflicto sin sobrescribir asignación, retiro tras confirmación y repetición duplicate=true con un efecto.",
+      "evidence": "evidence/week-08/logs/native-release-build.log y evidence/week-08/native/"
     }
   ]
 }

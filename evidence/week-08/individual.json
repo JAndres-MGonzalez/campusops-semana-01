@@ -8,7 +8,11 @@
       "name": "Kevin Armando Montalvo Marcial",
       "commitShas": [
         "e1445e4a77697c2b22f351026603acca2c90e540",
-        "c61f7018748bf7c5d92bac7ef7d41ef3b3bd81e4"
+        "c61f7018748bf7c5d92bac7ef7d41ef3b3bd81e4",
+        "e60ba22931ee57a51f7333716b65bab04aebda21",
+        "4c94d92e357e8a68e8eff657460cce68d475e1d4",
+        "29c3aeb74d9b214cb2871a8970a77bbba6b8d914",
+        "36021063e87ab0a26d67266dbd5f934777c0fb32"
       ],
       "files": [
         "src/infrastructure/persistence/schema.ts",
@@ -21,53 +25,92 @@
         "src/course-evaluation/index.ts",
         "src/infrastructure/persistence/week-08-evidence.test.ts",
         "docs/data-model.md",
-        "docs/sync-policy.md"
+        "docs/sync-policy.md",
+        "App.tsx",
+        "package.json",
+        "package-lock.json",
+        "src/infrastructure/sync/outbox.ts",
+        "src/infrastructure/sync/canonical-json.ts",
+        "jest.setup.js",
+        "src/infrastructure/sync/technician-start.ts",
+        "src/infrastructure/sync/technician-start.test.ts",
+        "src/infrastructure/incidents/http-incident-repository.ts",
+        "src/infrastructure/incidents/http-incident-repository.test.ts",
+        "src/ui/IncidentApp.tsx",
+        "src/ui/screens/IncidentDetailScreen.tsx",
+        "src/domain/incident.ts"
       ],
       "tests": [
         "course-tests/public/week-08.test.ts",
-        "src/infrastructure/persistence/week-08-evidence.test.ts"
+        "src/infrastructure/persistence/week-08-evidence.test.ts",
+        "src/infrastructure/persistence/queue.test.ts",
+        "src/infrastructure/sync/resolve.test.ts",
+        "src/infrastructure/sync/outbox.test.ts",
+        "src/infrastructure/sync/technician-start.test.ts",
+        "src/infrastructure/incidents/http-incident-repository.test.ts",
+        "evidence/week-08/technician-sync.test.ts"
       ],
       "reviews": [],
       "prediction": "La cola persistente conserva operationId y contenido al reconstruir la instancia, la migracion fallida revierte a la version anterior sin dejar esquema parcial y resolveSync/deduplicateOperations pasan el contrato publico.",
       "command": "npx.cmd jest --ci --runInBand course-tests/public/week-08.test.ts && npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts && npm.cmd run typecheck",
-      "observedResult": "week-08.test.ts 3/3 PASS; week-08-evidence.test.ts 5/5 PASS; typecheck sin errores.",
-      "explanation": "Implemente el esquema versionado (SCHEMA_VERSION=1), el puerto de almacenamiento con respaldo en AsyncStorage, la cola persistente con identidad estable y el migrador con snapshot y rollback. Delegue resolveSync y deduplicateOperations desde src/course-evaluation/index.ts a logica real en src/infrastructure/sync, sin tocar las firmas ni el modulo de sesion de la semana 6."
+      "observedResult": "Las 41 pruebas de persistencia y sincronización y las 3 del repositorio HTTP pasan, incluida technician-sync.test.ts de la revisión. El inicio de atención del técnico se encola con operationId, nota y referencia de fotografía, y un conflicto de reasignación lo conserva failed sin sobrescribir la asignación. Su commit dejó la captura nativa pendiente; la integración posterior la registra en evidence/week-08/native/.",
+      "explanation": "Generalicé el outbox a create_incident y start, añadí submitTechnicianStart con la decisión de reasignación/transición/ya aplicado, expuse versión y técnico asignado en el repositorio y agregué la UI de inicio con nota y referencia de fotografía. Actualicé las pruebas de outbox, evidencia y repositorio; la verificación nativa quedó para la integración posterior del equipo."
     },
     {
       "studentId": "3523110741",
-      "name": "Ismael Montalvo Lopez",
-      "commitShas": ["5c347c8180a03c86e9bc9c1c60a9bf497cc60fa6"],
+      "name": "Jose Ismael Montalvo Lopez",
+      "commitShas": [
+        "0e86020382ad547e296356530d57e36cdced69fc",
+        "02e3903d4a7b8d735e30f5cd737a1cf2b6fad76a"
+      ],
       "files": [
-        "evidence/week-06/engineering.json",
-        "evidence/week-06/reports/3523110741.md",
-        "reports/week-06/auth-tests.json"
+        "docs/sync-policy.md",
+        "reports/week-08/migration-tests.json",
+        "evidence/week-08/reports/3523110741.md"
       ],
-      "tests": [],
+      "tests": [
+        "src/infrastructure/persistence/week-08-evidence.test.ts",
+        "course-tests/public/week-08.test.ts"
+      ],
       "reviews": [
-        "Sin aportacion registrada en la semana 8. El SHA listado es su ultimo commit real en el repositorio (semana 6), se conserva solo para no dejar el campo vacio."
+        "evidence/week-08/reports/3523110741.md"
       ],
-      "prediction": "Sin prediccion de semana 8 registrada por este integrante.",
-      "command": "Sin comando de semana 8 registrado por este integrante.",
-      "observedResult": "Sin resultado observado de semana 8 registrado por este integrante.",
-      "explanation": "Este registro no acredita trabajo de la semana 8: no existen commits, reportes ni pruebas de su parte en la version entregada. Se declara explicitamente para no atribuirle evidencia que no produjo."
+      "prediction": "La cola conserva los datos al recrearla sobre el mismo almacenamiento; la falla de migración revierte los datos y la reasignación informa conflicto sin modificar las entradas.",
+      "command": "npm.cmd test -- --ci --runInBand --verbose src/infrastructure/persistence/week-08-evidence.test.ts",
+      "observedResult": "Su reporte sobre 0e86020382ad547e296356530d57e36cdced69fc registra 5 de 5 casos del núcleo y 3 de 3 públicas aprobadas. Declara reinicio simulado en memoria y falta de comprobación de retiro confirmado; la actualización posterior de AsyncStorage presenta una regresión en Jest.",
+      "explanation": "Reprodujo los cinco casos, registró estados de migración y rollback, documentó los límites del reinicio simulado y señaló que enqueue reemplaza la primera operación y que no se había probado el retiro de la cola sólo con confirmación."
     },
     {
       "studentId": "3523110131",
-      "name": "Juan Andres Medina Gonzalez",
-      "commitShas": ["0af94c2adca1937cb1b23ae5f50d0c36427fe965"],
+      "name": "Juan Andrés Medina González",
+      "commitShas": [
+        "13175155addec4bf6435d199409d107d3c0a9264",
+        "994715918e5232eb3d3d7c9c701965b34eedf7ce",
+        "73b55aed2facd016e819f24bebf62e5a20fc131e",
+        "09bf893198624614268cd449d2f2ad9925d562be",
+        "ac094940667fb3b63c6ece868de9b8154f0392b0"
+      ],
       "files": [
-        "evidence/week-06/engineering.json",
-        "evidence/week-06/individual.json",
-        "evidence/week-06/reports/3523110131.md"
+        "docs/data-model.md",
+        "docs/sync-policy.md",
+        ".github/workflows/week-08-persistencia-sincronizacion-feedback.yml",
+        "evidence/week-08/review.test.ts",
+        "evidence/week-08/technician-sync.test.ts",
+        "src/infrastructure/sync/technician-start.ts",
+        "evidence/week-08/native/native-restart.md",
+        "evidence/week-08/native/build.json"
       ],
-      "tests": [],
+      "tests": [
+        "evidence/week-08/review.test.ts",
+        "evidence/week-08/technician-sync.test.ts"
+      ],
       "reviews": [
-        "Sin aportacion registrada en la semana 8. El SHA listado es su ultimo commit real en el repositorio (semana 6), se conserva solo para no dejar el campo vacio."
+        "evidence/week-08/reports/3523110131.md"
       ],
-      "prediction": "Sin prediccion de semana 8 registrada por este integrante.",
-      "command": "Sin comando de semana 8 registrado por este integrante.",
-      "observedResult": "Sin resultado observado de semana 8 registrado por este integrante.",
-      "explanation": "Este registro no acredita trabajo de la semana 8: no existen commits, reportes ni pruebas de su parte en la version entregada. Se declara explicitamente para no atribuirle evidencia que no produjo."
+      "prediction": "La cola debe conservar su primer registro y dos operaciones simultáneas; el mismo contenido JSON no debe generar conflicto por el orden de sus propiedades.",
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync src/infrastructure/incidents/http-incident-repository.test.ts evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "observedResult": "110 pruebas aprobadas en 18 suites. En Android, cerrar y abrir el proceso conservó la misma cola en SQLite. La reasignación mantuvo el pendiente, la confirmación lo retiró y repetir la misma operación produjo duplicate=true sin un segundo efecto. Salidas y capturas en evidence/week-08/logs/integration-tests-final.log y evidence/week-08/native/.",
+      "explanation": "Integración de las ramas conservando los commits del equipo, revisión de cola y comparación JSON, y comprobación del inicio de atención. Se corrigió la confusión entre sesión vencida y reasignación con dos pruebas de regresión. La verificación asistida en Android conserva identidad, autor, nota y referencia de fotografía al reiniciar y demuestra el retiro sólo tras confirmación."
     }
   ]
 }

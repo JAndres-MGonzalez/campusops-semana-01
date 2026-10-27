@@ -10,6 +10,14 @@ type Props = Readonly<{
   loadList: () => Promise<readonly IncidentSummary[]>;
   loadDetail: (id: string) => Promise<IncidentDetail | null>;
   createIncident?: (draft: IncidentDraft, operationId: string) => Promise<IncidentDetail | null>;
+  /**
+   * Inicia la atención de una incidencia ya asignada. La operación se guarda en
+   * la cola antes de tocar la red, así que funciona igual con o sin conexión.
+   */
+  startAttention?: (
+    incident: IncidentDetail,
+    input: Readonly<{ note: string; photoRef: string }>,
+  ) => Promise<IncidentDetail | null>;
   reportFailure?: (operation: 'list' | 'detail' | 'create', error: unknown) => void;
 }>;
 
@@ -25,7 +33,7 @@ function errorMessage(error: unknown, fallback: string): string {
   return messages[error.kind];
 }
 
-export function IncidentApp({ loadList, loadDetail, createIncident, reportFailure }: Props) {
+export function IncidentApp({ loadList, loadDetail, createIncident, startAttention, reportFailure }: Props) {
   const [incidents, setIncidents] = useState<readonly IncidentSummary[]>([]);
   const [selected, setSelected] = useState<IncidentDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -101,6 +109,44 @@ export function IncidentApp({ loadList, loadDetail, createIncident, reportFailur
     } finally { setLoading(false); }
   };
 
+  /**
+   * Inicio de atención desde el detalle. La cola confirma o conserva la
+   * operación; la pantalla sólo refleja el estado optimista mientras tanto.
+   */
+  const startFromDetail = async (input: Readonly<{ note: string; photoRef: string }>) => {
+    if (!startAttention || selected === null) return;
+    setError(null);
+    setNotice(null);
+    setLoading(true);
+    try {
+      const updated = await startAttention(selected, input);
+      if (updated === null) {
+        setNotice('El inicio de atención no se pudo confirmar; sigue pendiente en la cola.');
+        return;
+      }
+      setSelected(updated);
+      setIncidents((items) => items.map((item) => (
+        item.id === updated.id ? { ...item, status: updated.status } : item
+      )));
+      setNotice('Inicio de atención en cola: se envía al servidor y se confirma al reconectar.');
+    } catch (error) {
+      reportFailure?.('detail', error);
+      setError(errorMessage(error, 'No se pudo iniciar la atención de la incidencia.'));
+    } finally { setLoading(false); }
+  };
+
+  const startProps = startAttention !== undefined && selected !== null
+    ? {
+      start: {
+        busy: loading,
+        enabled: selected.status === 'assigned',
+        onStart: (input: Readonly<{ note: string; photoRef: string }>) => {
+          void startFromDetail(input);
+        },
+      },
+    }
+    : {};
+
   return (
     <View style={styles.container}>
       {error ? <Text accessibilityRole="alert" style={styles.error}>{error}</Text> : null}
@@ -116,7 +162,7 @@ export function IncidentApp({ loadList, loadDetail, createIncident, reportFailur
         <IncidentCreateScreen busy={loading} onSubmit={saveIncident} onCancel={goBack} />
       ) : loading ? <Text>Cargando incidencias...</Text> : screen === 'detail' ? (
         <IncidentDetailScreen incident={selected} onBack={goBack}
-          emptyMessage={error ? '' : 'No hay datos disponibles para esta incidencia.'} />
+          emptyMessage={error ? '' : 'No hay datos disponibles para esta incidencia.'} {...startProps} />
       ) : (
         <>
           {createIncident ? <Pressable accessibilityRole="button" onPress={() => {

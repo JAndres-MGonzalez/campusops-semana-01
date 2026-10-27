@@ -1,0 +1,25 @@
+{
+  "capturedAt": "2026-10-27T05:46:00.715262+00:00",
+  "package": "mx.edu.dmi.engineeringapp",
+  "processId": "2985",
+  "queueSha256": "da56ea33b1d2d08609784bd09dfe2411d04b8d6d6940bf6acfb6a07aab354f75",
+  "operations": [
+    {
+      "operationId": "start-campus-inc-001-mvq9hg7q-geq8z9",
+      "incidentId": "campus-inc-001",
+      "author": "technician-1",
+      "payload": {
+        "action": "start",
+        "note": "Revision ficticia sin conexion",
+        "evidenceIds": [
+          "foto://campus-ficticio/pendiente-02.jpg"
+        ]
+      },
+      "baseVersion": 5,
+      "createdAt": 1793079913814,
+      "status": "failed",
+      "attempts": 1,
+      "idempotencyKey": "start-campus-inc-001-mvq9hg7q-geq8z9"
+    }
+  ]
+}

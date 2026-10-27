@@ -2,85 +2,62 @@
 
 ## Entidades y relaciones
 
-| Entidad | Almacenamiento y contenido |
+| Entidad | Contenido y relación |
 |---|---|
-| Incidencia | `campusops.data.incidents`: documentos JSON. Cada operación referencia una incidencia mediante `incidentId`. |
-| Actor | `author` identifica al actor sintético que creó la operación. La cola no guarda una tabla de usuarios ni sus credenciales. |
-| Operación pendiente | `campusops.queue.pending`: `operationId`, `incidentId`, `author`, `payload`, `baseVersion`, `createdAt`, `status`, `attempts` e `idempotencyKey` opcional. |
-| Versión de esquema | `campusops.schema.version`: entero del esquema de incidencias y cola. |
-| Respaldo de migración | `campusops.migration.snapshot`: versión, incidencias, cola y fecha anteriores a la migración. |
+| Incidencia | Documento JSON en `campusops.data.incidents`. Sus operaciones la referencian mediante `incidentId`. |
+| Actor | `author` identifica al actor sintético de la operación; la cola no guarda credenciales. |
+| Operación pendiente | `operationId`, `incidentId`, `author`, `payload`, `baseVersion`, `createdAt`, `status`, `attempts` e `idempotencyKey` opcional, en `campusops.queue.pending`. |
+| Versión de esquema | Entero en `campusops.schema.version`; `SCHEMA_VERSION = 1`. |
+| Respaldo de migración | Versión, incidencias, cola y fecha anteriores, en `campusops.migration.snapshot`. |
 
-Una incidencia puede tener varias operaciones. Cada operación conserva su autor y
-la versión de la incidencia usada como base. Una referencia de fotografía dentro
-del contenido identifica un adjunto pendiente; no demuestra que exista un archivo
-persistido ni que se haya enviado.
+Una incidencia puede tener varias operaciones. Cada operación conserva su autor
+y su versión base. Una referencia de fotografía identifica un recurso pendiente;
+no demuestra que el archivo ya esté almacenado o enviado.
 
-## Almacenamiento
+## Almacenamiento y cola
 
-`src/infrastructure/persistence/storage.ts` define `PersistenceStorage` e intenta
-cargar `@react-native-async-storage/async-storage`. Si no encuentra ese módulo,
-utiliza `MemoryStorage`, un `Map` dentro del proceso.
+`createDurableStorage` utiliza AsyncStorage 3.1.1 y recurre a memoria si no puede
+cargar el módulo. En Jest se utiliza el sustituto oficial desde `jest.setup.js`.
+Ese sustituto permite probar la lógica y no acredita almacenamiento nativo.
 
-AsyncStorage ya está agregado a `package.json`; el archivo de versiones fija
-la versión instalada `3.1.1`. `App.tsx` llama a `initializePersistence`, que ejecuta
-la migración cuando corresponde y lee las claves de cola e incidencias.
+Las mutaciones de cola se serializan con un candado por almacenamiento. Repetir
+`operationId` conserva el primer registro. `markInFlight` incrementa `attempts`;
+`markFailed` conserva la operación. Los estados son `pending`, `in_flight` y
+`failed`.
 
-La inicialización no conecta la cola con los casos de uso: las consultas y
-creaciones siguen usando directamente el repositorio HTTP. No hay un flujo
-integrado de inicio de atención sin conexión, envío de pendientes y confirmación.
-Los errores de inicialización se capturan sin mostrarlos al usuario.
+El outbox guarda nuevas incidencias con payload
+`{ action: 'create_incident', draft }`, `incidentId = local-<operationId>` y
+`baseVersion = 0` por defecto. El contenido se serializa mediante el mismo puerto.
 
-El respaldo `MemoryStorage` no conserva datos al cerrar el proceso. Instalar el
-adaptador permite usar almacenamiento duradero cuando el módulo nativo está
-disponible, pero no sustituye comprobar el cierre y la reapertura de la app con
-los mismos datos. El caso de reinicio de Kevin crea almacenamiento en memoria;
-la preparación común de sus pruebas usa el adaptador global y actualmente falla
-en Jest porque el módulo nativo no está disponible.
+## Versión y migración
 
-## Versión de esquema
+`getCurrentSchemaVersion` devuelve la versión almacenada o `0`. El salto `0 → 1`
+crea los arreglos de incidencias y cola si faltan, conservando sus datos. Cuando
+cambie la estructura deberá incrementarse `SCHEMA_VERSION` y añadirse el paso.
 
-`SCHEMA_VERSION` vale `1` en `src/infrastructure/persistence/schema.ts`.
-`getCurrentSchemaVersion()` devuelve la versión guardada o `0` si no existe.
-Al cambiar la estructura debe incrementarse la versión y añadirse su migración.
+1. Leer la versión, incidencias y cola.
+2. Guardar el respaldo del estado anterior.
+3. Preparar las estructuras y escribir la versión nueva al terminar.
+4. Si ocurre una excepción, restaurar el respaldo y devolver el resultado.
 
-La migración actual de `0` a `1` crea los arreglos de incidencias y cola si no
-existen y conserva los datos que ya estaban presentes.
+La prueba inyecta una excepción, comprueba versión `0` y conservación de los datos,
+y vuelve a migrar para obtener versión `1`. Las escrituras no forman una
+transacción nativa; no hay recuperación automática de una interrupción del
+proceso durante ellas.
 
-## Cola de operaciones
+## Integración y límites
 
-La cola serializa sus elementos como JSON mediante el puerto de almacenamiento.
-`operationId` identifica la intención; `incidentId`, `author`, `payload` y
-`baseVersion` permiten saber sobre qué incidencia, actor, cambio y versión opera.
-`createdAt` registra su creación. Los estados son `pending`, `in_flight` y `failed`;
-`markInFlight` incrementa `attempts`.
+`App.tsx` inicializa la persistencia y recupera el contador de pendientes. Ante
+un error de red al crear una incidencia, la guarda en el outbox. Al iniciar
+sesión o pulsar «Sincronizar pendientes», reintenta con la misma identidad y
+retira sólo las creaciones confirmadas.
 
-`enqueue` actualmente reemplaza el registro anterior con la misma identidad.
-Dos llamadas simultáneas pueden leer la misma cola y sobrescribir una operación.
-Ambos casos fallan en `evidence/week-08/review.test.ts`. El registro inicial debe
-conservarse y las escrituras necesitan coordinación para no perder cambios.
+Este flujo está limitado a crear incidencias como reportante. No admite enviar
+un inicio de atención del técnico sobre una incidencia existente ni integra la
+comparación con una reasignación remota. El reinicio de las pruebas reconstruye
+instancias sobre el mismo almacenamiento de prueba: falta evidencia de cerrar y
+abrir la app real conservando operación, notas y referencias de fotos.
 
-## Migración y recuperación
-
-1. Leer la versión y los datos existentes.
-2. Guardar un respaldo de versión, incidencias y cola.
-3. Preparar los arreglos necesarios y escribir la nueva versión al terminar.
-4. Si ocurre una excepción, intentar restaurar el respaldo y devolver el resultado.
-
-Antes de instalar AsyncStorage, la prueba controlada de
-`migrate({ injectFailure: true })` obtenía `success: false` y `rolledBack: true`,
-conservando incidencia, operación y versión `0`. Ismael registra esa ejecución
-en su reporte. En la revisión actual los cinco casos del núcleo se detienen en
-la preparación con `Native module is null`; deben incorporar un doble explícito
-del almacenamiento nativo para volver a comprobar migración y recuperación en Jest.
-
-Las escrituras se hacen por separado. No hay una transacción del almacenamiento
-ni recuperación automática del respaldo al abrir la app después de una
-interrupción del proceso. La prueba actual comprueba una excepción capturada en
-memoria, no una interrupción de una migración en un dispositivo.
-
-## Comprobación
-
-Los casos y resultados están en `reports/week-08/migration-tests.json` y en
-`evidence/week-08/logs/integration-tests.log`. La prueba de Kevin reconstruye la
-cola sobre el mismo objeto de memoria: conserva su contenido durante ese
-proceso, pero no comprueba cerrar y volver a abrir la aplicación.
+Los resultados actuales están en `reports/week-08/migration-tests.json`. Los logs
+históricos conservan el diagnóstico anterior y las nuevas ejecuciones registran
+qué fallos se corrigieron.

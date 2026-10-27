@@ -16,6 +16,7 @@ import { getCurrentSchemaVersion, migrate } from './migrations';
 import { SCHEMA_VERSION, STORAGE_KEYS } from './schema';
 import { resolveSyncReal } from '../sync/resolve';
 import { deduplicateOperationsReal } from '../sync/deduplicate';
+import { createOutbox } from '../sync/outbox';
 
 const OPERATION: PendingOperation = {
   operationId: 'op-inicio-001',
@@ -126,5 +127,77 @@ describe('week-08 parte A: persistencia y sync', () => {
     expect(first?.payload).toEqual({ note: 'primera' });
     expect(second?.operationId).toBe('op-inicio-002');
     expect(operations).toHaveLength(3);
+  });
+
+  it('cola: guardados simultáneos no se pierden y repetir operationId conserva la primera', async () => {
+    const queue = createPersistentQueue(createMemoryStorage());
+
+    await queue.enqueue(OPERATION);
+    await Promise.all([
+      queue.enqueue({ ...OPERATION, operationId: 'op-simultanea-a', payload: { note: 'a' } }),
+      queue.enqueue({ ...OPERATION, operationId: 'op-simultanea-b', payload: { note: 'b' } }),
+    ]);
+    await queue.enqueue({ ...OPERATION, payload: { note: 'repetida' } });
+
+    const all = await queue.getAll();
+    expect(all.map((op) => op.operationId).sort()).toEqual([
+      'op-inicio-001',
+      'op-simultanea-a',
+      'op-simultanea-b',
+    ]);
+    expect(all.find((op) => op.operationId === 'op-inicio-001')?.payload).toEqual(OPERATION.payload);
+  });
+
+  it('conflicto: el orden de propiedades no cambia el contenido JSON', () => {
+    const base = {
+      id: 'inc-0001',
+      version: 1,
+      fields: { work: { assignedTechnicianId: 'technician-1', status: 'assigned' } },
+    };
+    const local = {
+      ...base,
+      fields: { work: { status: 'assigned', assignedTechnicianId: 'technician-1' } },
+    };
+    const remote = { ...base, version: 2 };
+
+    expect(resolveSyncReal(base, local, remote).kind).toBe('merged');
+  });
+
+  it('outbox: sólo se retira lo confirmado y se reintenta con la misma identidad', async () => {
+    const outbox = createOutbox(createPersistentQueue(createMemoryStorage()), () => OPERATION.createdAt);
+    const draft = {
+      category: 'connectivity' as const,
+      description: 'Sin red en el laboratorio ficticio',
+      location: 'Edificio de prueba A',
+    };
+    await outbox.saveOffline(draft, 'op-outbox-001', { author: 'technician-1' });
+
+    const failed = await outbox.flush(async () => {
+      throw new Error('offline');
+    });
+    expect(failed.confirmed).toEqual([]);
+    expect(failed.pending).toEqual(['op-outbox-001']);
+    expect(await outbox.pendingCount()).toBe(1);
+
+    const calls: string[] = [];
+    const confirmed = await outbox.flush(async (sent, operationId) => {
+      calls.push(operationId);
+      return {
+        id: `server-${operationId}`,
+        title: sent.description,
+        category: sent.category,
+        status: 'open',
+        locationLabel: sent.location,
+        description: sent.description,
+        reportedBy: 'technician-1',
+        createdAt: null,
+        updatedAt: null,
+      };
+    });
+
+    expect(calls).toEqual(['op-outbox-001']);
+    expect(confirmed.confirmed).toEqual(['op-outbox-001']);
+    expect(confirmed.pending).toEqual([]);
+    expect(await outbox.pendingCount()).toBe(0);
   });
 });

@@ -1,85 +1,64 @@
 # Política de sincronización — Semana 8
 
-## Regla de combinación
+## Comparación y combinación
 
-`resolveSync` delega en `src/infrastructure/sync/resolve.ts` y compara cada campo
-local y remoto contra una base común.
+`resolveSync` delega en la lógica real de `src/infrastructure/sync/resolve.ts`.
+La comparación JSON ordena las claves de objetos recursivamente; el orden de
+los arreglos sí forma parte de su contenido. No modifica las entradas.
 
-| Cambio observado | Resultado |
+| Cambio respecto a la base | Resultado |
 |---|---|
-| Sólo cambió local | Conservar el valor local. |
-| Sólo cambió remoto | Conservar el valor remoto. |
+| Sólo cambió local | Conservar el cambio local. |
+| Sólo cambió remoto | Conservar el cambio remoto. |
 | Ambos tienen el mismo valor | Conservar ese valor. |
-| Ambos cambiaron el campo a valores distintos | Informar el conflicto con los nombres de campos ordenados. |
+| Ambos tienen valores distintos | Informar los campos incompatibles ordenados por nombre. |
 
-La función no modifica las entradas. Actualmente compara mediante
-`JSON.stringify`; objetos con iguales propiedades en diferente orden producen un
-conflicto falso. Ese límite se reproduce en `evidence/week-08/review.test.ts`.
+`work` agrupa estado y técnico en las pruebas. El inicio local y la reasignación
+remota son incompatibles: se devuelve conflicto sin modificar los tres registros.
+La política exige conservar la intención local y la nueva asignación hasta su
+revisión; nunca imponer al técnico anterior.
 
-## Inicio sin conexión y reasignación
+## Identidad y cola
 
-En las pruebas, `work` agrupa estado y técnico asignado. El inicio local de
-atención y la reasignación remota cambian ese campo de manera incompatible.
-La función devuelve `{ kind: 'conflict', fields: ['work'] }` sin cambiar los tres
-registros recibidos.
+`operationId` identifica la intención y se conserva en cada intento junto con el
+contenido y la versión base. `deduplicateOperations` conserva la primera
+aparición. La cola también conserva el primer registro y serializa sus escrituras
+para evitar pérdidas simultáneas.
 
-La política es conservar la nueva asignación y mantener la intención local
-pendiente, mostrando el conflicto para revisión. No se debe enviar el inicio
-antiguo como si el técnico siguiera asignado. Esta versión tiene el cálculo del
-conflicto, pero no su presentación ni su resolución conectadas a la app.
+El outbox actualmente sólo acepta payloads `create_incident`. Las creaciones se
+envían con el mismo `operationId` como clave de idempotencia. Si el envío devuelve
+un recurso, se elimina la operación; un error o `null` la conserva como `failed`.
+`flush` comparte una ejecución entre llamadas simultáneas.
 
-## Identidad y reintentos
+Una clave repetida no autoriza cambiar el contenido. El servidor debe rechazar
+esa reutilización o devolver la confirmación anterior cuando sea el mismo cambio.
+Una respuesta perdida no permite generar una identidad nueva ni descartar el
+pendiente.
 
-Cada intención debe conservar el mismo `operationId`, autor, contenido y versión
-base durante sus reintentos. El encabezado `Idempotency-Key` debe reutilizar esa
-identidad. Reutilizar una clave con otro contenido no es una operación válida.
+## Autorización y conflicto de reasignación
 
-`deduplicateOperations` conserva la primera aparición por `operationId` y no
-modifica el arreglo original. Sin embargo, `enqueue` reemplaza la operación
-anterior; falta hacer coherentes ambos comportamientos y evitar pérdidas ante
-escrituras simultáneas.
+Se conservan las pruebas de sesión y autorización de semana 6. El técnico sólo
+puede iniciar o resolver su incidencia asignada; coordinación puede reasignar,
+cerrar o reabrir según el contrato. Guardar `author` en la cola no sustituye
+comprobar los permisos vigentes en el servidor.
 
-## Confirmación y retiro
+La aplicación actual sólo inicia sesión como reportante y conecta el outbox con
+`repository.create`. No consulta la nueva versión ni envía `start` por
+`POST /v1/incidents/:id/actions`. Una operación de atención en la cola no es una
+creación válida para ese outbox: queda marcada como fallida sin enviarse.
 
-`markFailed` conserva el elemento. `markInFlight` registra el intento.
-La cola expone `remove`, pero todavía no existe un flujo de envío que compruebe
-la confirmación antes de llamarlo. Tener un método para borrar no demuestra esa
-regla.
+Por eso el conflicto calculado por `resolveSync` aún no demuestra el caso
+obligatorio de técnico sin conexión frente a reasignación remota en el flujo de
+sincronización. Debe integrarse ese envío, conservar la intención y mostrar la
+resolución sin sobrescribir la asignación.
 
-Sólo una respuesta confirmada permite retirar la operación. Un timeout, una
-respuesta de error o un conflicto deben conservarla. Si se pierde una respuesta
-cuando el servidor ya aplicó el cambio, el reintento debe usar la misma clave y
-producir un solo efecto. Esa comprobación con la cola y el backend sigue pendiente.
+## Evidencia y límites
 
-## Autorización
+Los casos, comandos y observaciones actuales están en
+`reports/week-08/migration-tests.json`. El reporte de Ismael está en
+`evidence/week-08/reports/3523110741.md`; registra sus ejecuciones anteriores y
+reconoce el reinicio simulado y los límites de confirmación.
 
-Se conservan los controles de sesión de la semana 6 y sus pruebas. El reportante
-crea sus incidencias; el técnico inicia o resuelve una incidencia que tiene
-asignada; coordinación asigna, reasigna, cierra o reabre según el contrato.
-
-La futura sincronización debe comprobar el actor y la asignación vigentes antes
-de enviar. Guardar `author` en la cola no sustituye la validación del servidor.
-Un conflicto no autoriza omitir una respuesta `403` o `409` ni imponer un estado
-antiguo.
-
-## Evidencia
-
-`reports/week-08/migration-tests.json` diferencia los casos aprobados, los fallos
-reproducidos y los flujos aún sin comprobar. Las salidas están en
-`evidence/week-08/logs/integration-tests.log`.
-
-En la revisión actual pasan las tres pruebas públicas de sincronización.
-Fallan los tres casos adicionales de revisión y los cinco del núcleo de Kevin;
-estos últimos se detienen al preparar AsyncStorage en Jest sin su módulo nativo.
-Los resultados actuales están en `evidence/week-08/logs/integration-tests-after-update.log`.
-La deduplicación de un arreglo no demuestra idempotencia del servidor, y
-reconstruir un objeto de cola en memoria no demuestra persistencia al reiniciar
-la app.
-
-## Revisión del equipo
-
-Ismael reprodujo los cinco casos del núcleo y las tres pruebas públicas sobre
-`0e86020382ad547e296356530d57e36cdced69fc`. Su reporte está en
-`evidence/week-08/reports/3523110741.md`. Distingue el reinicio de una instancia en
-memoria del cierre real de la app y señala que faltó comprobar la confirmación
-del servidor antes de retirar una operación.
+Las pruebas de outbox usan respuestas simuladas y memoria. Demuestran las reglas
+de retiro y reintento de creaciones, pero no prueban por sí solas idempotencia del
+servidor con respuestas perdidas ni cerrar y volver a abrir la app nativa.

@@ -21,15 +21,19 @@ persistido ni que se haya enviado.
 cargar `@react-native-async-storage/async-storage`. Si no encuentra ese módulo,
 utiliza `MemoryStorage`, un `Map` dentro del proceso.
 
-En esta versión, AsyncStorage no figura en `package.json` ni en el archivo de
-versiones fijadas. La alternativa disponible es memoria y no conserva datos al
-cerrar el proceso. Además, `App.tsx` no conecta el almacenamiento, las migraciones
-ni la cola con los casos de uso. La exportación de Expo termina correctamente,
-pero eso no acredita persistencia en el dispositivo.
+AsyncStorage ya está agregado a `package.json`; el archivo de versiones fija
+la versión instalada `3.1.1`. `App.tsx` llama a `initializePersistence`, que ejecuta
+la migración cuando corresponde y lee las claves de cola e incidencias.
 
-El puerto permite agregar almacenamiento duradero sin cambiar el formato de la
-cola. Para cumplir el reinicio real debe instalarse e integrarse ese adaptador y
-comprobar la reapertura de la app con los mismos datos.
+La inicialización no conecta la cola con los casos de uso: las consultas y
+creaciones siguen usando directamente el repositorio HTTP. No hay un flujo
+integrado de inicio de atención sin conexión, envío de pendientes y confirmación.
+Los errores de inicialización se capturan sin mostrarlos al usuario.
+
+El respaldo `MemoryStorage` no conserva datos al cerrar el proceso. Instalar el
+adaptador permite usar almacenamiento duradero cuando el módulo nativo está
+disponible, pero no sustituye comprobar el cierre y la reapertura de la app con
+los mismos datos. La prueba de Kevin sigue usando memoria.
 
 ## Versión de esquema
 

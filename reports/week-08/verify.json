@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "week": 8,
   "mode": "verify",
-  "commitSha": "72f109075f3f5cee8dcc292d02ee1ec0b41d1296",
-  "evaluatedAt": "2026-10-27T02:13:53.429222+00:00",
+  "commitSha": "994715918e5232eb3d3d7c9c701965b34eedf7ce",
+  "evaluatedAt": "2026-10-27T04:07:38.118060+00:00",
   "status": "pass",
   "checks": [
     {
@@ -39,7 +39,7 @@
     {
       "id": "toolchain_2",
       "status": "pass",
-      "detail": "npm run lint\n> dmi-react-native-starter@1.0.0 lint\n> eslint .\n\n\nC:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\src\\infrastructure\\persistence\\index.ts\n  14:1  warning  Import in body of module; reorder to top  import/first\n  15:1  warning  Import in body of module; reorder to top  import/first\n  16:1  warning  Import in body of module; reorder to top  import/first\n\nC:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\src\\infrastructure\\persistence\\storage.ts\n  39:5   warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-var-requires')\n  40:32  warning  A `require()` style import is forbidden                                                                @typescript-eslint/no-require-imports\n  65:5   warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-var-requires')\n  66:32  warning  A `require()` style import is forbidden                                                                @typescript-eslint/no-require-imports\n\n✖ 7 problems (0 errors, 7 warnings)\n  0 errors and 5 warnings potentially fixable with the `--fix` option."
+      "detail": "npm run lint\n> dmi-react-native-starter@1.0.0 lint\n> eslint ."
     },
     {
       "id": "toolchain_3",
@@ -49,7 +49,7 @@
     {
       "id": "toolchain_4",
       "status": "pass",
-      "detail": "npm run test:smoke\n> dmi-react-native-starter@1.0.0 test:smoke\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx\n\n\nPASS course-tests/smoke.test.tsx\n  √ renders the reproducible baseline and resolves backend state (129 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       1 passed, 1 total\nSnapshots:   0 total\nTime:        1.652 s, estimated 2 s\nRan all test suites matching /course-tests\\\\smoke.test.tsx/i."
+      "detail": "npm run test:smoke\n> dmi-react-native-starter@1.0.0 test:smoke\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx\n\n\nPASS course-tests/smoke.test.tsx (5.7 s)\n  √ renders the reproducible baseline and resolves backend state (597 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       1 passed, 1 total\nSnapshots:   0 total\nTime:        7.443 s\nRan all test suites matching /course-tests\\\\smoke.test.tsx/i."
     },
     {
       "id": "toolchain_5",

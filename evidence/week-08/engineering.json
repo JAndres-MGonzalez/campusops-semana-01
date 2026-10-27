@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "week": 8,
-  "commitSha": "72f109075f3f5cee8dcc292d02ee1ec0b41d1296",
-  "decision": "Combinar cambios independientes y conservar la intención local cuando existe un conflicto con la asignación remota. operationId debe mantenerse durante cada reintento y la cola sólo debe retirar lo confirmado. Kevin agregó AsyncStorage y su inicialización, e Ismael documentó la reproducción de los casos. La revisión actual conserva los tres fallos de cola y comparación JSON y detecta cinco casos detenidos por falta del módulo nativo en Jest. El flujo de envío y confirmación de la cola desde la app aún no está integrado.",
+  "commitSha": "994715918e5232eb3d3d7c9c701965b34eedf7ce",
+  "decision": "Comparar contra una base común, combinar campos compatibles y conservar la intención local cuando exista conflicto con una reasignación. La cola conserva la primera operación y serializa escrituras; la comparación JSON canónica evita falsos conflictos. El outbox de creaciones reutiliza operationId y sólo retira lo confirmado. La corrección supera los ocho fallos anteriores, pero no admite enviar el inicio de atención del técnico ni integra su conflicto con una reasignación. Las pruebas no acreditan cerrar y volver a abrir la app nativa.",
   "alternatives": [
     "Última escritura gana: es más simple, pero puede borrar el trabajo local o imponer una asignación antigua.",
     "Detener toda sincronización ante cualquier diferencia: conserva datos, pero impide combinar cambios que son compatibles.",
     "Combinar por campo y mantener los conflictos pendientes: conserva los cambios independientes y permite revisar una reasignación sin perder la intención local."
   ],
-  "tradeoff": "La combinación por campo evita perder cambios compatibles, pero requiere guardar la base y resolver conflictos. AsyncStorage permite almacenamiento duradero cuando el módulo nativo está disponible; en Jest debe usarse un doble explícito y comprobar por separado el dispositivo. La identidad estable sólo evita efectos repetidos si la cola conserva la operación original y el servidor confirma la misma clave. Quedan por resolver la coordinación de escrituras y el envío integrado.",
+  "tradeoff": "El candado y la comparación canónica agregan coordinación y procesamiento, pero conservan operaciones y evitan conflictos falsos. El sustituto de AsyncStorage hace repetibles las pruebas de lógica, aunque obliga a verificar el almacenamiento nativo por separado. El envío de creaciones ya conserva lo no confirmado; extenderlo a acciones de técnico requiere respetar versión base, permisos y asignación vigente.",
   "requirementIds": [
     "AC-01",
     "AC-02",
@@ -18,34 +18,29 @@
   ],
   "verification": [
     {
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts",
-      "result": "64 pruebas aprobadas y 8 fallidas: tres casos de cola/comparación JSON y cinco del núcleo que se detienen con Native module is null.",
-      "evidence": "evidence/week-08/logs/integration-tests-after-update.log"
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "result": "93 pruebas aprobadas y 1 fallida en 16 suites. Las ocho fallas anteriores están corregidas. Falla el envío de atención del técnico porque el outbox sólo admite creaciones.",
+      "evidence": "evidence/week-08/logs/integration-tests-outbox-update.log"
     },
     {
       "command": "make feedback",
-      "result": "Código 0: tipos, lint con siete advertencias y sin errores, smoke, auditoría con umbral critical y exportación Android de Expo.",
-      "evidence": "evidence/week-08/logs/feedback-after-update.log"
+      "result": "Código 0: tipos, lint sin errores ni advertencias, smoke, auditoría con umbral critical y exportación Android de Expo.",
+      "evidence": "evidence/week-08/logs/feedback-outbox-update.log"
     },
     {
       "command": "npm.cmd run check:architecture",
-      "result": "Código 0; 57 dependencias dentro de límites.",
-      "evidence": "evidence/week-08/logs/architecture-after-update.log"
-    },
-    {
-      "command": "node -e \"console.log(require.resolve('@react-native-async-storage/async-storage')); console.log('AsyncStorage instalado: ' + require('@react-native-async-storage/async-storage/package.json').version)\"",
-      "result": "Código 0; AsyncStorage 3.1.1 está instalado. No acredita el cierre y la reapertura de una app nativa.",
-      "evidence": "evidence/week-08/logs/storage-module-after-update.log"
+      "result": "Código 0; 72 dependencias internas dentro de límites.",
+      "evidence": "evidence/week-08/logs/architecture-outbox-update.log"
     },
     {
       "command": "make verify-week-08",
-      "result": "Código 0: verificación general y autoevaluación del backend aprobadas.",
-      "evidence": "evidence/week-08/logs/verify-after-update.log"
+      "result": "Código 0: comprobaciones generales, smoke y contratos del backend aprobados.",
+      "evidence": "evidence/week-08/logs/verify-outbox-update.log"
     },
     {
       "command": "make public-test-week-08",
-      "result": "Código 0: tres pruebas públicas y estructura de los reportes y tres registros individuales aprobados. El alcance público no incluye los ocho fallos de la revisión ampliada.",
-      "evidence": "evidence/week-08/logs/public-tests-after-update.log"
+      "result": "Código 0: estructura de reportes y tres registros individuales válidos; las tres pruebas públicas pasan. No cubren el inicio de atención desde el outbox ni el reinicio nativo.",
+      "evidence": "evidence/week-08/logs/public-tests-outbox-update.log"
     }
   ]
 }

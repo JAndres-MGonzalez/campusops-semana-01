@@ -9,7 +9,9 @@
       "commitShas": [
         "e1445e4a77697c2b22f351026603acca2c90e540",
         "c61f7018748bf7c5d92bac7ef7d41ef3b3bd81e4",
-        "e60ba22931ee57a51f7333716b65bab04aebda21"
+        "e60ba22931ee57a51f7333716b65bab04aebda21",
+        "4c94d92e357e8a68e8eff657460cce68d475e1d4",
+        "29c3aeb74d9b214cb2871a8970a77bbba6b8d914"
       ],
       "files": [
         "src/infrastructure/persistence/schema.ts",
@@ -25,17 +27,23 @@
         "docs/sync-policy.md",
         "App.tsx",
         "package.json",
-        "package-lock.json"
+        "package-lock.json",
+        "src/infrastructure/sync/outbox.ts",
+        "src/infrastructure/sync/canonical-json.ts",
+        "jest.setup.js"
       ],
       "tests": [
         "course-tests/public/week-08.test.ts",
-        "src/infrastructure/persistence/week-08-evidence.test.ts"
+        "src/infrastructure/persistence/week-08-evidence.test.ts",
+        "src/infrastructure/persistence/queue.test.ts",
+        "src/infrastructure/sync/resolve.test.ts",
+        "src/infrastructure/sync/outbox.test.ts"
       ],
       "reviews": [],
       "prediction": "La cola persistente conserva operationId y contenido al reconstruir la instancia, la migracion fallida revierte a la version anterior sin dejar esquema parcial y resolveSync/deduplicateOperations pasan el contrato publico.",
       "command": "npx.cmd jest --ci --runInBand course-tests/public/week-08.test.ts && npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts && npm.cmd run typecheck",
-      "observedResult": "Su versión anterior registra 3 públicas y 5 del núcleo aprobadas. En la integración actual las públicas pasan; las 5 del núcleo fallan al preparar AsyncStorage en Jest. Los resultados actuales están en evidence/week-08/logs/integration-tests-after-update.log.",
-      "explanation": "Implementó el esquema, la cola y el migrador, delegó las funciones de evaluación en el núcleo real y agregó AsyncStorage 3.1.1 con initializePersistence desde App.tsx. Persisten fallos de concurrencia y conservación de la primera operación; aún falta conectar el envío y confirmación de la cola."
+      "observedResult": "Su reporte registra 27 pruebas del núcleo/sincronización/smoke y 3 públicas aprobadas. La integración actual confirma las correcciones de cola, comparación JSON y Jest. La prueba adicional del inicio de atención no llega al envío porque el outbox sólo admite creaciones.",
+      "explanation": "Implementó el núcleo persistente, el candado de cola y JSON canónico, configuró el sustituto de AsyncStorage y conectó el outbox de creación con App.tsx. Falta extender el flujo a acciones del técnico y comprobar el reinicio real y la reasignación durante sincronización."
     },
     {
       "studentId": "3523110741",
@@ -66,24 +74,26 @@
       "name": "Juan Andrés Medina González",
       "commitShas": [
         "13175155addec4bf6435d199409d107d3c0a9264",
-        "72f109075f3f5cee8dcc292d02ee1ec0b41d1296"
+        "994715918e5232eb3d3d7c9c701965b34eedf7ce"
       ],
       "files": [
         "docs/data-model.md",
         "docs/sync-policy.md",
         ".github/workflows/week-08-persistencia-sincronizacion-feedback.yml",
-        "evidence/week-08/review.test.ts"
+        "evidence/week-08/review.test.ts",
+        "evidence/week-08/technician-sync.test.ts"
       ],
       "tests": [
-        "evidence/week-08/review.test.ts"
+        "evidence/week-08/review.test.ts",
+        "evidence/week-08/technician-sync.test.ts"
       ],
       "reviews": [
         "evidence/week-08/reports/3523110131.md"
       ],
       "prediction": "La cola debe conservar su primer registro y dos operaciones simultáneas; el mismo contenido JSON no debe generar conflicto por el orden de sus propiedades.",
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts",
-      "observedResult": "64 pruebas aprobadas y 8 fallidas después de integrar ambas ramas. Tres fallos de cola/comparación JSON persisten y cinco casos del núcleo fallan al preparar el módulo nativo de AsyncStorage. make feedback y arquitectura terminan con código 0. make verify-week-08 y make public-test-week-08 pasan; sus pruebas públicas no cubren los ocho fallos de la revisión ampliada.",
-      "explanation": "Integré las actualizaciones de Kevin e Ismael conservando sus SHAs, consolidé los documentos y el registro de los tres integrantes y repetí las comprobaciones. Diferencié instalar e inicializar AsyncStorage de completar el flujo offline y dejé evidencia de los fallos pendientes."
+      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
+      "observedResult": "93 pruebas aprobadas y 1 fallida. Las tres pruebas originales de revisión y los cinco casos antes bloqueados por AsyncStorage ya pasan. Falla el envío de atención del técnico. make feedback y arquitectura pasan; los tres registros individuales conservan commits reales.",
+      "explanation": "Integré las correcciones conservando los SHAs del equipo y consolidé los documentos. Repetí los casos antes fallidos y añadí una comprobación del inicio de atención que exige el enunciado. La prueba distingue crear una incidencia sin conexión de atender una existente; también registré el límite del reinicio simulado."
     }
   ]
 }

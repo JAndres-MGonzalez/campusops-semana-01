@@ -11,7 +11,8 @@
         "c61f7018748bf7c5d92bac7ef7d41ef3b3bd81e4",
         "e60ba22931ee57a51f7333716b65bab04aebda21",
         "4c94d92e357e8a68e8eff657460cce68d475e1d4",
-        "29c3aeb74d9b214cb2871a8970a77bbba6b8d914"
+        "29c3aeb74d9b214cb2871a8970a77bbba6b8d914",
+        "36021063e87ab0a26d67266dbd5f934777c0fb32"
       ],
       "files": [
         "src/infrastructure/persistence/schema.ts",
@@ -30,20 +31,30 @@
         "package-lock.json",
         "src/infrastructure/sync/outbox.ts",
         "src/infrastructure/sync/canonical-json.ts",
-        "jest.setup.js"
+        "jest.setup.js",
+        "src/infrastructure/sync/technician-start.ts",
+        "src/infrastructure/sync/technician-start.test.ts",
+        "src/infrastructure/incidents/http-incident-repository.ts",
+        "src/infrastructure/incidents/http-incident-repository.test.ts",
+        "src/ui/IncidentApp.tsx",
+        "src/ui/screens/IncidentDetailScreen.tsx",
+        "src/domain/incident.ts"
       ],
       "tests": [
         "course-tests/public/week-08.test.ts",
         "src/infrastructure/persistence/week-08-evidence.test.ts",
         "src/infrastructure/persistence/queue.test.ts",
         "src/infrastructure/sync/resolve.test.ts",
-        "src/infrastructure/sync/outbox.test.ts"
+        "src/infrastructure/sync/outbox.test.ts",
+        "src/infrastructure/sync/technician-start.test.ts",
+        "src/infrastructure/incidents/http-incident-repository.test.ts",
+        "evidence/week-08/technician-sync.test.ts"
       ],
       "reviews": [],
       "prediction": "La cola persistente conserva operationId y contenido al reconstruir la instancia, la migracion fallida revierte a la version anterior sin dejar esquema parcial y resolveSync/deduplicateOperations pasan el contrato publico.",
       "command": "npx.cmd jest --ci --runInBand course-tests/public/week-08.test.ts && npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts && npm.cmd run typecheck",
-      "observedResult": "Su reporte registra 27 pruebas del núcleo/sincronización/smoke y 3 públicas aprobadas. La integración actual confirma las correcciones de cola, comparación JSON y Jest. La prueba adicional del inicio de atención no llega al envío porque el outbox sólo admite creaciones.",
-      "explanation": "Implementó el núcleo persistente, el candado de cola y JSON canónico, configuró el sustituto de AsyncStorage y conectó el outbox de creación con App.tsx. Falta extender el flujo a acciones del técnico y comprobar el reinicio real y la reasignación durante sincronización."
+      "observedResult": "Las 41 pruebas de persistencia y sincronización y las 3 del repositorio HTTP pasan, incluida technician-sync.test.ts de la revisión. El inicio de atención del técnico se encola con operationId, nota y referencia de fotografía, y un conflicto de reasignación lo conserva failed sin sobrescribir la asignación. La captura nativa de cerrar y abrir la app quedó pendiente.",
+      "explanation": "Generalicé el outbox a create_incident y start, añadí submitTechnicianStart con la decisión de reasignación/transición/ya aplicado, expuse versión y técnico asignado en el repositorio y agregué la UI de inicio con nota y referencia de fotografía. Actualicé las pruebas de outbox, evidencia y repositorio; la verificación nativa del reinicio no se completó y se declara como pendiente."
     },
     {
       "studentId": "3523110741",

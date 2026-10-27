@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "week": 8,
-  "commitSha": "994715918e5232eb3d3d7c9c701965b34eedf7ce",
-  "generatedAt": "2026-10-27T04:05:55.534403+00:00",
+  "commitSha": "36021063e87ab0a26d67266dbd5f934777c0fb32",
+  "generatedAt": "2026-10-27T05:06:10.747Z",
   "checks": [
     {
       "id": "queue-recreated-in-process",
@@ -58,7 +58,7 @@
       "status": "pass",
       "scenarioType": "nominal",
       "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "Las 61 pruebas anteriores de sesión, autorización y cliente HTTP pasan. evidence/week-08/logs/integration-tests-outbox-update.log"
+      "evidence": "Las 33 pruebas de sesión, autorización y cliente HTTP siguen pasando, y las 3 del repositorio HTTP (versión, técnico asignado y start) pasan por separado. evidence/week-08/logs/session-regression-start.log y evidence/week-08/logs/http-repository-start.log"
     },
     {
       "id": "queue-first-record",
@@ -86,7 +86,7 @@
       "status": "pass",
       "scenarioType": "nominal",
       "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "Las ocho pruebas de outbox pasan: creaciones pendientes, confirmación, conservación ante error/null, reintento con la misma identidad y un solo flush simultáneo. Usan memoria y respuestas simuladas. evidence/week-08/logs/integration-tests-outbox-update.log"
+      "evidence": "Las once pruebas de outbox pasan: creaciones e inicios pendientes, confirmación, conservación ante error/null, conflicto de reasignación, reintento con la misma identidad y un solo flush simultáneo. Usan memoria y respuestas simuladas. evidence/week-08/logs/integration-tests-start.log"
     },
     {
       "id": "native-storage-jest-substitute",
@@ -97,17 +97,17 @@
     },
     {
       "id": "technician-start-submission",
-      "status": "fail",
+      "status": "pass",
       "scenarioType": "failure",
       "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "Una operación válida con payload.action=start y actor technician-1 no llega al callback de envío: submitted=[] en lugar de [op-start-technician-001]. El outbox sólo acepta create_incident y la marca como fallida. evidence/week-08/logs/integration-tests-outbox-update.log"
+      "evidence": "El payload start ya llega al envío con su operationId, nota y referencia de fotografía, y se retira sólo si el servidor confirma. Un conflicto de reasignación lo deja failed en la cola sin sobrescribir la asignación vigente. Pasan evidence/week-08/technician-sync.test.ts, src/infrastructure/sync/technician-start.test.ts y src/infrastructure/sync/outbox.test.ts. evidence/week-08/logs/integration-tests-start.log"
     },
     {
       "id": "native-restart-evidence",
       "status": "fail",
       "scenarioType": "boundary",
       "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "Las pruebas reconstruyen la cola sobre memoria o el sustituto de AsyncStorage en el mismo proceso. Falta evidencia de cerrar y abrir la app real conservando operación, notas y referencias de fotografías. evidence/week-08/logs/integration-tests-outbox-update.log"
+      "evidence": "Pendiente: no se completó la captura en la app nativa de cerrar y abrir el proceso. La cola demuestra la recuperación al recrear instancias sobre el mismo almacenamiento y con el sustituto oficial de AsyncStorage, pero eso no acredita por sí solo el reinicio real ni conservar la referencia de fotografía en el dispositivo. evidence/week-08/logs/integration-tests-start.log"
     }
   ]
 }

@@ -8,7 +8,8 @@
       "name": "Kevin Armando Montalvo Marcial",
       "commitShas": [
         "e1445e4a77697c2b22f351026603acca2c90e540",
-        "c61f7018748bf7c5d92bac7ef7d41ef3b3bd81e4"
+        "c61f7018748bf7c5d92bac7ef7d41ef3b3bd81e4",
+        "e60ba22931ee57a51f7333716b65bab04aebda21"
       ],
       "files": [
         "src/infrastructure/persistence/schema.ts",
@@ -21,7 +22,10 @@
         "src/course-evaluation/index.ts",
         "src/infrastructure/persistence/week-08-evidence.test.ts",
         "docs/data-model.md",
-        "docs/sync-policy.md"
+        "docs/sync-policy.md",
+        "App.tsx",
+        "package.json",
+        "package-lock.json"
       ],
       "tests": [
         "course-tests/public/week-08.test.ts",
@@ -30,26 +34,39 @@
       "reviews": [],
       "prediction": "La cola persistente conserva operationId y contenido al reconstruir la instancia, la migracion fallida revierte a la version anterior sin dejar esquema parcial y resolveSync/deduplicateOperations pasan el contrato publico.",
       "command": "npx.cmd jest --ci --runInBand course-tests/public/week-08.test.ts && npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts && npm.cmd run typecheck",
-      "observedResult": "week-08.test.ts 3/3 PASS; week-08-evidence.test.ts 5/5 PASS; typecheck sin errores.",
-      "explanation": "Implemente el esquema versionado (SCHEMA_VERSION=1), el puerto de almacenamiento con respaldo en AsyncStorage, la cola persistente con identidad estable y el migrador con snapshot y rollback. Delegue resolveSync y deduplicateOperations desde src/course-evaluation/index.ts a logica real en src/infrastructure/sync, sin tocar las firmas ni el modulo de sesion de la semana 6."
+      "observedResult": "Su versión anterior registra 3 públicas y 5 del núcleo aprobadas. En la integración actual las públicas pasan; las 5 del núcleo fallan al preparar AsyncStorage en Jest. Los resultados actuales están en evidence/week-08/logs/integration-tests-after-update.log.",
+      "explanation": "Implementó el esquema, la cola y el migrador, delegó las funciones de evaluación en el núcleo real y agregó AsyncStorage 3.1.1 con initializePersistence desde App.tsx. Persisten fallos de concurrencia y conservación de la primera operación; aún falta conectar el envío y confirmación de la cola."
     },
     {
       "studentId": "3523110741",
       "name": "Jose Ismael Montalvo Lopez",
-      "commitShas": [],
-      "files": [],
-      "tests": [],
-      "reviews": [],
-      "prediction": "Pendiente de evidencia propia de semana 8.",
-      "command": "Pendiente de comando registrado por el integrante.",
-      "observedResult": "No hay rama, commit ni reporte de semana 8 de este integrante en la revisión actual.",
-      "explanation": "No se reutilizan los commits de semana 6 para acreditar una aportación de semana 8."
+      "commitShas": [
+        "0e86020382ad547e296356530d57e36cdced69fc",
+        "02e3903d4a7b8d735e30f5cd737a1cf2b6fad76a"
+      ],
+      "files": [
+        "docs/sync-policy.md",
+        "reports/week-08/migration-tests.json",
+        "evidence/week-08/reports/3523110741.md"
+      ],
+      "tests": [
+        "src/infrastructure/persistence/week-08-evidence.test.ts",
+        "course-tests/public/week-08.test.ts"
+      ],
+      "reviews": [
+        "evidence/week-08/reports/3523110741.md"
+      ],
+      "prediction": "La cola conserva los datos al recrearla sobre el mismo almacenamiento; la falla de migración revierte los datos y la reasignación informa conflicto sin modificar las entradas.",
+      "command": "npm.cmd test -- --ci --runInBand --verbose src/infrastructure/persistence/week-08-evidence.test.ts",
+      "observedResult": "Su reporte sobre 0e86020382ad547e296356530d57e36cdced69fc registra 5 de 5 casos del núcleo y 3 de 3 públicas aprobadas. Declara reinicio simulado en memoria y falta de comprobación de retiro confirmado; la actualización posterior de AsyncStorage presenta una regresión en Jest.",
+      "explanation": "Reprodujo los cinco casos, registró estados de migración y rollback, documentó los límites del reinicio simulado y señaló que enqueue reemplaza la primera operación y que no se había probado el retiro de la cola sólo con confirmación."
     },
     {
       "studentId": "3523110131",
       "name": "Juan Andrés Medina González",
       "commitShas": [
-        "13175155addec4bf6435d199409d107d3c0a9264"
+        "13175155addec4bf6435d199409d107d3c0a9264",
+        "72f109075f3f5cee8dcc292d02ee1ec0b41d1296"
       ],
       "files": [
         "docs/data-model.md",
@@ -65,8 +82,8 @@
       ],
       "prediction": "La cola debe conservar su primer registro y dos operaciones simultáneas; el mismo contenido JSON no debe generar conflicto por el orden de sus propiedades.",
       "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts",
-      "observedResult": "69 pruebas aprobadas y 3 fallidas. Pasaron 3 públicas de semana 8, 5 del núcleo y 61 anteriores. Fallaron los 3 casos de revisión de cola y comparación JSON. make feedback y arquitectura terminaron con código 0.",
-      "explanation": "Integré la parte A sin cambiar sus SHAs, revisé el modelo y la política contra el código y agregué casos que reproducen pérdidas de cola y un conflicto falso. Separé la prueba en memoria del reinicio real y registré los límites antes de fijar una versión final."
+      "observedResult": "64 pruebas aprobadas y 8 fallidas después de integrar ambas ramas. Tres fallos de cola/comparación JSON persisten y cinco casos del núcleo fallan al preparar el módulo nativo de AsyncStorage. make feedback y arquitectura terminan con código 0. make verify-week-08 y make public-test-week-08 pasan; sus pruebas públicas no cubren los ocho fallos de la revisión ampliada.",
+      "explanation": "Integré las actualizaciones de Kevin e Ismael conservando sus SHAs, consolidé los documentos y el registro de los tres integrantes y repetí las comprobaciones. Diferencié instalar e inicializar AsyncStorage de completar el flujo offline y dejé evidencia de los fallos pendientes."
     }
   ]
 }

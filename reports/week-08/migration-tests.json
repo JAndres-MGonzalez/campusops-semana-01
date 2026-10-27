@@ -1,99 +1,99 @@
 {
   "schemaVersion": 1,
   "week": 8,
-  "commitSha": "13175155addec4bf6435d199409d107d3c0a9264",
-  "generatedAt": "2026-10-26T15:41:05.456323+00:00",
+  "commitSha": "72f109075f3f5cee8dcc292d02ee1ec0b41d1296",
+  "generatedAt": "2026-10-27T02:13:11.424878+00:00",
   "checks": [
     {
       "id": "queue-recreated-in-process",
-      "status": "pass",
+      "status": "fail",
       "scenarioType": "boundary",
       "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts",
-      "evidence": "La prueba de Kevin recupera la misma operación y contenido al crear otra cola sobre el mismo MemoryStorage. Es una prueba dentro del proceso, no de reinicio real. evidence/week-08/logs/integration-tests.log"
+      "evidence": "La preparación de la suite del núcleo falla con AsyncStorageError: Native module is null, cannot access legacy storage. Este caso no pudo ejecutarse en la versión actual. evidence/week-08/logs/integration-tests-after-update.log"
     },
     {
       "id": "migration-success",
-      "status": "pass",
+      "status": "fail",
       "scenarioType": "nominal",
       "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts",
-      "evidence": "Tras el rollback, migrate() completa el esquema 1 y conserva una incidencia y una operación. evidence/week-08/logs/integration-tests.log"
+      "evidence": "La preparación de la suite del núcleo falla con AsyncStorageError: Native module is null, cannot access legacy storage. Este caso no pudo ejecutarse en la versión actual. evidence/week-08/logs/integration-tests-after-update.log"
     },
     {
       "id": "migration-failure-rollback",
-      "status": "pass",
+      "status": "fail",
       "scenarioType": "failure",
       "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts",
-      "evidence": "La falla controlada devuelve success=false y rolledBack=true; conserva versión 0, incidencia y cola. La prueba posterior recupera la versión 1. evidence/week-08/logs/integration-tests.log"
+      "evidence": "La preparación de la suite del núcleo falla con AsyncStorageError: Native module is null, cannot access legacy storage. Este caso no pudo ejecutarse en la versión actual. evidence/week-08/logs/integration-tests-after-update.log"
     },
     {
       "id": "reassignment-pure-conflict",
       "status": "pass",
       "scenarioType": "boundary",
       "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts",
-      "evidence": "El inicio local y la reasignación remota devuelven conflicto en work sin mutar base, local ni remote. No acredita su resolución desde la app. evidence/week-08/logs/integration-tests.log"
+      "evidence": "La primera prueba pública devuelve conflicto en work sin mutar las entradas. La aplicación todavía no envía la cola al backend. evidence/week-08/logs/integration-tests-after-update.log"
     },
     {
       "id": "independent-changes",
       "status": "pass",
       "scenarioType": "nominal",
       "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts",
-      "evidence": "Se combinan title=Local y priority=2 desde una base común, sin modificar las entradas. evidence/week-08/logs/integration-tests.log"
+      "evidence": "La segunda prueba pública combina title=Local y priority=2 desde una base común. evidence/week-08/logs/integration-tests-after-update.log"
     },
     {
       "id": "deduplicate-first-occurrence",
       "status": "pass",
       "scenarioType": "boundary",
       "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts",
-      "evidence": "La función de deduplicación conserva el primer elemento por operationId; no demuestra un solo efecto en el servidor. evidence/week-08/logs/integration-tests.log"
+      "evidence": "La tercera prueba pública reduce las operaciones repetidas a dos elementos. La prueba del núcleo con contenido diferente se detiene en la preparación del almacenamiento nativo. evidence/week-08/logs/integration-tests-after-update.log"
     },
     {
       "id": "public-week-08",
       "status": "pass",
       "scenarioType": "nominal",
       "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts",
-      "evidence": "Las tres pruebas públicas de semana 8 pasan. evidence/week-08/logs/integration-tests.log"
+      "evidence": "Las tres pruebas públicas de semana 8 pasan. evidence/week-08/logs/integration-tests-after-update.log"
     },
     {
       "id": "session-and-http-regression",
       "status": "pass",
       "scenarioType": "nominal",
       "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts",
-      "evidence": "Las nueve suites previas de sesión, permisos, concurrencia y cliente HTTP pasan: 61 pruebas. evidence/week-08/logs/integration-tests.log"
+      "evidence": "Las nueve suites previas de sesión, permisos, concurrencia y cliente HTTP pasan: 61 pruebas. evidence/week-08/logs/integration-tests-after-update.log"
     },
     {
       "id": "queue-first-record",
       "status": "fail",
       "scenarioType": "boundary",
       "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts",
-      "evidence": "Reencolar op-review-001 con createdAt distinto reemplaza el registro inicial: se obtiene 1793030400001 en lugar de 1793030400000. evidence/week-08/logs/integration-tests.log"
+      "evidence": "Reencolar op-review-001 con createdAt distinto reemplaza el registro inicial: se obtiene 1793030400001 en lugar de 1793030400000. evidence/week-08/logs/integration-tests-after-update.log"
     },
     {
       "id": "queue-concurrent-writes",
       "status": "fail",
       "scenarioType": "failure",
       "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts",
-      "evidence": "Dos enqueue simultáneos dejan sólo op-review-002; se pierde op-review-001. evidence/week-08/logs/integration-tests.log"
+      "evidence": "Dos enqueue simultáneos dejan sólo op-review-002; se pierde op-review-001. evidence/week-08/logs/integration-tests-after-update.log"
     },
     {
       "id": "json-content-order",
       "status": "fail",
       "scenarioType": "boundary",
       "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts",
-      "evidence": "Propiedades iguales en distinto orden producen conflict en note en vez de merged. evidence/week-08/logs/integration-tests.log"
+      "evidence": "Propiedades iguales en distinto orden producen conflict en note en vez de merged. evidence/week-08/logs/integration-tests-after-update.log"
     },
     {
       "id": "durable-storage-module",
-      "status": "fail",
-      "scenarioType": "failure",
-      "command": "node -e \"require.resolve('@react-native-async-storage/async-storage')\"",
-      "evidence": "require.resolve termina con código 1 y MODULE_NOT_FOUND. No está instalado AsyncStorage y el respaldo del código es memoria. Ver evidence/week-08/logs/storage-module.log."
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "node -e \"console.log(require.resolve('@react-native-async-storage/async-storage')); console.log('AsyncStorage instalado: ' + require('@react-native-async-storage/async-storage/package.json').version)\"",
+      "evidence": "Código 0: módulo instalado, versión 3.1.1. App.tsx llama a initializePersistence. La resolución del módulo no demuestra reinicio real. Ver evidence/week-08/logs/storage-module-after-update.log."
     },
     {
       "id": "offline-flow-in-app",
       "status": "fail",
       "scenarioType": "failure",
-      "command": "rg -n 'migrate|pendingQueue|createPersistentQueue|resolveSync|/actions' App.tsx src/application src/ui",
-      "evidence": "La búsqueda no encuentra llamadas a migración, cola o sincronización ni envío de acciones en App.tsx, src/application y src/ui. No hay evidencia de cierre/reapertura, reasignación y confirmación con la cola integrada. Ver evidence/week-08/logs/app-integration.log y docs/sync-policy.md."
+      "command": "rg -n 'pendingQueue|createPersistentQueue|resolveSync|/actions' App.tsx src/application src/ui",
+      "evidence": "Sin coincidencias, código 1. App.tsx inicializa la persistencia, pero los casos de uso no encolan ni envían acciones pendientes. No hay prueba del flujo completo de reinicio, reasignación y confirmación. Ver evidence/week-08/logs/app-integration-after-update.log y docs/sync-policy.md."
     }
   ]
 }

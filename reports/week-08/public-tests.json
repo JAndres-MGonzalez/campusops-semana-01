@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "week": 8,
   "mode": "public",
-  "commitSha": "13175155addec4bf6435d199409d107d3c0a9264",
-  "evaluatedAt": "2026-10-26T15:42:02.840160+00:00",
-  "status": "fail",
+  "commitSha": "72f109075f3f5cee8dcc292d02ee1ec0b41d1296",
+  "evaluatedAt": "2026-10-27T02:13:52.185206+00:00",
+  "status": "pass",
   "checks": [
     {
       "id": "base_files",
@@ -39,7 +39,7 @@
     {
       "id": "schema:reports/week-08/migration-tests.json",
       "status": "pass",
-      "detail": "13 checks indexed, 9 boundary/failure; report evaluates HEAD"
+      "detail": "13 checks indexed, 8 boundary/failure; report evaluates HEAD"
     },
     {
       "id": "schema:evidence/week-08/engineering.json",
@@ -48,8 +48,8 @@
     },
     {
       "id": "schema:evidence/week-08/individual.json",
-      "status": "fail",
-      "detail": "3523110741: at least one authored commit SHA is required"
+      "status": "pass",
+      "detail": "three individual evidence records found"
     },
     {
       "id": "toolchain_1",
@@ -59,7 +59,7 @@
     {
       "id": "toolchain_2",
       "status": "pass",
-      "detail": "npm run lint\n> dmi-react-native-starter@1.0.0 lint\n> eslint .\n\n\nC:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\src\\infrastructure\\persistence\\index.ts\n  14:1  warning  Import in body of module; reorder to top  import/first\n  15:1  warning  Import in body of module; reorder to top  import/first\n\nC:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\src\\infrastructure\\persistence\\storage.ts\n  39:26  warning  A `require()` style import is forbidden  @typescript-eslint/no-require-imports\n\n✖ 3 problems (0 errors, 3 warnings)\n  0 errors and 2 warnings potentially fixable with the `--fix` option."
+      "detail": "npm run lint\n> dmi-react-native-starter@1.0.0 lint\n> eslint .\n\n\nC:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\src\\infrastructure\\persistence\\index.ts\n  14:1  warning  Import in body of module; reorder to top  import/first\n  15:1  warning  Import in body of module; reorder to top  import/first\n  16:1  warning  Import in body of module; reorder to top  import/first\n\nC:\\Users\\Ra1zeR\\Documents\\ChatGPT\\Semana 01 — Diagnóstico reproducible y definición técnica\\src\\infrastructure\\persistence\\storage.ts\n  39:5   warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-var-requires')\n  40:32  warning  A `require()` style import is forbidden                                                                @typescript-eslint/no-require-imports\n  65:5   warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-var-requires')\n  66:32  warning  A `require()` style import is forbidden                                                                @typescript-eslint/no-require-imports\n\n✖ 7 problems (0 errors, 7 warnings)\n  0 errors and 5 warnings potentially fixable with the `--fix` option."
     },
     {
       "id": "toolchain_3",
@@ -69,7 +69,7 @@
     {
       "id": "toolchain_4",
       "status": "pass",
-      "detail": "npm test -- --ci --runInBand course-tests/public/week-08.test.ts\n> dmi-react-native-starter@1.0.0 test\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-08.test.ts\n\n\nPASS course-tests/public/week-08.test.ts\n  √ CampusOps detects offline start versus remote reassignment without mutating either record (2 ms)\n  √ merges independent field changes and reports same-field conflict (8 ms)\n  √ deduplicates a replayed operation by stable identity (1 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       3 passed, 3 total\nSnapshots:   0 total\nTime:        0.996 s, estimated 1 s\nRan all test suites matching /course-tests\\\\public\\\\week-08.test.ts/i."
+      "detail": "npm test -- --ci --runInBand course-tests/public/week-08.test.ts\n> dmi-react-native-starter@1.0.0 test\n> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-08.test.ts\n\n\nPASS course-tests/public/week-08.test.ts\n  √ CampusOps detects offline start versus remote reassignment without mutating either record (4 ms)\n  √ merges independent field changes and reports same-field conflict (9 ms)\n  √ deduplicates a replayed operation by stable identity\n\nTest Suites: 1 passed, 1 total\nTests:       3 passed, 3 total\nSnapshots:   0 total\nTime:        1.171 s\nRan all test suites matching /course-tests\\\\public\\\\week-08.test.ts/i."
     }
   ]
 }

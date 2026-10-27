@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "week": 8,
-  "commitSha": "13175155addec4bf6435d199409d107d3c0a9264",
-  "decision": "Combinar cambios independientes y conservar la intención local cuando existe un conflicto con la asignación remota. La identidad operationId debe mantenerse durante cada reintento y la cola sólo debe retirar lo confirmado por el servidor. La función de combinación y la deduplicación ya delegan en el núcleo real. La revisión detectó que la cola reemplaza el primer registro, pierde una escritura concurrente y que la comparación JSON confunde el orden de propiedades. La persistencia duradera y el envío desde la app aún no están integrados; esta versión no acredita el flujo completo.",
+  "commitSha": "72f109075f3f5cee8dcc292d02ee1ec0b41d1296",
+  "decision": "Combinar cambios independientes y conservar la intención local cuando existe un conflicto con la asignación remota. operationId debe mantenerse durante cada reintento y la cola sólo debe retirar lo confirmado. Kevin agregó AsyncStorage y su inicialización, e Ismael documentó la reproducción de los casos. La revisión actual conserva los tres fallos de cola y comparación JSON y detecta cinco casos detenidos por falta del módulo nativo en Jest. El flujo de envío y confirmación de la cola desde la app aún no está integrado.",
   "alternatives": [
     "Última escritura gana: es más simple, pero puede borrar el trabajo local o imponer una asignación antigua.",
     "Detener toda sincronización ante cualquier diferencia: conserva datos, pero impide combinar cambios que son compatibles.",
     "Combinar por campo y mantener los conflictos pendientes: conserva los cambios independientes y permite revisar una reasignación sin perder la intención local."
   ],
-  "tradeoff": "La combinación por campo evita perder cambios compatibles, pero requiere guardar la base y resolver los conflictos. Una identidad estable evita efectos repetidos sólo si la cola conserva la operación original y el servidor confirma la misma clave. Hace falta integrar almacenamiento duradero, coordinación de escrituras y confirmación; la memoria y la deduplicación de arreglos no sustituyen esas garantías.",
+  "tradeoff": "La combinación por campo evita perder cambios compatibles, pero requiere guardar la base y resolver conflictos. AsyncStorage permite almacenamiento duradero cuando el módulo nativo está disponible; en Jest debe usarse un doble explícito y comprobar por separado el dispositivo. La identidad estable sólo evita efectos repetidos si la cola conserva la operación original y el servidor confirma la misma clave. Quedan por resolver la coordinación de escrituras y el envío integrado.",
   "requirementIds": [
     "AC-01",
     "AC-02",
@@ -19,33 +19,33 @@
   "verification": [
     {
       "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence/week-08-evidence.test.ts evidence/week-08/review.test.ts",
-      "result": "69 pruebas aprobadas y 3 fallidas en 12 suites; los fallos reproducen reemplazo, pérdida concurrente y conflicto falso por orden JSON.",
-      "evidence": "evidence/week-08/logs/integration-tests.log"
+      "result": "64 pruebas aprobadas y 8 fallidas: tres casos de cola/comparación JSON y cinco del núcleo que se detienen con Native module is null.",
+      "evidence": "evidence/week-08/logs/integration-tests-after-update.log"
     },
     {
       "command": "make feedback",
-      "result": "Código 0: tipos, lint sin errores, smoke, auditoría con umbral critical y exportación Android de Expo. La auditoría informa 10 vulnerabilidades high y no falla con el umbral configurado.",
-      "evidence": "evidence/week-08/logs/feedback.log"
+      "result": "Código 0: tipos, lint con siete advertencias y sin errores, smoke, auditoría con umbral critical y exportación Android de Expo.",
+      "evidence": "evidence/week-08/logs/feedback-after-update.log"
     },
     {
       "command": "npm.cmd run check:architecture",
-      "result": "Código 0; 56 dependencias respetan los límites.",
-      "evidence": "tools/check-boundaries.mjs"
+      "result": "Código 0; 57 dependencias dentro de límites.",
+      "evidence": "evidence/week-08/logs/architecture-after-update.log"
     },
     {
-      "command": "node -e \"require.resolve('@react-native-async-storage/async-storage')\"",
-      "result": "Código 1: MODULE_NOT_FOUND. No acredita persistencia tras reiniciar la app.",
-      "evidence": "evidence/week-08/logs/storage-module.log"
+      "command": "node -e \"console.log(require.resolve('@react-native-async-storage/async-storage')); console.log('AsyncStorage instalado: ' + require('@react-native-async-storage/async-storage/package.json').version)\"",
+      "result": "Código 0; AsyncStorage 3.1.1 está instalado. No acredita el cierre y la reapertura de una app nativa.",
+      "evidence": "evidence/week-08/logs/storage-module-after-update.log"
     },
     {
       "command": "make verify-week-08",
       "result": "Código 0: verificación general y autoevaluación del backend aprobadas.",
-      "evidence": "reports/week-08/verify.json"
+      "evidence": "evidence/week-08/logs/verify-after-update.log"
     },
     {
       "command": "make public-test-week-08",
-      "result": "Código 2 de make: las tres pruebas públicas pasan, pero individual.json falla porque Ismael no tiene un commit propio de semana 8 registrado.",
-      "evidence": "reports/week-08/public-tests.json"
+      "result": "Código 0: tres pruebas públicas y estructura de los reportes y tres registros individuales aprobados. El alcance público no incluye los ocho fallos de la revisión ampliada.",
+      "evidence": "evidence/week-08/logs/public-tests-after-update.log"
     }
   ]
 }

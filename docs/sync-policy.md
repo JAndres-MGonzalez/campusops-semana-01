@@ -68,10 +68,13 @@ antiguo.
 reproducidos y los flujos aún sin comprobar. Las salidas están en
 `evidence/week-08/logs/integration-tests.log`.
 
-Pasaron las tres pruebas públicas de sincronización y los cinco casos del núcleo
-de Kevin. Los tres casos adicionales de revisión fallaron. La deduplicación de un
-arreglo no demuestra por sí sola idempotencia del servidor, y reconstruir un
-objeto de cola en memoria no demuestra persistencia al reiniciar la app.
+En la revisión actual pasan las tres pruebas públicas de sincronización.
+Fallan los tres casos adicionales de revisión y los cinco del núcleo de Kevin;
+estos últimos se detienen al preparar AsyncStorage en Jest sin su módulo nativo.
+Los resultados actuales están en `evidence/week-08/logs/integration-tests-after-update.log`.
+La deduplicación de un arreglo no demuestra idempotencia del servidor, y
+reconstruir un objeto de cola en memoria no demuestra persistencia al reiniciar
+la app.
 
 ## Revisión del equipo
 

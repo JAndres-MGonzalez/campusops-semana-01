@@ -33,7 +33,9 @@ Los errores de inicialización se capturan sin mostrarlos al usuario.
 El respaldo `MemoryStorage` no conserva datos al cerrar el proceso. Instalar el
 adaptador permite usar almacenamiento duradero cuando el módulo nativo está
 disponible, pero no sustituye comprobar el cierre y la reapertura de la app con
-los mismos datos. La prueba de Kevin sigue usando memoria.
+los mismos datos. El caso de reinicio de Kevin crea almacenamiento en memoria;
+la preparación común de sus pruebas usa el adaptador global y actualmente falla
+en Jest porque el módulo nativo no está disponible.
 
 ## Versión de esquema
 
@@ -64,9 +66,12 @@ conservarse y las escrituras necesitan coordinación para no perder cambios.
 3. Preparar los arreglos necesarios y escribir la nueva versión al terminar.
 4. Si ocurre una excepción, intentar restaurar el respaldo y devolver el resultado.
 
-`migrate({ injectFailure: true })` devuelve `success: false` y `rolledBack: true`
-en la prueba controlada; se conserva una incidencia y una operación con versión
-`0`. Un segundo intento sin falla completa la versión `1`.
+Antes de instalar AsyncStorage, la prueba controlada de
+`migrate({ injectFailure: true })` obtenía `success: false` y `rolledBack: true`,
+conservando incidencia, operación y versión `0`. Ismael registra esa ejecución
+en su reporte. En la revisión actual los cinco casos del núcleo se detienen en
+la preparación con `Native module is null`; deben incorporar un doble explícito
+del almacenamiento nativo para volver a comprobar migración y recuperación en Jest.
 
 Las escrituras se hacen por separado. No hay una transacción del almacenamiento
 ni recuperación automática del respaldo al abrir la app después de una

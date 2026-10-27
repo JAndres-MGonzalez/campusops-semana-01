@@ -15,7 +15,10 @@ aparición**, sin mutar las entradas.
 ## Combinar o declarar conflicto
 
 `resolveSync(base, local, remote)` compara campo por campo contra `base` usando
-igualdad por contenido JSON (`JSON.stringify`). Los campos se recorren en orden
+igualdad por contenido JSON **canónica** (`canonicalJson`): las claves de los
+objetos se ordenan de forma recursiva antes de serializar, por lo que reordenar
+propiedades no cuenta como cambio ni produce un falso conflicto. Los arreglos
+siguen siendo ordenados: su orden es contenido. Los campos se recorren en orden
 alfabético, de modo que el reporte sea determinista.
 
 | Situación | Resultado |
@@ -33,6 +36,8 @@ Reglas adicionales:
 - La agrupación de estado y técnico asignado bajo un campo `work` es una decisión
   del contrato de pruebas, no del algoritmo. `resolveSync` es genérico: funciona
   con cualquier campo y cualquier anidamiento representable en JSON.
+- Un campo presente en un lado y ausente en el otro sigue siendo un cambio de
+  contenido; el orden de las claves no lo es.
 
 ## Qué se conserva, qué se combina, qué requiere resolución
 
@@ -66,11 +71,41 @@ evita perder cambios por un error transitorio o por un conflicto no resuelto.
 estado para que la capa de sincronización decida. Un reintento reutiliza el mismo
 `operationId`, por lo que el servidor puede aplicarlo una sola vez.
 
+## Bandeja de salida (outbox) y conexión con la app
+
+`src/infrastructure/sync/outbox.ts` conecta la cola con las acciones reales de la
+pantalla:
+
+1. **Guardar sin conexión** (`saveOffline`). Ante un error de red o timeout, la
+   intención se escribe en la cola persistente con `operationId` propio,
+   `incidentId = local-<operationId>` y payload
+   `{ action: 'create_incident', draft }`. La UI recibe un detalle local
+   (`id = pending-<operationId>`) sin esperar al servidor.
+2. **Reenviar al reconectar** (`flush`). Al iniciar sesión o pulsar
+   «Sincronizar pendientes» se recorre la cola y se envía cada operación con su
+   **mismo** `operationId` como `Idempotency-Key`. El backend deduplica por esa
+   clave: si el intento anterior llegó a aplicarse, no produce un segundo efecto.
+3. **Retirar sólo lo confirmado.** `remove(operationId)` se llama únicamente
+   cuando el envío devolvió el recurso confirmado. Un error, un timeout, una
+   respuesta nula o un conflicto marcan `failed` y dejan la operación en la cola.
+4. **Recuperación al cerrar y abrir.** Al arrancar, `initializePersistence()`
+   migra si hace falta y la app cuenta las operaciones guardadas; si hay alguna,
+   lo informa y queda disponible para el siguiente `flush`. El almacenamiento es
+   AsyncStorage, así que el cierre de la app no borra la cola.
+
+`flush` es *single-flight*: si dos reconexiones lo disparan a la vez, ambas
+esperan la misma ejecución y ninguna operación se envía dos veces. Antes de tocar
+la red se marca `in_flight`; si la app muere a mitad del envío, el reintento usa
+el mismo `operationId` y el servidor lo deduplica.
+
 ## Idempotencia
 
-- `operationId` estable + `enqueue` que reemplaza por clave = una sola entrada por
-  operación, aunque se reencole.
+- `operationId` estable + `enqueue` que **conserva la primera** entrada por clave =
+  una sola operación pendiente por intención, aunque se reencole.
 - `deduplicateOperations` colapsa repeticiones conservando la primera.
+- El `Idempotency-Key` enviado al backend es el mismo `operationId`; el backend
+  responde con el resultado ya aplicado si la clave se repite y con `409` si la
+  misma clave llega con contenido distinto.
 - `payload` y `baseVersion` permiten que el receptor verifique que ya aplicó esa
   operación sin volver a producir el efecto.
 
@@ -78,8 +113,13 @@ estado para que la capa de sincronización decida. Un reintento reutiliza el mis
 
 - `reports/week-08/migration-tests.json` indexa los casos con comando y resultado
   observado: reinicio de cola, migración válida, migración fallida con rollback,
-  conflicto de reasignación, combinación de campos independientes y deduplicación.
+  conflicto de reasignación, combinación de campos independientes, deduplicación,
+  guardados simultáneos con primera intención conservada, orden de claves JSON y
+  outbox (retiro sólo de lo confirmado y reintento con la misma identidad).
 - `src/infrastructure/persistence/week-08-evidence.test.ts` es el ejecutable que
-  respalda esos casos.
+  respalda esos casos (8/8 en verde).
+- `src/infrastructure/persistence/queue.test.ts`,
+  `src/infrastructure/sync/resolve.test.ts` y
+  `src/infrastructure/sync/outbox.test.ts` cubren los escenarios en detalle.
 - `course-tests/public/week-08.test.ts` valida el contrato público de
   `resolveSync` y `deduplicateOperations` (3/3 en verde).

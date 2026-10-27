@@ -16,6 +16,9 @@ equipo; si un elemento no aparece aquí, no forma parte de esta entrega.
 ## Relaciones
 
 - Una **incidencia** (`incidentId`) agrupa cero o más **operaciones pendientes**.
+- Una creación guardada sin conexión usa `incidentId = local-<operationId>` porque
+  la incidencia aún no existe en el servidor; al confirmarse el envío, la
+  operación se retira de la cola.
 - Cada **operación pendiente** referencia a un **autor** (`author`) y declara la
   `baseVersion` de la incidencia sobre la que se construyó.
 - La **versión de esquema** aplica al conjunto `incidencias + cola`; un snapshot
@@ -34,6 +37,13 @@ implementación concreta en este orden:
 El punto deliberado es que la cola nunca vive en el árbol de componentes ni en un
 array de módulo: siempre se lee y escribe a través del puerto, de modo que
 cambiar el medio no obliga a tocar la lógica de cola o de migración.
+
+En Jest no existe el módulo nativo: el adaptador real responde
+`AsyncStorageError: Native module is null`. Para que los casos ejerciten el mismo
+código, `jest.setup.js` registra el mock oficial del paquete
+(`@react-native-async-storage/async-storage/jest`) mediante `setupFilesAfterEnv`.
+Así las pruebas usan un almacenamiento en memoria, pero el camino de producción
+(`createDurableStorage`) y el contrato `PersistenceStorage` no cambian.
 
 ## Versión de esquema
 
@@ -64,8 +74,20 @@ cambiar el medio no obliga a tocar la lógica de cola o de migración.
 sobre el mismo almacenamiento se recuperan los mismos `operationId`, incidentes y
 payloads. Una lista en memoria no cumple el requisito del hito.
 
-`enqueue` es idempotente por construcción: descarta cualquier elemento previo con
-el mismo `operationId` antes de insertar, así que reencolar no duplica.
+**Escrituras atómicas.** Todas las mutaciones de la cola (`enqueue`, `remove`,
+`markInFlight`, `markFailed`, `clear`) se ejecutan bajo un candado ligado al
+almacenamiento (`WeakMap<PersistenceStorage, Promise<void>>`). Lectura, cálculo y
+escritura ocurren en la misma sección crítica, así que dos guardados simultáneos
+parten de snapshots distintos y no se pisan. El candado es compartido entre
+instancias de cola que apunten al mismo almacenamiento, lo que cubre también el
+caso de dos pantallas (o dos módulos) escribiendo a la vez.
+
+`enqueue` conserva la **primera** operación: si ya existe un registro con el mismo
+`operationId`, no lo reemplaza, no lo duplica y no altera su contenido. Repetir un
+guardado por un reintento de la UI mantiene la intención original que está a la
+espera de confirmación; la única forma de retirar una operación es `remove`, tras
+la confirmación del servidor. El primer y el segundo requisito del revisor quedan
+así cubiertos: no se pierde el primer registro ni con guardados concurrentes.
 
 ## Procedimiento de migración y recuperación
 
@@ -88,6 +110,9 @@ siendo la anterior; un segundo intento sin falla completa la migración.
 
 ## Verificación
 
-`src/infrastructure/persistence/week-08-evidence.test.ts` ejecuta los cinco casos
-del hito contra este código. Los comandos y resultados observados están indexados
-en `reports/week-08/migration-tests.json`.
+`src/infrastructure/persistence/week-08-evidence.test.ts` ejecuta los ocho casos
+del hito contra este código (reinicio de cola, migración válida, migración fallida
+con rollback, conflicto de reasignación, combinación de campos independientes,
+deduplicación, guardados simultáneos/primera intención y reordenamiento de claves
+JSON más outbox). Los comandos y resultados observados están indexados en
+`reports/week-08/migration-tests.json`.

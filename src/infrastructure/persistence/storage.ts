@@ -1,8 +1,8 @@
 /**
  * Abstracción de almacenamiento persistente (Semana 8).
- * Usa AsyncStorage si está disponible, de lo contrario un almacenamiento en memoria
- * con persistencia simulada. Lo importante es que la cola sea persistente y
- * sobreviva a un reinicio simulado.
+ * Usa @react-native-async-storage/async-storage como almacenamiento DURADERO
+ * para que la cola e incidencias sobrevivan al cerrar y abrir la app.
+ * Se mantiene un fallback en memoria únicamente para entornos sin AsyncStorage.
  */
 
 export interface PersistenceStorage {
@@ -35,21 +35,21 @@ class MemoryStorage implements PersistenceStorage {
 
 function createDefaultStorage(): PersistenceStorage {
   try {
-    // Try to use AsyncStorage if available (React Native)
-    const asyncStorage = require('@react-native-async-storage/async-storage');
-    if (asyncStorage?.default) {
+    // Preferir almacenamiento DURADERO para demostrar persistencia al reiniciar
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const asyncStorageModule = require('@react-native-async-storage/async-storage');
+    const asyncStorage = asyncStorageModule?.default ?? asyncStorageModule;
+
+    if (asyncStorage && typeof asyncStorage.getItem === 'function') {
       return {
-        getItem: (key: string) => asyncStorage.default.getItem(key),
-        setItem: (key: string, value: string) => asyncStorage.default.setItem(key, value),
-        removeItem: (key: string) => asyncStorage.default.removeItem(key),
-        clear: () => asyncStorage.default.clear(),
+        getItem: (key: string) => asyncStorage.getItem(key),
+        setItem: (key: string, value: string) => asyncStorage.setItem(key, value),
+        removeItem: (key: string) => asyncStorage.removeItem(key),
+        clear: () => asyncStorage.clear(),
       };
     }
-    if (typeof asyncStorage.getItem === 'function') {
-      return asyncStorage as PersistenceStorage;
-    }
   } catch {
-    // Fallback to memory storage
+    // Si no está disponible, usar fallback (principalmente para pruebas)
   }
   return new MemoryStorage();
 }
@@ -57,5 +57,25 @@ function createDefaultStorage(): PersistenceStorage {
 export const storage: PersistenceStorage = createDefaultStorage();
 
 export function createMemoryStorage(): PersistenceStorage {
+  return new MemoryStorage();
+}
+
+export function createDurableStorage(): PersistenceStorage {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const asyncStorageModule = require('@react-native-async-storage/async-storage');
+    const asyncStorage = asyncStorageModule?.default ?? asyncStorageModule;
+
+    if (asyncStorage && typeof asyncStorage.getItem === 'function') {
+      return {
+        getItem: (key: string) => asyncStorage.getItem(key),
+        setItem: (key: string, value: string) => asyncStorage.setItem(key, value),
+        removeItem: (key: string) => asyncStorage.removeItem(key),
+        clear: () => asyncStorage.clear(),
+      };
+    }
+  } catch {
+    // Ignorar y dejar que quien llame decida el fallback
+  }
   return new MemoryStorage();
 }

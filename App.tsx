@@ -10,6 +10,7 @@ import { createSessionManager } from './src/infrastructure/session/manager';
 import { createSecureSessionStorage } from './src/infrastructure/session/secure-storage';
 import { reportIncidentFailure } from './src/infrastructure/telemetry/safe-telemetry';
 import { IncidentApp } from './src/ui/IncidentApp';
+import { initializePersistence } from './src/infrastructure/persistence';
 
 const backendUrl = process.env.EXPO_PUBLIC_COURSE_BACKEND_URL
   ?? (Platform.OS === 'android' ? 'http://10.0.2.2:4310' : 'http://127.0.0.1:4310');
@@ -24,6 +25,10 @@ const repository = new HttpIncidentRepository(backendUrl, {
 });
 
 export default function App() {
+  useEffect(() => {
+    initializePersistence().catch(() => undefined);
+  }, []);
+
   const [status, setStatus] = useState<'checking' | 'available' | 'offline'>('checking');
   const [sessionState, setSessionState] = useState<'anonymous' | 'autenticado'>('anonymous');
   const [sessionBusy, setSessionBusy] = useState(false);

@@ -27,7 +27,10 @@ Las mutaciones de cola se serializan con un candado por almacenamiento. Repetir
 
 El outbox guarda nuevas incidencias con payload
 `{ action: 'create_incident', draft }`, `incidentId = local-<operationId>` y
-`baseVersion = 0` por defecto. El contenido se serializa mediante el mismo puerto.
+`baseVersion = 0` por defecto. El inicio de atención usa
+`{ action: 'start', note?, evidenceIds? }`, el `incidentId` real, el `author` del
+técnico y la `baseVersion` visible al encolar. El contenido se serializa mediante
+el mismo puerto, así que nota y referencia de fotografía sobreviven al reinicio.
 
 ## Versión y migración
 
@@ -47,16 +50,17 @@ proceso durante ellas.
 
 ## Integración y límites
 
-`App.tsx` inicializa la persistencia y recupera el contador de pendientes. Ante
-un error de red al crear una incidencia, la guarda en el outbox. Al iniciar
-sesión o pulsar «Sincronizar pendientes», reintenta con la misma identidad y
-retira sólo las creaciones confirmadas.
+`App.tsx` inicializa la persistencia, recupera las operaciones pendientes y las
+muestra mientras la sesión está cerrada. Ante un error de red al crear una
+incidencia, la guarda en el outbox. El botón «Iniciar atención» también guarda
+primero en la cola. Al iniciar sesión o pulsar «Sincronizar pendientes», se
+reintenta con la misma identidad y se retira sólo lo confirmado.
 
-Este flujo está limitado a crear incidencias como reportante. No admite enviar
-un inicio de atención del técnico sobre una incidencia existente ni integra la
-comparación con una reasignación remota. El reinicio de las pruebas reconstruye
-instancias sobre el mismo almacenamiento de prueba: falta evidencia de cerrar y
-abrir la app real conservando operación, notas y referencias de fotos.
+`submitTechnicianStart` integra la comparación con la reasignación remota: no
+envía el inicio si la incidencia pertenece a otro técnico, conserva la operación
+como `failed`, la reporta en `conflicts` y no sobrescribe la asignación. La
+evidencia de cerrar y abrir la app real, con la misma operación, nota y
+referencia de fotografía, está en `evidence/week-08/native/native-restart.md`.
 
 Los resultados actuales están en `reports/week-08/migration-tests.json`. Los logs
 históricos conservan el diagnóstico anterior y las nuevas ejecuciones registran

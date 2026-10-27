@@ -13,7 +13,7 @@ const nonempty = (value: unknown): value is string => typeof value === 'string' 
 function mapIncident(input: unknown): IncidentDetail | null {
   const parsed = validateRemoteResource(input);
   if (!parsed.ok) throw new IncidentRequestError('contract');
-  const { id, status, payload } = parsed.value;
+  const { id, status, payload, version } = parsed.value;
   if (payload === null) return null;
   if (!statuses.has(status) || !nonempty(payload.category) || !categories.has(payload.category)
     || !nonempty(payload.description) || !nonempty(payload.location) || !nonempty(payload.reporterId)) {
@@ -24,16 +24,25 @@ function mapIncident(input: unknown): IncidentDetail | null {
     if (!nonempty(value) || !Number.isFinite(Date.parse(value))) throw new IncidentRequestError('contract');
     return value;
   };
+  const technician = payload.assignedTechnicianId;
   return {
     id, title: payload.description, category: payload.category as IncidentCategory,
     status: status as IncidentStatus, description: payload.description,
     locationLabel: payload.location, reportedBy: payload.reporterId,
     createdAt: date(payload.createdAt), updatedAt: date(payload.updatedAt),
+    version,
+    assignedTechnicianId: typeof technician === 'string' && technician.trim().length > 0 ? technician : null,
   };
 }
 
 type Options = Readonly<{
   actorId?: string;
+  /**
+   * Actor vigente en tiempo de ejecución. Permite cambiar de reportante a
+   * técnico sin recrear el repositorio: el backend autoriza según
+   * `X-Course-Actor`, así que el encabezado debe seguir a la sesión activa.
+   */
+  actorProvider?: () => string | null;
   timeoutMs?: number;
   fetchImpl?: typeof fetch;
   scenario?: string;
@@ -61,11 +70,12 @@ export class HttpIncidentRepository implements IncidentRepository {
   }
 
   private send(controller: AbortController, path: string, init: RequestInit, token: string): Promise<Response> {
+    const actor = this.options.actorProvider?.() ?? this.options.actorId ?? 'reporter-1';
     return (this.options.fetchImpl ?? fetch)(`${this.baseUrl}${path}`, {
       ...init, signal: controller.signal,
       headers: {
         Authorization: `Bearer ${token}`,
-        'X-Course-Actor': this.options.actorId ?? 'reporter-1',
+        'X-Course-Actor': actor,
         ...(this.options.scenario ? { 'X-Course-Scenario': this.options.scenario } : {}),
         ...init.headers,
       },
@@ -129,5 +139,33 @@ export class HttpIncidentRepository implements IncidentRepository {
     });
     if (!isRecord(body)) throw new IncidentRequestError('contract');
     return mapIncident(body.incident);
+  }
+
+  /**
+   * Inicia la atención de una incidencia asignada al actor vigente.
+   *
+   * `baseVersion` es el candado del servidor: si la incidencia cambió (por
+   * ejemplo, una reasignación), responde 409 y la operación sigue en la cola.
+   * `note` y `evidenceIds` viajan en el cuerpo como metadatos de la operación;
+   * la referencia de fotografía identifica el recurso, no lo sube.
+   */
+  async start(
+    incidentId: string,
+    baseVersion: number,
+    operationId: string,
+    input: Readonly<{ note?: string; evidenceIds?: readonly string[] }> = {},
+  ): Promise<IncidentDetail | null> {
+    if (!nonempty(incidentId) || !Number.isInteger(baseVersion) || baseVersion < 1
+      || !nonempty(operationId) || operationId.length < 8) throw new IncidentRequestError('validation');
+    const body: Record<string, unknown> = { action: 'start', baseVersion };
+    if (input.note !== undefined) body.note = input.note;
+    if (input.evidenceIds !== undefined) body.evidenceIds = [...input.evidenceIds];
+    const response = await this.request(`/v1/incidents/${encodeURIComponent(incidentId)}/actions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Idempotency-Key': operationId },
+      body: JSON.stringify(body),
+    });
+    if (!isRecord(response)) throw new IncidentRequestError('contract');
+    return mapIncident(response.incident);
   }
 }

@@ -16,7 +16,7 @@ import { getCurrentSchemaVersion, migrate } from './migrations';
 import { SCHEMA_VERSION, STORAGE_KEYS } from './schema';
 import { resolveSyncReal } from '../sync/resolve';
 import { deduplicateOperationsReal } from '../sync/deduplicate';
-import { createOutbox } from '../sync/outbox';
+import { OutboxConflictError, createOutbox } from '../sync/outbox';
 
 const OPERATION: PendingOperation = {
   operationId: 'op-inicio-001',
@@ -182,13 +182,15 @@ describe('week-08 parte A: persistencia y sync', () => {
     const calls: string[] = [];
     const confirmed = await outbox.flush(async (sent, operationId) => {
       calls.push(operationId);
+      if (sent.action !== 'create_incident') throw new Error('se esperaba create_incident');
+      const draft = sent.draft;
       return {
         id: `server-${operationId}`,
-        title: sent.description,
-        category: sent.category,
+        title: draft.description,
+        category: draft.category,
         status: 'open',
-        locationLabel: sent.location,
-        description: sent.description,
+        locationLabel: draft.location,
+        description: draft.description,
         reportedBy: 'technician-1',
         createdAt: null,
         updatedAt: null,
@@ -199,5 +201,53 @@ describe('week-08 parte A: persistencia y sync', () => {
     expect(confirmed.confirmed).toEqual(['op-outbox-001']);
     expect(confirmed.pending).toEqual([]);
     expect(await outbox.pendingCount()).toBe(0);
+  });
+
+  it('inicio de atención: se envía completo y el conflicto de reasignación permanece en cola', async () => {
+    const queue = createPersistentQueue(createMemoryStorage());
+    const outbox = createOutbox(queue, () => OPERATION.createdAt);
+    await outbox.saveAction({
+      operationId: 'op-start-tecnico-001',
+      incidentId: 'campus-inc-001',
+      author: 'technician-1',
+      payload: { action: 'start', note: 'Llegué al laboratorio A', evidenceIds: ['foto://lab-a/ingreso-01.jpg'] },
+      baseVersion: 1,
+    });
+
+    // 1) Se envía la acción completa con su identidad estable.
+    const received: unknown[] = [];
+    const ok = await outbox.flush(async (payload, operationId) => {
+      received.push({ payload, operationId });
+      return {
+        id: 'campus-inc-001', title: 'Falla ficticia', category: 'connectivity',
+        status: 'in_progress', locationLabel: 'Edificio A', description: 'Revisión',
+        reportedBy: 'reporter-1', createdAt: null, updatedAt: null,
+      };
+    });
+    expect(received).toEqual([{
+      operationId: 'op-start-tecnico-001',
+      payload: { action: 'start', note: 'Llegué al laboratorio A', evidenceIds: ['foto://lab-a/ingreso-01.jpg'] },
+    }]);
+    expect(ok.confirmed).toEqual(['op-start-tecnico-001']);
+
+    // 2) Tras una reasignación remota, la operación no se retira ni se sobrescribe.
+    await outbox.saveAction({
+      operationId: 'op-start-tecnico-002',
+      incidentId: 'campus-inc-001',
+      author: 'technician-1',
+      payload: { action: 'start', note: 'Reintento tras reasignación' },
+      baseVersion: 2,
+    });
+    const conflicted = await outbox.flush(async () => {
+      throw new OutboxConflictError('op-start-tecnico-002', 'reassignment', ['work.assignedTechnicianId']);
+    });
+    expect(conflicted.conflicts).toEqual([{
+      operationId: 'op-start-tecnico-002',
+      reason: 'reassignment',
+      fields: ['work.assignedTechnicianId'],
+    }]);
+    const pending = await outbox.pending();
+    expect(pending.map((operation) => operation.operationId)).toEqual(['op-start-tecnico-002']);
+    expect(pending[0]?.status).toBe('failed');
   });
 });

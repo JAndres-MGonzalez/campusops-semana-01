@@ -25,10 +25,25 @@ contenido y la versión base. `deduplicateOperations` conserva la primera
 aparición. La cola también conserva el primer registro y serializa sus escrituras
 para evitar pérdidas simultáneas.
 
-El outbox actualmente sólo acepta payloads `create_incident`. Las creaciones se
-envían con el mismo `operationId` como clave de idempotencia. Si el envío devuelve
-un recurso, se elimina la operación; un error o `null` la conserva como `failed`.
-`flush` comparte una ejecución entre llamadas simultáneas.
+El outbox acepta dos payloads: `{ action: 'create_incident', draft }` y
+`{ action: 'start', note?, evidenceIds? }`. Ambos se envían con el mismo
+`operationId` como clave de idempotencia. Si el envío devuelve un recurso, se
+elimina la operación; un error o `null` la conserva como `failed`. `flush`
+comparte una ejecución entre llamadas simultáneas.
+
+Antes de enviar un `start`, `submitTechnicianStart` consulta la incidencia y
+decide: si ya está `in_progress` para el mismo técnico, la considera confirmada;
+si la asignación vigente es de otro técnico (o el servidor responde 403/404 al
+consultarla) informa `reasignación`; si sólo cambió un campo independiente,
+reenvía con la versión remota actual; si el estado ya avanzó, informa
+`transición`. Un conflicto (`OutboxConflictError`) deja la operación `failed` en
+la cola, la reporta en `conflicts` y nunca la retira ni sobrescribe al técnico
+vigente. `baseVersion` sigue siendo el candado final del servidor: un 409 al
+aplicar la acción conserva la operación para revisión.
+
+Las notas y las `evidenceIds` viajan como metadatos de la operación y quedan en
+la cola aunque el envío no se confirme. Una referencia de fotografía identifica
+el recurso pendiente; no sube el archivo.
 
 Una clave repetida no autoriza cambiar el contenido. El servidor debe rechazar
 esa reutilización o devolver la confirmación anterior cuando sea el mismo cambio.
@@ -42,15 +57,17 @@ puede iniciar o resolver su incidencia asignada; coordinación puede reasignar,
 cerrar o reabrir según el contrato. Guardar `author` en la cola no sustituye
 comprobar los permisos vigentes en el servidor.
 
-La aplicación actual sólo inicia sesión como reportante y conecta el outbox con
-`repository.create`. No consulta la nueva versión ni envía `start` por
-`POST /v1/incidents/:id/actions`. Una operación de atención en la cola no es una
-creación válida para ese outbox: queda marcada como fallida sin enviarse.
+La aplicación permite iniciar sesión como reportante (`reporter-1`) o como
+técnico (`technician-1`); el repositorio HTTP toma el actor vigente en cada
+solicitud para que el servidor aplique sus permisos. El detalle de la incidencia
+muestra versión y técnico asignado, y el botón «Iniciar atención» guarda primero
+la operación en la cola (outbox-first): con o sin conexión el camino es el mismo
+y sólo se retira cuando el servidor confirma.
 
-Por eso el conflicto calculado por `resolveSync` aún no demuestra el caso
-obligatorio de técnico sin conexión frente a reasignación remota en el flujo de
-sincronización. Debe integrarse ese envío, conservar la intención y mostrar la
-resolución sin sobrescribir la asignación.
+La cola sobrevive a cerrar y abrir la app: al arrancar, `App.tsx` migra el
+esquema si hace falta, recupera las operaciones y muestra `operationId`,
+incidencia, nota, referencia de fotografía y estado, antes de que el usuario
+vuelva a iniciar sesión.
 
 ## Evidencia y límites
 
@@ -60,5 +77,7 @@ Los casos, comandos y observaciones actuales están en
 reconoce el reinicio simulado y los límites de confirmación.
 
 Las pruebas de outbox usan respuestas simuladas y memoria. Demuestran las reglas
-de retiro y reintento de creaciones, pero no prueban por sí solas idempotencia del
-servidor con respuestas perdidas ni cerrar y volver a abrir la app nativa.
+de retiro, reintento y conflicto de creaciones e inicios de atención. La
+evidencia nativa de cerrar y abrir la app real está en
+`evidence/week-08/native/native-restart.md`, con capturas y el registro de
+`adb`.

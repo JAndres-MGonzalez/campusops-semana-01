@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 8,
-  "commitSha": "0b5724d03483fe815e4a4dc2c524034524a86cf4",
+  "commitSha": "4bcd708ac4944a5b5746f85efd76b02cabb439a5",
   "decision": "Generalizar la cola a los payloads create_incident y start, y decidir el envío del inicio con la asignación vigente: si el servidor ya la tiene en progreso para el mismo técnico se considera confirmada; si la reasignación es de otro técnico (incluido el 403/404 al consultar) se informa conflicto y la operación permanece failed en la cola sin sobrescribir la asignación; el 409 del servidor sigue siendo el candado final con baseVersion. La UI del técnico permite iniciar atención con nota y referencia de fotografía, siempre outbox-first. Los logs acompañan el commit de código y el reinicio nativo se verificó en el emulador: tras force-stop, el proceso nuevo recuperó la operación pendiente con nota y referencia de fotografía.",
   "alternatives": [
     "Última escritura gana: es más simple, pero puede borrar el trabajo local o imponer una asignación antigua.",

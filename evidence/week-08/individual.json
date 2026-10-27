@@ -8,7 +8,8 @@
       "name": "Kevin Armando Montalvo Marcial",
       "commitShas": [
         "e1445e4a77697c2b22f351026603acca2c90e540",
-        "c61f7018748bf7c5d92bac7ef7d41ef3b3bd81e4"
+        "c61f7018748bf7c5d92bac7ef7d41ef3b3bd81e4",
+        "4c94d92e357e8a68e8eff657460cce68d475e1d4"
       ],
       "files": [
         "src/infrastructure/persistence/schema.ts",
@@ -17,21 +18,31 @@
         "src/infrastructure/persistence/migrations.ts",
         "src/infrastructure/persistence/index.ts",
         "src/infrastructure/sync/resolve.ts",
+        "src/infrastructure/sync/canonical-json.ts",
+        "src/infrastructure/sync/outbox.ts",
         "src/infrastructure/sync/deduplicate.ts",
         "src/course-evaluation/index.ts",
+        "App.tsx",
+        "jest.setup.js",
         "src/infrastructure/persistence/week-08-evidence.test.ts",
+        "src/infrastructure/persistence/queue.test.ts",
+        "src/infrastructure/sync/resolve.test.ts",
+        "src/infrastructure/sync/outbox.test.ts",
         "docs/data-model.md",
         "docs/sync-policy.md"
       ],
       "tests": [
         "course-tests/public/week-08.test.ts",
-        "src/infrastructure/persistence/week-08-evidence.test.ts"
+        "src/infrastructure/persistence/week-08-evidence.test.ts",
+        "src/infrastructure/persistence/queue.test.ts",
+        "src/infrastructure/sync/resolve.test.ts",
+        "src/infrastructure/sync/outbox.test.ts"
       ],
       "reviews": [],
-      "prediction": "La cola persistente conserva operationId y contenido al reconstruir la instancia, la migracion fallida revierte a la version anterior sin dejar esquema parcial y resolveSync/deduplicateOperations pasan el contrato publico.",
-      "command": "npx.cmd jest --ci --runInBand course-tests/public/week-08.test.ts && npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts && npm.cmd run typecheck",
-      "observedResult": "week-08.test.ts 3/3 PASS; week-08-evidence.test.ts 5/5 PASS; typecheck sin errores.",
-      "explanation": "Implemente el esquema versionado (SCHEMA_VERSION=1), el puerto de almacenamiento con respaldo en AsyncStorage, la cola persistente con identidad estable y el migrador con snapshot y rollback. Delegue resolveSync y deduplicateOperations desde src/course-evaluation/index.ts a logica real en src/infrastructure/sync, sin tocar las firmas ni el modulo de sesion de la semana 6."
+      "prediction": "La cola persistente conserva operationId y contenido al reconstruir la instancia, dos guardados simultaneos no se pisan, enqueue conserva la primera operacion, la comparacion JSON ignora el orden de propiedades, el outbox solo retira lo confirmado y se recupera la cola tras reiniciar; ademas la migracion fallida revierte y resolveSync/deduplicateOperations pasan el contrato publico.",
+      "command": "npx.cmd jest --ci --runInBand course-tests/public/week-08.test.ts && npx.cmd jest --ci --runInBand src/infrastructure/persistence src/infrastructure/sync course-tests/smoke.test.tsx && npm.cmd run typecheck && npm.cmd run lint",
+      "observedResult": "week-08.test.ts 3/3 PASS; week-08-evidence.test.ts 8/8 PASS; queue/resolve/outbox 18/18 PASS; smoke 1/1 PASS (27/27 en total); typecheck y lint sin errores.",
+      "explanation": "Implemente el esquema versionado (SCHEMA_VERSION=1), el puerto de almacenamiento con AsyncStorage duradero y respaldo en memoria, la cola persistente con identidad estable y el migrador con snapshot y rollback. Tras la revision del PR 21 agregue el candado por almacenamiento y la regla de conservar la primera operacion, la comparacion JSON canonica, el mock oficial de AsyncStorage para Jest y el outbox que conecta guardar sin conexion, sincronizar al reconectar, retirar solo lo confirmado y recuperar la cola al reiniciar."
     },
     {
       "studentId": "3523110741",

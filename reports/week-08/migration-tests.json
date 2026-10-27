@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
   "week": 8,
-  "commitSha": "c61f7018748bf7c5d92bac7ef7d41ef3b3bd81e4",
-  "generatedAt": "2026-10-26T05:39:03Z",
+  "commitSha": "4c94d92e357e8a68e8eff657460cce68d475e1d4",
+  "generatedAt": "2026-10-27T02:53:39Z",
   "checks": [
     {
       "id": "restart-offline-queue",
       "status": "pass",
       "scenarioType": "boundary",
       "command": "npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts",
-      "evidence": "Caso 'reinicio': se encola op-inicio-001 (inc-0001, tecnico-1) y se reconstruye createPersistentQueue sobre el mismo almacenamiento. getAll() devuelve 1 operacion con operationId 'op-inicio-001', incidentId 'inc-0001' y payload identico al encolado. Tests: 5 passed, 5 total."
+      "evidence": "Caso 'reinicio': se encola op-inicio-001 (inc-0001, tecnico-1) y se reconstruye createPersistentQueue sobre el mismo almacenamiento. getAll() devuelve 1 operacion con operationId 'op-inicio-001', incidentId 'inc-0001' y payload identico al encolado."
     },
     {
       "id": "migration-success",
@@ -45,6 +45,27 @@
       "scenarioType": "boundary",
       "command": "npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts",
       "evidence": "Dos operaciones con operationId 'op-inicio-001' y una con 'op-inicio-002': deduplicateOperations devuelve 2 elementos, conserva el payload 'primera' y deja intacto el arreglo de entrada (3 elementos)."
+    },
+    {
+      "id": "concurrent-writes-keep-first-operation",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npx.cmd jest --ci --runInBand src/infrastructure/persistence/queue.test.ts src/infrastructure/persistence/week-08-evidence.test.ts",
+      "evidence": "Dos enqueue simultaneos (op-simultanea-a, op-simultanea-b) mas un enqueue repetido de op-inicio-001: la cola queda con 3 operaciones, ninguna se pierde y la repetida conserva el payload original ('inicio de atencion sin conexion') porque enqueue conserva la primera. Tambien se cubre el candado compartido entre dos instancias sobre el mismo almacenamiento y un markInFlight concurrente con un alta."
+    },
+    {
+      "id": "canonical-json-key-order",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npx.cmd jest --ci --runInBand src/infrastructure/sync/resolve.test.ts src/infrastructure/persistence/week-08-evidence.test.ts",
+      "evidence": "canonicalJson({ a: 1, b: { y: 2, x: 1 } }) es igual a canonicalJson({ b: { x: 1, y: 2 }, a: 1 }); reordenar 'work' entre { assignedTechnicianId, status } devuelve kind='merged' y no un conflicto. Los arreglos siguen siendo ordenados: ['a','b'] frente a ['b','a'] se reporta como conflicto."
+    },
+    {
+      "id": "outbox-offline-then-sync",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npx.cmd jest --ci --runInBand src/infrastructure/sync/outbox.test.ts src/infrastructure/persistence/week-08-evidence.test.ts",
+      "evidence": "saveOffline guarda la intencion con idempotencyKey = operationId; una nueva instancia de outbox sobre el mismo almacenamiento la recupera (pendingCount = 1). flush envia con la misma identidad, retira solo lo confirmado (op-buena-001) y conserva lo fallido (op-mala-001). Dos flush simultaneos comparten la misma promesa: el envio ocurre una sola vez."
     },
     {
       "id": "public-contract-week-08",

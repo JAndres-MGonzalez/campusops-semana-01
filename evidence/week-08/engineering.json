@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "week": 8,
-  "commitSha": "36021063e87ab0a26d67266dbd5f934777c0fb32",
-  "decision": "Generalizar la cola a los payloads create_incident y start, y decidir el envío del inicio con la asignación vigente: si el servidor ya la tiene en progreso para el mismo técnico se considera confirmada; si la reasignación es de otro técnico (incluido el 403/404 al consultar) se informa conflicto y la operación permanece failed en la cola sin sobrescribir la asignación; el 409 del servidor sigue siendo el candado final con baseVersion. La UI del técnico permite iniciar atención con nota y referencia de fotografía, siempre outbox-first. Los logs acompañan el commit de código; la evidencia nativa de cerrar y abrir la app queda pendiente.",
+  "commitSha": "0b5724d03483fe815e4a4dc2c524034524a86cf4",
+  "decision": "Generalizar la cola a los payloads create_incident y start, y decidir el envío del inicio con la asignación vigente: si el servidor ya la tiene en progreso para el mismo técnico se considera confirmada; si la reasignación es de otro técnico (incluido el 403/404 al consultar) se informa conflicto y la operación permanece failed en la cola sin sobrescribir la asignación; el 409 del servidor sigue siendo el candado final con baseVersion. La UI del técnico permite iniciar atención con nota y referencia de fotografía, siempre outbox-first. Los logs acompañan el commit de código y el reinicio nativo se verificó en el emulador: tras force-stop, el proceso nuevo recuperó la operación pendiente con nota y referencia de fotografía.",
   "alternatives": [
     "Última escritura gana: es más simple, pero puede borrar el trabajo local o imponer una asignación antigua.",
     "Detener toda sincronización ante cualquier diferencia: conserva datos, pero impide combinar cambios que son compatibles.",
     "Combinar por campo y mantener los conflictos pendientes: conserva los cambios independientes y permite revisar una reasignación sin perder la intención local."
   ],
-  "tradeoff": "La cola genérica y la consulta previa añaden una lectura y coordinación por envío, pero evitan imponer un inicio sobre una reasignación y conservan la intención local. Nota y referencia de fotografía se guardan como metadatos, así que el contexto sobrevive aunque el envío no se confirme; a cambio, la cola no demuestra la subida de archivos ni el reinicio nativo, que requieren verificación aparte en el dispositivo.",
+  "tradeoff": "La cola genérica y la consulta previa añaden una lectura y coordinación por envío, pero evitan imponer un inicio sobre una reasignación y conservan la intención local. Nota y referencia de fotografía se guardan como metadatos, así que el contexto sobrevive aunque el envío no se confirme; a cambio, la cola no demuestra la subida de un archivo de imagen real: la referencia de fotografía es un identificador local, no un binario transferido.",
   "requirementIds": [
     "AC-01",
     "AC-02",
@@ -41,6 +41,11 @@
       "command": "npm.cmd test -- --ci --runInBand course-tests/public/week-08.test.ts",
       "result": "3 de 3 pruebas públicas aprobadas. No cubren por sí solas el reinicio nativo del proceso.",
       "evidence": "evidence/week-08/logs/public-tests-start.log"
+    },
+    {
+      "command": "adb shell am force-stop mx.edu.dmi.engineeringapp && adb shell am start -n mx.edu.dmi.engineeringapp/.MainActivity",
+      "result": "Reinicio nativo en el emulador con el backend detenido: el proceso murió (PID 8430) y el nuevo (8854) mostró \"Recuperadas 1 operación(es) pendientes de la sesión anterior\" con la nota y la referencia de fotografía; al reconectar se sincronizó y la incidencia quedó En proceso.",
+      "evidence": "evidence/week-08/logs/native-restart.log, evidence/week-08/native/01-antes-del-reinicio.png, evidence/week-08/native/02-despues-del-reinicio.png y evidence/week-08/native/03-sincronizado.png"
     }
   ]
 }

@@ -12,7 +12,8 @@
         "e60ba22931ee57a51f7333716b65bab04aebda21",
         "4c94d92e357e8a68e8eff657460cce68d475e1d4",
         "29c3aeb74d9b214cb2871a8970a77bbba6b8d914",
-        "36021063e87ab0a26d67266dbd5f934777c0fb32"
+        "36021063e87ab0a26d67266dbd5f934777c0fb32",
+        "0b5724d03483fe815e4a4dc2c524034524a86cf4"
       ],
       "files": [
         "src/infrastructure/persistence/schema.ts",
@@ -38,7 +39,8 @@
         "src/infrastructure/incidents/http-incident-repository.test.ts",
         "src/ui/IncidentApp.tsx",
         "src/ui/screens/IncidentDetailScreen.tsx",
-        "src/domain/incident.ts"
+        "src/domain/incident.ts",
+        "evidence/week-08/logs/native-restart.log"
       ],
       "tests": [
         "course-tests/public/week-08.test.ts",
@@ -53,8 +55,8 @@
       "reviews": [],
       "prediction": "La cola persistente conserva operationId y contenido al reconstruir la instancia, la migracion fallida revierte a la version anterior sin dejar esquema parcial y resolveSync/deduplicateOperations pasan el contrato publico.",
       "command": "npx.cmd jest --ci --runInBand course-tests/public/week-08.test.ts && npx.cmd jest --ci --runInBand src/infrastructure/persistence/week-08-evidence.test.ts && npm.cmd run typecheck",
-      "observedResult": "Las 41 pruebas de persistencia y sincronización y las 3 del repositorio HTTP pasan, incluida technician-sync.test.ts de la revisión. El inicio de atención del técnico se encola con operationId, nota y referencia de fotografía, y un conflicto de reasignación lo conserva failed sin sobrescribir la asignación. La captura nativa de cerrar y abrir la app quedó pendiente.",
-      "explanation": "Generalicé el outbox a create_incident y start, añadí submitTechnicianStart con la decisión de reasignación/transición/ya aplicado, expuse versión y técnico asignado en el repositorio y agregué la UI de inicio con nota y referencia de fotografía. Actualicé las pruebas de outbox, evidencia y repositorio; la verificación nativa del reinicio no se completó y se declara como pendiente."
+      "observedResult": "Las 41 pruebas de persistencia y sincronización y las 3 del repositorio HTTP pasan, incluida technician-sync.test.ts de la revisión. El inicio de atención del técnico se encola con operationId, nota y referencia de fotografía, y un conflicto de reasignación lo conserva failed sin sobrescribir la asignación. En el emulador se verificó el reinicio nativo: con el backend detenido, la operación quedó en la cola y el proceso nuevo la recuperó con nota y foto antes de sincronizarla.",
+      "explanation": "Generalicé el outbox a create_incident y start, añadí submitTechnicianStart con la decisión de reasignación/transición/ya aplicado, expuse versión y técnico asignado en el repositorio y agregué la UI de inicio con nota y referencia de fotografía. Verifiqué el reinicio real del proceso en el emulador: la cola y los metadatos sobreviven al force-stop y se confirman al reconectar."
     },
     {
       "studentId": "3523110741",

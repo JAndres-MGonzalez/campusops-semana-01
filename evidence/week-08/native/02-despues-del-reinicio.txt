@@ -1,0 +1,11 @@
+CampusOps
+Incidencias del campus en un entorno académico ficticio
+Backend: offline
+Pendientes sin conexión: 1
+Recuperadas 1 operación(es) pendientes de la sesión anterior.
+Iniciar sesión (reportante)
+Iniciar sesión (técnico)
+Pendientes sin conexión
+Inicio de atención · campus-inc-001 · start-campus-inc-001-mvq9mllt-8d9rvo · nota: Ingreso 10:20 - foto tomada · foto: foto://lab-a/ingreso-01.jpg · estado: failed
+Inicia sesión para consultar las incidencias.
+Las operaciones pendientes se conservan aunque cierres la app.

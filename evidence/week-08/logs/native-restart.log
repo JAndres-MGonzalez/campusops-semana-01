@@ -1,0 +1,48 @@
+# Evidencia nativa del reinicio — Semana 8
+
+Commit evaluado: 0b5724d (el código es 3602106; no hubo cambios de código después).
+Dispositivo: emulador Pixel_8 (Android 15, API 35), APK de debug `mx.edu.dmi.engineeringapp`.
+Backend didáctico: `npm run backend` en `http://127.0.0.1:4310`, alcanzado desde el emulador con
+`adb reverse tcp:4310 tcp:4310`.
+
+## Escenario
+
+El técnico inicia la atención de `campus-inc-001` **sin conexión con el backend**, de modo que la
+operación queda en la cola local. Después se cierra el proceso de la app por completo y se vuelve a
+abrir para comprobar que la cola, la nota y la referencia de fotografía sobreviven al reinicio.
+Finalmente se restablece la conexión y se confirma que la operación se envía.
+
+## Pasos y resultado observado
+
+1. Sesión iniciada como `technician-1` y detalle de `campus-inc-001` abierto (estado `Asignada`,
+   versión 1).
+2. Formulario de inicio llenado en el dispositivo:
+   - Nota: `Ingreso 10:20 - foto tomada`
+   - Referencia de fotografía: `foto://lab-a/ingreso-01.jpg`
+3. Backend detenido (puerto 4310 sin escucha) antes de pulsar "Iniciar atención".
+4. Resultado: `Pendientes sin conexión: 1` y la entrada
+   `Inicio de atención · campus-inc-001 · start-campus-inc-001-mvq9mllt-8d9rvo · nota: Ingreso 10:20 - foto tomada · foto: foto://lab-a/ingreso-01.jpg · estado: failed`
+   Captura: `evidence/week-08/native/01-antes-del-reinicio.png`
+5. Reinicio real del proceso:
+   - `adb shell pidof mx.edu.dmi.engineeringapp` → `8430`
+   - `adb shell am force-stop mx.edu.dmi.engineeringapp` → sin proceso
+   - `adb shell am start -n mx.edu.dmi.engineeringapp/.MainActivity` → PID nuevo `8854`
+6. Resultado tras el reinicio (backend todavía detenido, `Backend: offline`):
+   - `Pendientes sin conexión: 1`
+   - `Recuperadas 1 operación(es) pendientes de la sesión anterior.`
+   - La entrada conserva el mismo `operationId`, la nota y la referencia de fotografía, en estado `failed`.
+   Captura: `evidence/week-08/native/02-despues-del-reinicio.png`
+   Texto de la pantalla: `evidence/week-08/native/02-despues-del-reinicio.txt`
+7. Backend levantado de nuevo y sesión de `technician-1` reiniciada:
+   - `Sincronizadas 1 operación(es) pendientes.`
+   - `Pendientes sin conexión: 0`
+   - La incidencia queda en `En proceso`.
+   Captura: `evidence/week-08/native/03-sincronizado.png`
+
+## Qué acredita y qué no
+
+Acredita: la cola se guarda en el almacenamiento del dispositivo, sobrevive a la muerte del proceso y
+conserva los metadatos del inicio (nota y referencia de fotografía), y se envía al reconectar.
+
+No acredita: la subida de un archivo de imagen real. La referencia de fotografía es un identificador
+local (`foto://…`), no un binario transferido al servidor.

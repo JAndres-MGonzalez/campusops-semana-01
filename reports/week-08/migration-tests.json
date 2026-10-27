@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "week": 8,
-  "commitSha": "36021063e87ab0a26d67266dbd5f934777c0fb32",
-  "generatedAt": "2026-10-27T05:06:10.747Z",
+  "commitSha": "0b5724d03483fe815e4a4dc2c524034524a86cf4",
+  "generatedAt": "2026-10-27T05:52:31.121Z",
   "checks": [
     {
       "id": "queue-recreated-in-process",
@@ -104,10 +104,10 @@
     },
     {
       "id": "native-restart-evidence",
-      "status": "fail",
+      "status": "pass",
       "scenarioType": "boundary",
-      "command": "npm.cmd test -- --ci --runInBand --json --outputFile=reports/week-08/generated-review-tests.json evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx course-tests/public/week-06.test.ts src/infrastructure/session/session.test.ts course-tests/smoke.test.tsx evidence/week-05/backend-failures.test.ts evidence/week-05/contract-cases.test.ts evidence/week-05/http-client-ui.test.tsx course-tests/public/week-08.test.ts src/infrastructure/persistence src/infrastructure/sync evidence/week-08/review.test.ts evidence/week-08/technician-sync.test.ts",
-      "evidence": "Pendiente: no se completó la captura en la app nativa de cerrar y abrir el proceso. La cola demuestra la recuperación al recrear instancias sobre el mismo almacenamiento y con el sustituto oficial de AsyncStorage, pero eso no acredita por sí solo el reinicio real ni conservar la referencia de fotografía en el dispositivo. evidence/week-08/logs/integration-tests-start.log"
+      "command": "adb shell am force-stop mx.edu.dmi.engineeringapp && adb shell am start -n mx.edu.dmi.engineeringapp/.MainActivity (con el backend detenido)",
+      "evidence": "Reinicio nativo verificado en el emulador Pixel_8 con el APK de debug. Con el backend detenido, el inicio de atención quedó en la cola con nota y referencia de fotografía; el PID 8430 murió con force-stop y el proceso nuevo (8854) mostró \"Recuperadas 1 operación(es) pendientes de la sesión anterior\" conservando nota y foto, y al reconectar se sincronizó. Capturas: evidence/week-08/native/01-antes-del-reinicio.png, 02-despues-del-reinicio.png y 03-sincronizado.png; detalle en evidence/week-08/logs/native-restart.log"
     }
   ]
 }

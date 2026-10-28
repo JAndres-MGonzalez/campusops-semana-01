@@ -1,0 +1,12 @@
+CampusOps
+Incidencias del campus en un entorno académico ficticio
+Backend: available
+Pendientes sin conexión: 0
+Sincronizadas 1 operación(es) pendientes.
+Sesión: technician-1
+Sincronizar pendientes
+Cerrar sesión
+Nueva incidencia
+Sin conexión en laboratorio ficticio
+En proceso · Conectividad
+Edificio de prueba A

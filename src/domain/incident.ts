@@ -14,6 +14,10 @@ export type IncidentDetail = Readonly<
     reportedBy: string;
     createdAt: string | null;
     updatedAt: string | null;
+    /** Versión del servidor: candado de las acciones (`baseVersion`). */
+    version?: number;
+    /** Técnico visible para el actor actual; `null` cuando no hay asignación. */
+    assignedTechnicianId?: string | null;
   }
 >;
 

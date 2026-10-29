@@ -12,6 +12,8 @@ import type {
 import type { IncidentLocation } from '../campusops/contracts';
 import { resolveSyncReal } from '../infrastructure/sync/resolve';
 import { deduplicateOperationsReal } from '../infrastructure/sync/deduplicate';
+import { planRetryReal } from '../infrastructure/resilience/retry-policy';
+import { selectIncidentLocationReal } from '../infrastructure/geocoding/select-location';
 
 function pending(name: string): never {
   throw new Error(`${name} must be implemented in the assigned week`);
@@ -49,14 +51,14 @@ export function deduplicateOperations<T extends Readonly<{ operationId: string }
   return deduplicateOperationsReal(operations);
 }
 
-export function planRetry(_input: Readonly<{
+export function planRetry(input: Readonly<{
   method: 'GET' | 'POST';
   status: number | 'timeout';
   attempt: number;
   retryAfterMs?: number;
   idempotencyKey?: string;
 }>): Readonly<{ retry: boolean; delayMs: number; requiresStableIdempotencyKey: boolean }> {
-  return pending('planRetry');
+  return planRetryReal(input);
 }
 
 export function reduceRemoteResponses(_input: Readonly<{
@@ -73,6 +75,6 @@ export function reducePermissionLifecycle(
 }
 
 /** Week 09: see docs/CAMPUSOPS_API.md; this is not a completed solution. */
-export function selectIncidentLocation(_provider: unknown, _manualLabel: string): IncidentLocation {
-  return pending('selectIncidentLocation');
+export function selectIncidentLocation(provider: unknown, manualLabel: string): IncidentLocation {
+  return selectIncidentLocationReal(provider, manualLabel);
 }

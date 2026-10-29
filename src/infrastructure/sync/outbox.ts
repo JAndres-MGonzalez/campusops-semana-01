@@ -16,6 +16,22 @@
 import type { IncidentDraft, IncidentDetail } from '../../domain/incident';
 import { pendingQueue } from '../persistence/queue';
 import type { PendingOperation, PersistentQueue } from '../persistence/queue';
+import { planRetryReal } from '../resilience/retry-policy';
+import type { RetryStatus } from '../resilience/retry-policy';
+
+/**
+ * Traduce el fallo de un envío a un estado observable. Se lee por forma (`kind`)
+ * para no acoplar la cola al tipo concreto de error del repositorio HTTP.
+ */
+function retryStatusOf(error: unknown): RetryStatus | null {
+  if (error === null || typeof error !== 'object') return null;
+  const kind = (error as { kind?: unknown }).kind;
+  if (kind === 'timeout') return 'timeout';
+  if (kind === 'network') return 503;
+  if (kind === 'rate_limit') return 429;
+  if (kind === 'server') return 500;
+  return null;
+}
 
 /** Payload de una operación de creación de incidencia. */
 export type CreateIncidentPayload = Readonly<{
@@ -59,6 +75,12 @@ export type OutboxFlushResult = Readonly<{
   pending: readonly string[];
   /** Operaciones cuyo envío falló o no se confirmó. */
   failed: readonly string[];
+  /**
+   * Subconjunto de `failed` que es seguro repetir con la misma clave
+   * (`timeout`, red, 429 o 5xx). La UI puede informar "se reintentará" en vez de
+   * pedir una corrección. Nada de esto sale de la cola.
+   */
+  retryable: readonly string[];
   /** Operaciones que chocaron con el estado remoto y siguen en la cola. */
   conflicts: readonly OutboxConflictReport[];
 }>;
@@ -145,7 +167,21 @@ export function createOutbox(
   const runFlush = async (submit: OutboxSubmit): Promise<OutboxFlushResult> => {
     const confirmed: string[] = [];
     const failed: string[] = [];
+    const retryable: string[] = [];
     const conflicts: OutboxConflictReport[] = [];
+
+    /**
+     * Un fallo transitorio se queda en la cola para el siguiente `flush` con la
+     * MISMA clave; uno de contrato o conflicto necesita revisión humana. Desde
+     * el intento 4 la política ya no permite repetir.
+     */
+    const isRetryable = (error: unknown, operation: PendingOperation): boolean =>
+      planRetryReal({
+        method: 'POST',
+        status: retryStatusOf(error) ?? -1,
+        attempt: operation.attempts + 1,
+        idempotencyKey: operation.idempotencyKey ?? operation.operationId,
+      }).retry;
 
     const operations = await queue.getAll();
     for (const operation of operations) {
@@ -174,6 +210,7 @@ export function createOutbox(
       } catch (error) {
         await queue.markFailed(operation.operationId);
         failed.push(operation.operationId);
+        if (isRetryable(error, operation)) retryable.push(operation.operationId);
         if (error instanceof OutboxConflictError) {
           conflicts.push({ operationId: error.operationId, reason: error.reason, fields: error.fields });
         }
@@ -185,6 +222,7 @@ export function createOutbox(
       confirmed,
       pending: remaining.map((operation) => operation.operationId),
       failed,
+      retryable,
       conflicts,
     };
   };

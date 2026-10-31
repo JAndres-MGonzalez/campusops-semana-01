@@ -78,7 +78,9 @@ la sección 4.
   perdida tras guardar).
 - `reports/week-09/retry-metrics.json` — intentos y tiempos observados (Andrés).
 - `evidence/week-09/logs/` — salidas reales de las pruebas y de `fault-injection.mjs`.
-- **Respuesta perdida:** `POST /v1/incidents/campus-inc-001/actions` (`start`, `baseVersion: 1`)
-  con la clave `resolve-campus-inc-001-op-9` y `timeout_after_commit`, abortado a los 800 ms: el
-  servidor ya había guardado (`in_progress`, versión 2). La repetición con la misma clave devolvió
-  `200` con `duplicate: true` y quedó un solo evento de historial para esa clave.
+- **Respuesta perdida:** se reprodujo al **resolver** (técnico) y al **cerrar** (coordinador).
+  Con la incidencia `campus-inc-001` ya en `in_progress`, `POST /v1/incidents/campus-inc-001/actions`
+  con `timeout_after_commit` y abort a los 800 ms: el servidor ya había guardado (`resolved`, versión 3;
+  `closed`, versión 4). La repetición con la **misma clave y el mismo cuerpo** (`resolve-campus-inc-001-op-9`
+  y `close-campus-inc-001-op-10`) devolvió `200` con `duplicate: true` y quedó un solo evento de historial
+  por clave.

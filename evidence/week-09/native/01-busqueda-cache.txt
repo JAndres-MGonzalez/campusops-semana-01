@@ -1,0 +1,1 @@
+Teléfono Xiaomi 23100RN82L, 16:37, con el backend disponible. El campo Ubicación muestra "Edificio de prueba A" y el aviso dice "Ubicación reutilizada de una búsqueda reciente." Es decir, el resultado vino de la caché y no del proveedor; este aviso no es el del proveedor. Descripción "Prueba 1".

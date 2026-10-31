@@ -12,7 +12,7 @@
  */
 
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 
 const ROOT = process.cwd();
@@ -33,6 +33,25 @@ function jestSummary(logName) {
   if (suites === undefined || tests === undefined) return 'log sin resumen de Jest (revisar)';
   return `Test Suites: ${suites}; Tests: ${tests}`;
 }
+
+/**
+ * Evidencia del emulador: sólo lo que existe en `evidence/week-09/native/`
+ * (capturas .png y notas .txt escritas por la persona) y el log del recorrido.
+ */
+const nativeDir = resolve(ROOT, 'evidence/week-09/native');
+const nativeFiles = existsSync(nativeDir) ? readdirSync(nativeDir).sort() : [];
+const emulatorLog = existsSync(resolve(ROOT, 'evidence/week-09/logs/emulador.log'));
+const nativeLines = [];
+for (const file of nativeFiles.filter((name) => /\.(png|jpe?g)$/i.test(name))) {
+  const note = file.replace(/\.(png|jpe?g)$/i, '.txt');
+  nativeLines.push(`- \`evidence/week-09/native/${file}\``);
+  if (nativeFiles.includes(note)) {
+    nativeLines.push(`  - Observado: ${readText(resolve(nativeDir, note)).trim().replace(/\s*\n\s*/g, ' ')}`);
+  } else {
+    nativeLines.push('  - Sin nota de observación.');
+  }
+}
+if (emulatorLog) nativeLines.push('- Log del recorrido: `evidence/week-09/logs/emulador.log`');
 
 const emulatorIndex = process.argv.indexOf('--emulador');
 const emulator = emulatorIndex >= 0 ? process.argv[emulatorIndex + 1] : undefined;
@@ -91,11 +110,12 @@ const lines = [
   '',
   ...(faults === null ? faultRows : ['| id | tipo | estado | observado |', '|---|---|---|---|', ...faultRows]),
   '',
-  '## Verificación en emulador',
+  '## Verificación en dispositivo Android',
   '',
-  emulator !== undefined && emulator.trim().length > 0
-    ? emulator.trim()
-    : 'No ejecutado: este reporte se generó sin el recorrido en emulador.',
+  ...(nativeLines.length > 0
+    ? ['Sólo se registra lo que quedó guardado como captura, nota o log:', '', ...nativeLines]
+    : ['No ejecutado: este reporte se generó sin capturas ni log del recorrido en un dispositivo Android.']),
+  ...(emulator !== undefined && emulator.trim().length > 0 ? ['', emulator.trim()] : []),
   '',
   '## Archivos tocados',
   '',
@@ -114,8 +134,9 @@ const lines = [
   '',
   '- La caché no persiste entre arranques.',
   '- El escenario `slow` del doble responde a los 1200 ms; el timeout se fuerza con 800 ms en el script.',
+  '- La respuesta perdida se reprodujo al resolver y al cerrar, preparando la incidencia con un inicio de atención normal; no se probó con otras acciones.',
   '- La desconexión se reproduce contra un puerto cerrado (`127.0.0.1:1`), no apagando el backend.',
-  '- Jest no demuestra que la pantalla renderice en un dispositivo: eso sólo cuenta si la sección de emulador lo describe.',
+  '- Jest no demuestra que la pantalla renderice en un dispositivo: eso sólo cuenta si la sección de verificación en dispositivo lo describe.',
   '',
 ];
 

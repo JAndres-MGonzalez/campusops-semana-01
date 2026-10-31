@@ -10,8 +10,9 @@
  *   node evidence/week-09/scripts/fault-injection.mjs
  *   node evidence/week-09/scripts/fault-injection.mjs --report reports/week-09/fault-injection.json
  *
- * Sólo imprime id de incidencia, estado, version, duplicate, origen y tipo de
- * fallo. No imprime tokens, actores, consultas, etiquetas ni coordenadas.
+ * La respuesta perdida se prueba al resolver (técnico) y al cerrar
+ * (coordinador), no al iniciar. Sólo imprime id de incidencia, estado, version,
+ * duplicate, origen y tipo de fallo. No imprime tokens, actores, consultas, etiquetas ni coordenadas.
  */
 
 import { execFileSync } from 'node:child_process';
@@ -27,7 +28,10 @@ const BACKEND = process.env.BACKEND_URL ?? 'http://127.0.0.1:4310';
 const TOKEN = 'course-valid-token';
 const COMMAND = 'node evidence/week-09/scripts/fault-injection.mjs';
 const INCIDENT = 'campus-inc-001';
-const KEY = 'resolve-campus-inc-001-op-9';
+const PATH = `/v1/incidents/${INCIDENT}/actions`;
+const PREPARE_KEY = 'prepare-campus-inc-001-start-1';
+const RESOLVE_KEY = 'resolve-campus-inc-001-op-9';
+const CLOSE_KEY = 'close-campus-inc-001-op-10';
 
 // ---------------------------------------------------------------------------
 // Carga del código real de la app (TypeScript → .mjs temporal)
@@ -127,10 +131,41 @@ async function api(method, path, { actor, scenario, key, body, abortMs } = {}) {
   }
 }
 
-const incidentSummary = (incident) => {
-  const history = incident.payload.history.filter((event) => event.operationId === KEY);
-  return { status: incident.status, version: incident.version, events: history.length };
+const incidentSummary = (incident, key) => {
+  const history = incident.payload.history;
+  return {
+    status: incident.status,
+    version: incident.version,
+    events: history.filter((event) => event.operationId === key).length,
+    total: history.length,
+  };
 };
+
+/**
+ * Respuesta perdida tras guardar: el servidor procesa la acción pero la
+ * respuesta no llega (abort a 800 ms con `timeout_after_commit`). Se repite
+ * con la MISMA clave y el MISMO cuerpo y se comprueba `duplicate: true` y un
+ * solo evento de historial para esa operación.
+ */
+async function lostResponse({ label, actor, key, body, status, version }) {
+  const lost = await api('POST', PATH, { actor, scenario: 'timeout_after_commit', key, body, abortMs: 800 });
+  const after = await api('GET', `/v1/incidents/${INCIDENT}`, { actor });
+  const committed = after.status === 200 ? incidentSummary(after.json, key) : null;
+  record(`lost-response-${label}-committed-before-timeout`, 'failure',
+    lost.aborted === true && committed?.status === status && committed?.version === version,
+    `la respuesta de "${label}" se perdió (abort a 800ms) pero el servidor guardó: id=${INCIDENT} estado=${committed?.status} version=${committed?.version}`);
+
+  const replay = await api('POST', PATH, { actor, key, body });
+  record(`lost-response-${label}-replay-duplicate-true`, 'failure',
+    replay.status === 200 && replay.json?.duplicate === true,
+    `repetición de "${label}" con la misma clave y cuerpo: HTTP ${replay.status} duplicate=${replay.json?.duplicate}`);
+
+  const final = await api('GET', `/v1/incidents/${INCIDENT}`, { actor });
+  const end = final.status === 200 ? incidentSummary(final.json, key) : null;
+  record(`lost-response-${label}-single-history-event`, 'boundary',
+    end !== null && committed !== null && end.version === version && end.status === status && end.events === 1,
+    `GET final tras "${label}": id=${INCIDENT} estado=${end?.status} version=${end?.version} eventos con esa clave=${end?.events} (historial total=${end?.total})`);
+}
 
 // ---------------------------------------------------------------------------
 // Escenarios
@@ -233,32 +268,37 @@ async function main() {
         `${describe(result)} solicitudes=${counter.state.count} (sin reintento)`);
     }
 
-    // 9) Respuesta perdida tras guardar: mismo POST, misma clave, mismo contenido
+    // 9) Preparación: la incidencia pasa a `in_progress` (operación normal, con su propia clave)
     {
-      const body = { action: 'start', baseVersion: 1 };
-      const lost = await api('POST', `/v1/incidents/${INCIDENT}/actions`, {
-        actor: 'technician-1', scenario: 'timeout_after_commit', key: KEY, body, abortMs: 800,
+      const prepared = await api('POST', PATH, {
+        actor: 'technician-1', key: PREPARE_KEY, body: { action: 'start', baseVersion: 1 },
       });
-      const lostOk = lost.aborted === true;
-      const afterLoss = await api('GET', `/v1/incidents/${INCIDENT}`, { actor: 'technician-1' });
-      const committed = afterLoss.status === 200 ? incidentSummary(afterLoss.json) : null;
-      record('lost-response-committed-before-timeout', 'failure',
-        lostOk && committed?.status === 'in_progress',
-        `la respuesta se perdió (abort a 800ms) pero el servidor guardó: id=${INCIDENT} estado=${committed?.status} version=${committed?.version}`);
-
-      const replay = await api('POST', `/v1/incidents/${INCIDENT}/actions`, {
-        actor: 'technician-1', key: KEY, body,
-      });
-      record('lost-response-replay-duplicate-true', 'failure',
-        replay.status === 200 && replay.json?.duplicate === true,
-        `repetición con la misma clave: HTTP ${replay.status} duplicate=${replay.json?.duplicate}`);
-
-      const final = await api('GET', `/v1/incidents/${INCIDENT}`, { actor: 'technician-1' });
-      const end = final.status === 200 ? incidentSummary(final.json) : null;
-      record('lost-response-single-history-event', 'boundary',
-        end !== null && committed !== null && end.version === committed.version && end.events === 1,
-        `GET final: id=${INCIDENT} estado=${end?.status} version=${end?.version} eventos con esa clave=${end?.events}`);
+      const check = await api('GET', `/v1/incidents/${INCIDENT}`, { actor: 'technician-1' });
+      const state = check.status === 200 ? incidentSummary(check.json, PREPARE_KEY) : null;
+      record('lost-response-prepare-in-progress', 'nominal',
+        prepared.status === 201 && state?.status === 'in_progress' && state?.version === 2,
+        `preparación: HTTP ${prepared.status} id=${INCIDENT} estado=${state?.status} version=${state?.version}`);
     }
+
+    // 10) Respuesta perdida al RESOLVER (técnico) y repetición con la misma clave y cuerpo
+    await lostResponse({
+      label: 'resolve',
+      actor: 'technician-1',
+      key: RESOLVE_KEY,
+      body: { action: 'resolve', baseVersion: 2, diagnosis: 'Cable de red reemplazado (dato ficticio)' },
+      status: 'resolved',
+      version: 3,
+    });
+
+    // 11) Respuesta perdida al CERRAR (coordinador) y repetición con la misma clave y cuerpo
+    await lostResponse({
+      label: 'close',
+      actor: 'coordinator-1',
+      key: CLOSE_KEY,
+      body: { action: 'close', baseVersion: 3 },
+      status: 'closed',
+      version: 4,
+    });
   } finally {
     cleanup();
   }

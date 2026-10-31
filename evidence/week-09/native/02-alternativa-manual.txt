@@ -1,0 +1,1 @@
+Teléfono Xiaomi, 16:38. Con la búsqueda fallida, el campo Ubicación conserva "Zona A" y aparece el aviso "No se pudo obtener la ubicación. Se conserva tu referencia manual." La app no se bloquea. El encabezado todavía dice "Backend: available" porque ese estado solo se revisa al abrir la app o al sincronizar.

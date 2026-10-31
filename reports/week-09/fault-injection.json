@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "week": 9,
-  "commitSha": "8db35971a67a599f176ce009a0c9f75e157da32f",
-  "generatedAt": "2026-10-31T03:09:22.224Z",
+  "commitSha": "96caa0e167652c75004ca2eb16e8f1e277b9dcfc",
+  "generatedAt": "2026-10-31T22:46:43.166Z",
   "checks": [
     {
       "id": "geocoding-success",
@@ -58,7 +58,7 @@
       "status": "pass",
       "scenarioType": "boundary",
       "command": "node evidence/week-09/scripts/fault-injection.mjs",
-      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: origen=manual fallo=timeout timeout=800ms transcurrido=810ms solicitudes=1"
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: origen=manual fallo=timeout timeout=800ms transcurrido=818ms solicitudes=1"
     },
     {
       "id": "geocoding-network-down",
@@ -68,25 +68,53 @@
       "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: origen=manual fallo=network solicitudes=1 (sin reintento)"
     },
     {
-      "id": "lost-response-committed-before-timeout",
+      "id": "lost-response-prepare-in-progress",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: preparación: HTTP 201 id=campus-inc-001 estado=in_progress version=2"
+    },
+    {
+      "id": "lost-response-resolve-committed-before-timeout",
       "status": "pass",
       "scenarioType": "failure",
       "command": "node evidence/week-09/scripts/fault-injection.mjs",
-      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: la respuesta se perdió (abort a 800ms) pero el servidor guardó: id=campus-inc-001 estado=in_progress version=2"
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: la respuesta de \"resolve\" se perdió (abort a 800ms) pero el servidor guardó: id=campus-inc-001 estado=resolved version=3"
     },
     {
-      "id": "lost-response-replay-duplicate-true",
+      "id": "lost-response-resolve-replay-duplicate-true",
       "status": "pass",
       "scenarioType": "failure",
       "command": "node evidence/week-09/scripts/fault-injection.mjs",
-      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: repetición con la misma clave: HTTP 200 duplicate=true"
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: repetición de \"resolve\" con la misma clave y cuerpo: HTTP 200 duplicate=true"
     },
     {
-      "id": "lost-response-single-history-event",
+      "id": "lost-response-resolve-single-history-event",
       "status": "pass",
       "scenarioType": "boundary",
       "command": "node evidence/week-09/scripts/fault-injection.mjs",
-      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: GET final: id=campus-inc-001 estado=in_progress version=2 eventos con esa clave=1"
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: GET final tras \"resolve\": id=campus-inc-001 estado=resolved version=3 eventos con esa clave=1 (historial total=2)"
+    },
+    {
+      "id": "lost-response-close-committed-before-timeout",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: la respuesta de \"close\" se perdió (abort a 800ms) pero el servidor guardó: id=campus-inc-001 estado=closed version=4"
+    },
+    {
+      "id": "lost-response-close-replay-duplicate-true",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: repetición de \"close\" con la misma clave y cuerpo: HTTP 200 duplicate=true"
+    },
+    {
+      "id": "lost-response-close-single-history-event",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: GET final tras \"close\": id=campus-inc-001 estado=closed version=4 eventos con esa clave=1 (historial total=3)"
     }
   ]
 }

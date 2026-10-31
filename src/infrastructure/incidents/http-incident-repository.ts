@@ -3,6 +3,9 @@ import type { IncidentDetail, IncidentDraft, IncidentSummary } from '../../domai
 import type { IncidentRepository } from '../../domain/ports/incident-repository';
 import { IncidentRequestError } from '../../domain/incident-request-error';
 import { validateRemoteResource } from '../../domain/remote-resource';
+import { runWithRetry } from '../resilience/retry-executor';
+import type { RetryObservation } from '../resilience/retry-executor';
+import type { RetryStatus } from '../resilience/retry-policy';
 
 const categories = new Set(['electrical', 'laboratory', 'water', 'connectivity', 'equipment', 'safety', 'maintenance']);
 const statuses = new Set(['open', 'assigned', 'in_progress', 'resolved', 'closed']);
@@ -59,7 +62,41 @@ type Options = Readonly<{
    * Permite reintentar cada solicitud una sola vez con el token correcto.
    */
   onUnauthorized?: (rejectedToken: string) => Promise<string | null>;
+  /**
+   * Espera entre reintentos. Se inyecta en las pruebas para comprobar los
+   * límites sin dormir de verdad.
+   */
+  sleepImpl?: (ms: number) => Promise<void>;
+  /** Observación sanitizada de cada reintento: intento, estado y demora. */
+  observeRetry?: (event: RetryObservation) => void;
 }>;
+
+const idempotencyKeyOf = (init: RequestInit): string | undefined => {
+  const headers = init.headers;
+  if (headers === undefined || Array.isArray(headers)) return undefined;
+  if (typeof (headers as Headers).get === 'function') {
+    return (headers as Headers).get('Idempotency-Key') ?? undefined;
+  }
+  const value = (headers as Record<string, string>)['Idempotency-Key'];
+  return typeof value === 'string' ? value : undefined;
+};
+
+/** Sólo lo transitorio se reintenta; un 4xx de contrato no cambia al repetir. */
+const retryStatusOf = (error: unknown): RetryStatus | null => {
+  if (!(error instanceof IncidentRequestError)) return null;
+  switch (error.kind) {
+    case 'timeout': return 'timeout';
+    case 'network': return 503;
+    case 'rate_limit': return error.httpStatus ?? 429;
+    case 'server': return error.httpStatus ?? 500;
+    default: return null;
+  }
+};
+
+const retryAfterMsOf = (error: unknown): number | undefined =>
+  error instanceof IncidentRequestError && error.retryAfterSeconds !== undefined
+    ? error.retryAfterSeconds * 1000
+    : undefined;
 
 export class HttpIncidentRepository implements IncidentRepository {
   constructor(private readonly baseUrl: string, private readonly options: Options = {}) {}
@@ -83,6 +120,26 @@ export class HttpIncidentRepository implements IncidentRepository {
   }
 
   private async request(path: string, init: RequestInit = {}): Promise<unknown> {
+    const idempotencyKey = idempotencyKeyOf(init);
+    const outcome = await runWithRetry<unknown>({
+      method: init.method === 'POST' ? 'POST' : 'GET',
+      execute: () => this.attempt(path, init),
+      classify: retryStatusOf,
+      ...(idempotencyKey !== undefined ? { idempotencyKey } : {}),
+      retryAfterMs: retryAfterMsOf,
+      ...(this.options.sleepImpl !== undefined ? { sleep: this.options.sleepImpl } : {}),
+      ...(this.options.observeRetry !== undefined ? { observe: this.options.observeRetry } : {}),
+    });
+    if (outcome.ok) return outcome.value;
+    throw outcome.error;
+  }
+
+  /**
+   * Un intento completo: token vigente, envío, renovación por 401 y lectura del
+   * cuerpo. El controlador de aborto y su temporizador son de ESTE intento, así
+   * que un timeout no arrastra al siguiente.
+   */
+  private async attempt(path: string, init: RequestInit): Promise<unknown> {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), this.options.timeoutMs ?? 2000);
     try {

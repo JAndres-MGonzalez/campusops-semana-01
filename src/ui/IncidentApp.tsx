@@ -5,6 +5,7 @@ import { IncidentRequestError } from '../domain/incident-request-error';
 import { IncidentCreateScreen } from './screens/IncidentCreateScreen';
 import { IncidentDetailScreen } from './screens/IncidentDetailScreen';
 import { IncidentListScreen } from './screens/IncidentListScreen';
+import type { LocationViewResult } from './location-view';
 
 type Props = Readonly<{
   loadList: () => Promise<readonly IncidentSummary[]>;
@@ -19,6 +20,8 @@ type Props = Readonly<{
     input: Readonly<{ note: string; photoRef: string }>,
   ) => Promise<IncidentDetail | null>;
   reportFailure?: (operation: 'list' | 'detail' | 'create', error: unknown) => void;
+  /** Búsqueda opcional de ubicación para el formulario de creación. */
+  resolveLocation?: (query: string) => Promise<LocationViewResult>;
 }>;
 
 function errorMessage(error: unknown, fallback: string): string {
@@ -33,7 +36,9 @@ function errorMessage(error: unknown, fallback: string): string {
   return messages[error.kind];
 }
 
-export function IncidentApp({ loadList, loadDetail, createIncident, startAttention, reportFailure }: Props) {
+export function IncidentApp({
+  loadList, loadDetail, createIncident, startAttention, reportFailure, resolveLocation,
+}: Props) {
   const [incidents, setIncidents] = useState<readonly IncidentSummary[]>([]);
   const [selected, setSelected] = useState<IncidentDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -159,7 +164,8 @@ export function IncidentApp({ loadList, loadDetail, createIncident, startAttenti
         <Text>Reintentar</Text>
       </Pressable> : null}
       {screen === 'create' ? (
-        <IncidentCreateScreen busy={loading} onSubmit={saveIncident} onCancel={goBack} />
+        <IncidentCreateScreen busy={loading} onSubmit={saveIncident} onCancel={goBack}
+          {...(resolveLocation !== undefined ? { onResolveLocation: resolveLocation } : {})} />
       ) : loading ? <Text>Cargando incidencias...</Text> : screen === 'detail' ? (
         <IncidentDetailScreen incident={selected} onBack={goBack}
           emptyMessage={error ? '' : 'No hay datos disponibles para esta incidencia.'} {...startProps} />

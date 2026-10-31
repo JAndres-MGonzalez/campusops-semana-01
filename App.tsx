@@ -6,6 +6,7 @@ import { createIncident, getIncidentDetail, getIncidentList } from './src/applic
 import type { IncidentDetail, IncidentDraft } from './src/domain/incident';
 import { IncidentRequestError } from './src/domain/incident-request-error';
 import { getBackendHealth } from './src/api/courseBackend';
+import { createHttpGeocodingProvider, createLocationCache, createLocationService } from './src/infrastructure/geocoding';
 import { HttpIncidentRepository } from './src/infrastructure/incidents/http-incident-repository';
 import { initializePersistence } from './src/infrastructure/persistence';
 import type { PendingOperation } from './src/infrastructure/persistence';
@@ -16,6 +17,7 @@ import type { OutboxSubmit, StartPayload } from './src/infrastructure/sync/outbo
 import { submitTechnicianStart } from './src/infrastructure/sync/technician-start';
 import { reportIncidentFailure } from './src/infrastructure/telemetry/safe-telemetry';
 import { IncidentApp } from './src/ui/IncidentApp';
+import { describeLocation } from './src/ui/location-view';
 
 const backendUrl = process.env.EXPO_PUBLIC_COURSE_BACKEND_URL
   ?? (Platform.OS === 'android' ? 'http://10.0.2.2:4310' : 'http://127.0.0.1:4310');
@@ -37,6 +39,22 @@ const repository = new HttpIncidentRepository(backendUrl, {
   tokenProvider: () => session.getValidToken(),
   onUnauthorized: (rejectedToken) => session.renew(rejectedToken),
 });
+
+/**
+ * Servicio de ubicación: lectura opcional con caché y alternativa manual. Usa
+ * la sesión vigente (token y actor) y nunca lanza ni bloquea el guardado.
+ */
+const geocoding = createLocationService({
+  lookup: createHttpGeocodingProvider({
+    baseUrl: backendUrl,
+    tokenProvider: () => session.getValidToken(),
+    actorProvider: () => activeActor,
+  }),
+  cache: createLocationCache(),
+});
+
+const resolveLocation = async (query: string) =>
+  describeLocation(await geocoding.resolve(query, query));
 
 function isOfflineFailure(error: unknown): boolean {
   return error instanceof IncidentRequestError
@@ -322,6 +340,7 @@ export default function App() {
           createIncident={saveIncident}
           startAttention={startAttention}
           reportFailure={reportIncidentFailure}
+          resolveLocation={resolveLocation}
         />
       ) : (
         <View style={styles.card}>

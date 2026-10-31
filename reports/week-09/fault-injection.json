@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "week": 9,
+  "commitSha": "8db35971a67a599f176ce009a0c9f75e157da32f",
+  "generatedAt": "2026-10-31T03:09:22.224Z",
+  "checks": [
+    {
+      "id": "geocoding-success",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: origen=provider fallo=ninguno solicitudes=1"
+    },
+    {
+      "id": "geocoding-zero-coordinates-accepted",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: las coordenadas (0,0) del proveedor se conservaron como válidas: origen=provider"
+    },
+    {
+      "id": "geocoding-cache-hit",
+      "status": "pass",
+      "scenarioType": "nominal",
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: primera=provider segunda=cache solicitudes al proveedor=1"
+    },
+    {
+      "id": "geocoding-invalid-coordinates",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: origen=manual fallo=contract sin coordenadas inventadas solicitudes=1"
+    },
+    {
+      "id": "geocoding-incomplete",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: origen=manual fallo=contract sin coordenadas inventadas solicitudes=1"
+    },
+    {
+      "id": "geocoding-rate-limited",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: origen=manual fallo=rate_limit retry-after=1s solicitudes=1 (sin reintento)"
+    },
+    {
+      "id": "geocoding-server-error",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: origen=manual fallo=server solicitudes=1 (sin reintento)"
+    },
+    {
+      "id": "geocoding-slow-timeout",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: origen=manual fallo=timeout timeout=800ms transcurrido=810ms solicitudes=1"
+    },
+    {
+      "id": "geocoding-network-down",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: origen=manual fallo=network solicitudes=1 (sin reintento)"
+    },
+    {
+      "id": "lost-response-committed-before-timeout",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: la respuesta se perdió (abort a 800ms) pero el servidor guardó: id=campus-inc-001 estado=in_progress version=2"
+    },
+    {
+      "id": "lost-response-replay-duplicate-true",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: repetición con la misma clave: HTTP 200 duplicate=true"
+    },
+    {
+      "id": "lost-response-single-history-event",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "evidence": "Salida real en evidence/week-09/logs/fault-injection.log: GET final: id=campus-inc-001 estado=in_progress version=2 eventos con esa clave=1"
+    }
+  ]
+}

@@ -1,7 +1,8 @@
-# Política de resiliencia — Semana 9 (borrador de Parte B)
+# Política de resiliencia — Semana 9
 
-Borrador técnico de Ismael (`3523110741`) con datos verificables del código y de las
-ejecuciones reales. Andrés consolida la redacción final.
+CampusOps conserva la captura manual cuando el proveedor de ubicación falla.
+Las operaciones con efecto sólo se repiten con la misma identidad y contenido,
+con un máximo de cuatro solicitudes y tres esperas.
 
 ## 1. Proveedor y ejecución externa
 
@@ -39,6 +40,10 @@ ejecuciones reales. Andrés consolida la redacción final.
   incidencia (el contrato no las acepta) ni forman parte del borrador.
 - La UI conserva exactamente lo que la persona escribió; «Guardar incidencia» no depende de la
   geocodificación.
+- La alternativa manual no sustituye la sesión. El token didáctico dura 60 s:
+  si vence sin conexión y la renovación falla, la app puede rechazar el guardado.
+  Se conserva el formulario para reautenticarse y repetir, sin declarar una
+  operación confirmada ni encolada cuando no lo está.
 
 ## 4. Reintentos de operaciones con efecto
 
@@ -84,3 +89,50 @@ la sección 4.
   `closed`, versión 4). La repetición con la **misma clave y el mismo cuerpo** (`resolve-campus-inc-001-op-9`
   y `close-campus-inc-001-op-10`) devolvió `200` con `duplicate: true` y quedó un solo evento de historial
   por clave.
+
+## 8. Decisión y métricas independientes
+
+| Situación | Acción | Motivo |
+|---|---|---|
+| Lectura de incidencias con timeout o estado transitorio publicado | Hasta tres reintentos; backoff 500, 1000 y 2000 ms | Recuperar sin una ráfaga ilimitada de solicitudes. |
+| POST con clave estable y fallo transitorio | Repetir con igual clave y cuerpo | El servidor reconoce el efecto ya aplicado. |
+| POST sin clave, 409 u otro error no transitorio | Informar el fallo y conservar el pendiente | Repetir no garantiza seguridad ni corrige el contrato. |
+| Proveedor de ubicación inválido, lento, limitado o desconectado | Una solicitud y alternativa manual | La captura puede continuar sin inventar coordenadas. |
+
+`evidence/week-09/retry-metrics.test.ts` cuenta las solicitudes del cliente real
+con respuestas controladas y reloj inyectado. Comprueba 429 con dos solicitudes
+y espera de 1000 ms; 503 persistente con cuatro solicitudes y esperas de
+500/1000/2000 ms; Retry-After de 120 s recortado a 30000 ms; y POST sin clave
+o conflicto 409 con un único intento. Sus tiempos son de reloj controlado.
+
+`node evidence/week-09/scripts/retry-live-metrics.mjs` inicia un backend local
+aislado y usa el ejecutor real. Al resolver y cerrar, aborta la primera respuesta
+a los 800 ms y repite con la misma clave y cuerpo. Cada operación debe producir
+dos solicitudes, `duplicate=true` y un solo evento de historial. Las esperas y
+tiempos de este script se miden con reloj real. Los resultados están en
+`reports/week-09/retry-metrics.json` y `evidence/week-09/logs/retry-live.log`.
+
+## 9. Verificación de la versión
+
+El workflow obtiene el historial completo y, en un PR, revisa su SHA de origen.
+Así están disponibles los tags y se comprueba la misma versión identificada en
+los reportes, en lugar del commit temporal que GitHub prepara para el PR. Todos
+los comandos obligatorios y sus códigos de error se conservan.
+
+Los resultados anteriores de cada integrante se conservan con su SHA original.
+Dos ramas aportaron un log con el mismo nombre; el de Kevin se preservó como
+`evidence/week-09/logs/kevin-linea-base-week-06-08.log` y el de Ismael conserva
+`evidence/week-09/logs/linea-base-week-06-08.log`.
+
+## 10. Recorrido Android
+
+La integración se instaló como APK en Android 16/API 36. Se verificaron búsqueda
+con proveedor, guardado en línea y detalle. Con una sesión recién iniciada se
+interrumpió el acceso al backend local: la búsqueda conservó la ubicación manual,
+el guardado quedó en la cola y, al reconectar, sólo salió tras confirmación. La
+lista y el detalle mostraron la ubicación escrita. Capturas, pasos y límites en
+`evidence/week-09/native/andres-ui.md`.
+
+Las capturas anteriores de Ismael que muestran un rechazo de permiso se conservan
+como diagnóstico. Este recorrido no afirma que el guardado funcione después de
+perder la sesión sin conexión.

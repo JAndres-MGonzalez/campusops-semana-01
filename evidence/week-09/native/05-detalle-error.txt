@@ -1,0 +1,1 @@
+Teléfono Xiaomi, 16:40, con "Backend: offline". Al abrir el detalle no se muestra el detalle sino el error en rojo "No tienes permiso para esta operación." con las opciones "Reintentar" y "Volver a la lista". La app no se bloquea y se puede regresar a la lista.

@@ -1,0 +1,1 @@
+Teléfono Xiaomi, 16:40, con "Backend: offline". La lista se muestra con una sola incidencia, "Sin conexión en laboratorio ficticio · Asignada · Conectividad · Edificio de prueba A". No aparece la incidencia "Prueba 1" porque no se guardó. No hay pantalla en blanco.

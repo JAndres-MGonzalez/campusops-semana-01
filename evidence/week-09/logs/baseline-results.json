@@ -1,0 +1,37 @@
+[
+  {
+    "name": "baseline-typecheck",
+    "exitCode": 0,
+    "sha": "044f5dff69f650d95270cb67b758ac1777e3db0b",
+    "command": "npm.cmd run typecheck",
+    "log": "C:\\Users\\Ra1zeR\\.cache\\campusops-tools\\week-09-andres\\baseline-typecheck.log"
+  },
+  {
+    "name": "baseline-lint",
+    "exitCode": 0,
+    "sha": "044f5dff69f650d95270cb67b758ac1777e3db0b",
+    "command": "npm.cmd run lint",
+    "log": "C:\\Users\\Ra1zeR\\.cache\\campusops-tools\\week-09-andres\\baseline-lint.log"
+  },
+  {
+    "name": "baseline-architecture",
+    "exitCode": 0,
+    "sha": "044f5dff69f650d95270cb67b758ac1777e3db0b",
+    "command": "npm.cmd run check:architecture",
+    "log": "C:\\Users\\Ra1zeR\\.cache\\campusops-tools\\week-09-andres\\baseline-architecture.log"
+  },
+  {
+    "name": "baseline-public-06-08",
+    "exitCode": 0,
+    "sha": "044f5dff69f650d95270cb67b758ac1777e3db0b",
+    "command": "npm.cmd test -- --ci --runInBand course-tests/public/week-06.test.ts course-tests/public/week-08.test.ts",
+    "log": "C:\\Users\\Ra1zeR\\.cache\\campusops-tools\\week-09-andres\\baseline-public-06-08.log"
+  },
+  {
+    "name": "baseline-session-persistence-sync",
+    "exitCode": 0,
+    "sha": "044f5dff69f650d95270cb67b758ac1777e3db0b",
+    "command": "npm.cmd test -- --ci --runInBand src/infrastructure/session src/infrastructure/persistence src/infrastructure/sync",
+    "log": "C:\\Users\\Ra1zeR\\.cache\\campusops-tools\\week-09-andres\\baseline-session-persistence-sync.log"
+  }
+]

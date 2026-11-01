@@ -1,0 +1,225 @@
+npm run typecheck
+
+> dmi-react-native-starter@1.0.0 typecheck
+> tsc --noEmit
+
+npm run lint
+
+> dmi-react-native-starter@1.0.0 lint
+> eslint .
+
+npm run test:smoke
+
+> dmi-react-native-starter@1.0.0 test:smoke
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/smoke.test.tsx
+
+PASS course-tests/smoke.test.tsx
+  √ renders the reproducible baseline and resolves backend state (120 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        1.58 s, estimated 5 s
+Ran all test suites matching /course-tests\\smoke.test.tsx/i.
+npm run audit:ci
+
+> dmi-react-native-starter@1.0.0 audit:ci
+> npm audit --omit=dev --audit-level=critical
+
+# npm audit report
+
+@xmldom/xmldom  <=0.8.14 || 0.9.0-beta.1 - 0.9.11
+Severity: high
+xmldom: XML fragment injection via invalid EntityReference.nodeName during requireWellFormed serialization - https://github.com/advisories/GHSA-6gmq-8vp8-gcm6
+xmldom: XML fragment injection via invalid EntityReference.nodeName during requireWellFormed serialization - https://github.com/advisories/GHSA-6gmq-8vp8-gcm6
+xmldom: HTML raw-text closing-tag case mismatch causes output amplification - https://github.com/advisories/GHSA-6mj3-qw4j-hgrw
+xmldom: Processing Instruction Target Injection Bypasses requireWellFormed - https://github.com/advisories/GHSA-c7q8-3ch8-vqpv
+xmldom: Processing Instruction Target Injection Bypasses requireWellFormed - https://github.com/advisories/GHSA-c7q8-3ch8-vqpv
+xmldom: requireWellFormed element/attribute name validation is bypassable via an embedded line terminator - https://github.com/advisories/GHSA-jxjr-3g7g-3944
+xmldom: DocType `name` Injection Bypasses requireWellFormed - https://github.com/advisories/GHSA-27p8-2357-5qqv
+xmldom: DocType `name` Injection Bypasses requireWellFormed - https://github.com/advisories/GHSA-27p8-2357-5qqv
+xmldom: Creation-time XML Name/QName validation is bypassable via an embedded line terminator, allowing injection on the default serialization path - https://github.com/advisories/GHSA-3px3-54cx-rmw9
+xmldom: requireWellFormed DocType publicId/systemId validation is bypassable via an embedded line terminator - https://github.com/advisories/GHSA-vr34-hp96-76pp
+xmldom: Parser silently accepts a not-well-formed end tag whose name is followed by a line break and trailing content - https://github.com/advisories/GHSA-6h8r-xr42-gp59
+xmldom: Parser silently accepts a not-well-formed end tag whose name is followed by a line break and trailing content - https://github.com/advisories/GHSA-6h8r-xr42-gp59
+xmldom: Quadratic-time attribute deduplication - https://github.com/advisories/GHSA-8344-3jmq-59r6
+xmldom: Quadratic-time attribute deduplication - https://github.com/advisories/GHSA-8344-3jmq-59r6
+xmldom: End-tag Whitespace-Trim Regex ReDoS — quadratic backtracking in the 0.8.x end-tag parser - https://github.com/advisories/GHSA-x4fp-j954-r2f4
+xmldom: Quadratic-memory consumption - https://github.com/advisories/GHSA-965w-775f-mr7g
+xmldom: Quadratic-memory consumption - https://github.com/advisories/GHSA-965w-775f-mr7g
+xmldom: Quadratic-time parsing via the malformed-input recovery path — `parseElementStartPart` re-scan and `normalize()` adjacent-text merge - https://github.com/advisories/GHSA-93r5-fhx6-vmg9
+xmldom: Quadratic-time parsing via the malformed-input recovery path — `parseElementStartPart` re-scan and `normalize()` adjacent-text merge - https://github.com/advisories/GHSA-93r5-fhx6-vmg9
+fix available via `npm audit fix`
+node_modules/@xmldom/xmldom
+node_modules/plist/node_modules/@xmldom/xmldom
+
+brace-expansion  <=1.1.20 || 4.0.0 - 5.0.11
+Severity: high
+brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service - https://github.com/advisories/GHSA-q2hr-2g5m-vwhr
+brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service - https://github.com/advisories/GHSA-q2hr-2g5m-vwhr
+brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion - https://github.com/advisories/GHSA-qhr7-859c-m2p7
+brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion - https://github.com/advisories/GHSA-qhr7-859c-m2p7
+brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion - https://github.com/advisories/GHSA-6j4f-fj2g-mc7p
+brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion - https://github.com/advisories/GHSA-6j4f-fj2g-mc7p
+fix available via `npm audit fix`
+node_modules/@expo/fingerprint/node_modules/brace-expansion
+node_modules/brace-expansion
+node_modules/glob/node_modules/brace-expansion
+
+compression  <1.8.2
+Severity: high
+compression vulnerable to Denial of Service via memory leak on premature response close - https://github.com/advisories/GHSA-vc2v-76pw-4v95
+fix available via `npm audit fix`
+node_modules/compression
+
+deepmerge  >=4.2.0
+deepmerge mergeObject() allows prototype poisoning of returned objects - https://github.com/advisories/GHSA-gcqx-w48m-w2h4
+fix available via `npm audit fix --force`
+Will install expo@51.0.39, which is a breaking change
+node_modules/deepmerge
+  @expo/config  >=9.1.0-canary-20240628-1ba8152
+  Depends on vulnerable versions of @expo/config-plugins
+  Depends on vulnerable versions of deepmerge
+  Depends on vulnerable versions of glob
+  node_modules/@expo/config
+    @expo/local-build-cache-provider  *
+    Depends on vulnerable versions of @expo/config
+    node_modules/@expo/local-build-cache-provider
+      expo  >=52.0.0-canary-20240625-2333e70
+      Depends on vulnerable versions of @expo/cli
+      Depends on vulnerable versions of @expo/config
+      Depends on vulnerable versions of @expo/config-plugins
+      Depends on vulnerable versions of @expo/fingerprint
+      Depends on vulnerable versions of @expo/local-build-cache-provider
+      Depends on vulnerable versions of @expo/metro-config
+      node_modules/expo
+
+glob  3.0.0 - 14.0.1
+Severity: moderate
+Glob: AbortSignal cancellation bypass allows post-timeout filesystem traversal - https://github.com/advisories/GHSA-3g3m-2fjr-6pw4
+Depends on vulnerable versions of minimatch
+fix available via `npm audit fix --force`
+Will install expo@51.0.39, which is a breaking change
+node_modules/glob
+node_modules/test-exclude/node_modules/glob
+  @expo/cli  >=0.19.0-canary-20240625-2333e70
+  Depends on vulnerable versions of @expo/config
+  Depends on vulnerable versions of @expo/config-plugins
+  Depends on vulnerable versions of @expo/inline-modules
+  Depends on vulnerable versions of @expo/metro-config
+  Depends on vulnerable versions of @expo/prebuild-config
+  Depends on vulnerable versions of glob
+  Depends on vulnerable versions of zod
+  node_modules/expo/node_modules/@expo/cli
+  @expo/config-plugins  8.0.9-canary-20240719-83ee47b - 8.0.9-canary-20240814-ce0f7d5 || >=8.1.0-canary-20240904-69100c1
+  Depends on vulnerable versions of glob
+  node_modules/@expo/config-plugins
+    @expo/inline-modules  >=0.0.2-canary-20260409-6fc2991
+    Depends on vulnerable versions of @expo/config-plugins
+    node_modules/@expo/inline-modules
+    @expo/prebuild-config  7.0.9-canary-20240719-83ee47b - 7.0.9-canary-20240814-ce0f7d5 || >=7.1.0-canary-20240904-69100c1
+    Depends on vulnerable versions of @expo/config
+    Depends on vulnerable versions of @expo/config-plugins
+    node_modules/@expo/prebuild-config
+  @expo/fingerprint  *
+  Depends on vulnerable versions of glob
+  Depends on vulnerable versions of minimatch
+  node_modules/@expo/fingerprint
+  @expo/metro-config  >=0.19.0-canary-20240625-2333e70
+  Depends on vulnerable versions of @expo/config
+  Depends on vulnerable versions of glob
+  node_modules/@expo/metro-config
+  test-exclude  4.2.2 || >=5.0.0
+  Depends on vulnerable versions of glob
+  Depends on vulnerable versions of minimatch
+  node_modules/test-exclude
+    babel-plugin-istanbul  >=5.0.1
+    Depends on vulnerable versions of test-exclude
+    node_modules/babel-plugin-istanbul
+      @jest/transform  *
+      Depends on vulnerable versions of babel-plugin-istanbul
+      node_modules/@jest/transform
+        babel-jest  >=24.0.0-alpha.0
+        Depends on vulnerable versions of @jest/transform
+        Depends on vulnerable versions of babel-plugin-istanbul
+        node_modules/babel-jest
+          @react-native/jest-preset  *
+          Depends on vulnerable versions of babel-jest
+          node_modules/@react-native/jest-preset
+            react-native  0.85.0-nightly-20260108-1236b6be4 - 0.87.0-rc.4
+            Depends on vulnerable versions of @react-native/jest-preset
+            Depends on vulnerable versions of @react-native/virtualized-lists
+            node_modules/react-native
+              @react-native/virtualized-lists  0.85.0-nightly-20260108-1236b6be4 - 0.87.0-rc.4
+              Depends on vulnerable versions of react-native
+              node_modules/@react-native/virtualized-lists
+
+js-yaml  3.0.0 - 3.15.1 || 4.0.0 - 4.3.1
+Severity: high
+js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources - https://github.com/advisories/GHSA-2883-xcg3-v3hh
+js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources - https://github.com/advisories/GHSA-2883-xcg3-v3hh
+fix available via `npm audit fix`
+node_modules/@expo/xcpretty/node_modules/js-yaml
+node_modules/js-yaml
+
+minimatch  <11.0.1
+Severity: moderate
+minimatch has potential denial of service via globparts amplification - https://github.com/advisories/GHSA-g3hv-75wg-m249
+fix available via `npm audit fix --force`
+Will install expo@51.0.39, which is a breaking change
+node_modules/@expo/fingerprint/node_modules/minimatch
+node_modules/glob/node_modules/minimatch
+node_modules/minimatch
+
+node-forge  <=1.4.0
+Severity: high
+node-forge RSA PKCS#1 v1.5 signature verification accepts extra nested DigestAlgorithm elements - https://github.com/advisories/GHSA-86w9-cpqp-85rv
+Forge: ASN.1 OID first arc truncation in asn1.oidToDer - https://github.com/advisories/GHSA-4642-5mcj-2rqw
+Forge: Prototype Pollution in forge.http cookie handling via a malicious Set-Cookie - https://github.com/advisories/GHSA-6wvx-3r32-xmcg
+Forge: TLS client crash when the server sends no certificate - https://github.com/advisories/GHSA-525v-9gp9-w22h
+Forge: Regular expression denial of service in PEM decoding (pem.decode) - https://github.com/advisories/GHSA-7wch-p9px-956x
+Forge: Denial of Service via infinite loop in BigInteger.modInverse() with negative input (incomplete fix of CVE-2026-33891) - https://github.com/advisories/GHSA-h6cr-wjv9-3cpp
+Forge: verifyCertificateChain() removes trusted CA certificates with the same subject from the CA store - https://github.com/advisories/GHSA-4487-j8r4-4g2f
+Forge: AES-GCM authentication bypass via unvalidated tagLength option - https://github.com/advisories/GHSA-5cwg-6vw7-rj6p
+Forge: PKCS#12 MAC forgery and constant-key PBE via zero iteration count - https://github.com/advisories/GHSA-jc66-7q78-782g
+Forge: Denial of service in TLS record processing via a record interleaved with a fragmented handshake message - https://github.com/advisories/GHSA-8hrf-8g6f-7xwp
+Forge: Denial of service in TLS record processing via call stack exhaustion - https://github.com/advisories/GHSA-hqq3-7jhf-c5jx
+Forge: X.509 basicConstraints bypass in verifyCertificateChain() via deprecated extension OIDs 2.5.29.10 and 2.5.29.13 - https://github.com/advisories/GHSA-5x38-2vff-x55p
+fix available via `npm audit fix`
+node_modules/node-forge
+
+source-map-js  1.0.0 - 1.2.1
+Severity: high
+source-map-js allows event-loop denial of service through indexed source-map section offsets - https://github.com/advisories/GHSA-68fv-2mgg-jv7q
+fix available via `npm audit fix`
+node_modules/source-map-js
+
+zod  <4.6.6
+Severity: high
+Zod can exhaust memory while validating oversized constrained collections - https://github.com/advisories/GHSA-mrhx-c7xc-m3w5
+fix available via `npm audit fix`
+node_modules/expo/node_modules/zod
+
+26 vulnerabilities (1 low, 17 moderate, 8 high)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+npm run bundle:release
+
+> dmi-react-native-starter@1.0.0 bundle:release
+> expo export --platform android --output-dir dist/export
+
+Starting Metro Bundler
+
+Android Bundled 6355ms index.ts (616 modules)
+
+› android bundles (1):
+_expo/static/js/android/index-a405acf0eeb0044d00f4ad622b2d640b.hbc (1.6MB)
+
+› Files (1):
+metadata.json (150B)
+
+Exported: dist/export

@@ -1,0 +1,18 @@
+Comprobación Android de semana 9.
+APK release: JavaScript incluido; no se requiere servidor Metro en ejecución.
+La salida de Metro de compilación está en native-release-build.log.
+Validación de textos visibles contra las jerarquías XML capturadas:
+PASS andres-01-provider.png
+PASS andres-02-saved-online.png
+PASS andres-03-list-online.png
+PASS andres-04-manual-offline.png
+PASS andres-05-saved-offline.png
+PASS andres-06-confirmed.png
+PASS andres-07-list-confirmed.png
+PASS andres-08-detail-confirmed.png
+Cola observada: 1 operación sin conexión; 0 tras la confirmación.
+El guardado de la alternativa manual se comprobó con sesión vigente.
+Al sincronizar, la app vuelve automáticamente a la lista.
+--------- beginning of main
+11-01 00:49:14.403  1846  1864 I ReactNativeJS: Running "main"
+

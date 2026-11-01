@@ -1,0 +1,22 @@
+[
+  {
+    "name": "andres-typecheck",
+    "command": "npm.cmd run typecheck",
+    "exitCode": 0
+  },
+  {
+    "name": "andres-lint",
+    "command": "npm.cmd run lint",
+    "exitCode": 0
+  },
+  {
+    "name": "andres-architecture",
+    "command": "npm.cmd run check:architecture",
+    "exitCode": 0
+  },
+  {
+    "name": "integration-tests",
+    "command": "npm.cmd test -- --ci --runInBand --json --outputFile=C:\\Users\\Ra1zeR\\.cache\\campusops-tools\\week-09-andres\\integration-tests.json course-tests/public/week-06.test.ts course-tests/public/week-08.test.ts course-tests/public/week-09.test.ts src/infrastructure/session src/infrastructure/persistence src/infrastructure/sync src/infrastructure/resilience src/infrastructure/geocoding src/infrastructure/incidents src/ui/screens/incident-create-location.test.tsx evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx evidence/week-09/retry-metrics.test.ts",
+    "exitCode": 0
+  }
+]

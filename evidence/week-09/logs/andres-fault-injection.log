@@ -1,0 +1,19 @@
+PASS [nominal] geocoding-success: origen=provider fallo=ninguno solicitudes=1
+PASS [boundary] geocoding-zero-coordinates-accepted: las coordenadas (0,0) del proveedor se conservaron como válidas: origen=provider
+PASS [nominal] geocoding-cache-hit: primera=provider segunda=cache solicitudes al proveedor=1
+PASS [failure] geocoding-invalid-coordinates: origen=manual fallo=contract sin coordenadas inventadas solicitudes=1
+PASS [failure] geocoding-incomplete: origen=manual fallo=contract sin coordenadas inventadas solicitudes=1
+PASS [failure] geocoding-rate-limited: origen=manual fallo=rate_limit retry-after=1s solicitudes=1 (sin reintento)
+PASS [failure] geocoding-server-error: origen=manual fallo=server solicitudes=1 (sin reintento)
+PASS [boundary] geocoding-slow-timeout: origen=manual fallo=timeout timeout=800ms transcurrido=808ms solicitudes=1
+PASS [failure] geocoding-network-down: origen=manual fallo=network solicitudes=1 (sin reintento)
+PASS [nominal] lost-response-prepare-in-progress: preparación: HTTP 201 id=campus-inc-001 estado=in_progress version=2
+PASS [failure] lost-response-resolve-committed-before-timeout: la respuesta de "resolve" se perdió (abort a 800ms) pero el servidor guardó: id=campus-inc-001 estado=resolved version=3
+PASS [failure] lost-response-resolve-replay-duplicate-true: repetición de "resolve" con la misma clave y cuerpo: HTTP 200 duplicate=true
+PASS [boundary] lost-response-resolve-single-history-event: GET final tras "resolve": id=campus-inc-001 estado=resolved version=3 eventos con esa clave=1 (historial total=2)
+PASS [failure] lost-response-close-committed-before-timeout: la respuesta de "close" se perdió (abort a 800ms) pero el servidor guardó: id=campus-inc-001 estado=closed version=4
+PASS [failure] lost-response-close-replay-duplicate-true: repetición de "close" con la misma clave y cuerpo: HTTP 200 duplicate=true
+PASS [boundary] lost-response-close-single-history-event: GET final tras "close": id=campus-inc-001 estado=closed version=4 eventos con esa clave=1 (historial total=3)
+
+Resumen: 16/16 comprobaciones en pass.
+Reporte escrito en C:\Users\Ra1zeR\.cache\campusops-tools\week-09-andres\fault-injection-observed.json

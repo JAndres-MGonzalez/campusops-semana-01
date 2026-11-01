@@ -1,0 +1,42 @@
+[
+  {
+    "stage": "ismael-before-merge",
+    "name": "typecheck",
+    "sha": "cc5c48bbf833d5c4078a6499c07c3c3ca8c7e7d3",
+    "command": "npm.cmd run typecheck",
+    "exitCode": 0,
+    "log": "C:\\Users\\Ra1zeR\\.cache\\campusops-tools\\week-09-andres\\ismael-before-merge-typecheck.log"
+  },
+  {
+    "stage": "ismael-before-merge",
+    "name": "lint",
+    "sha": "cc5c48bbf833d5c4078a6499c07c3c3ca8c7e7d3",
+    "command": "npm.cmd run lint",
+    "exitCode": 0,
+    "log": "C:\\Users\\Ra1zeR\\.cache\\campusops-tools\\week-09-andres\\ismael-before-merge-lint.log"
+  },
+  {
+    "stage": "ismael-before-merge",
+    "name": "architecture",
+    "sha": "cc5c48bbf833d5c4078a6499c07c3c3ca8c7e7d3",
+    "command": "npm.cmd run check:architecture",
+    "exitCode": 0,
+    "log": "C:\\Users\\Ra1zeR\\.cache\\campusops-tools\\week-09-andres\\ismael-before-merge-architecture.log"
+  },
+  {
+    "stage": "ismael-before-merge",
+    "name": "public-09",
+    "sha": "cc5c48bbf833d5c4078a6499c07c3c3ca8c7e7d3",
+    "command": "npm.cmd test -- --ci --runInBand course-tests/public/week-09.test.ts",
+    "exitCode": 0,
+    "log": "C:\\Users\\Ra1zeR\\.cache\\campusops-tools\\week-09-andres\\ismael-before-merge-public-09.log"
+  },
+  {
+    "stage": "ismael-before-merge",
+    "name": "geocoding-ui",
+    "sha": "cc5c48bbf833d5c4078a6499c07c3c3ca8c7e7d3",
+    "command": "npm.cmd test -- --ci --runInBand src/infrastructure/geocoding src/ui/screens/incident-create-location.test.tsx",
+    "exitCode": 0,
+    "log": "C:\\Users\\Ra1zeR\\.cache\\campusops-tools\\week-09-andres\\ismael-before-merge-geocoding-ui.log"
+  }
+]

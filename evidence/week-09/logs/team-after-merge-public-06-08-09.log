@@ -1,0 +1,13 @@
+
+> dmi-react-native-starter@1.0.0 test
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand course-tests/public/week-06.test.ts course-tests/public/week-08.test.ts course-tests/public/week-09.test.ts
+
+PASS course-tests/public/week-06.test.ts
+PASS course-tests/public/week-09.test.ts
+PASS course-tests/public/week-08.test.ts
+
+Test Suites: 3 passed, 3 total
+Tests:       9 passed, 9 total
+Snapshots:   0 total
+Time:        1.292 s, estimated 3 s
+Ran all test suites matching /course-tests\\public\\week-06.test.ts|course-tests\\public\\week-08.test.ts|course-tests\\public\\week-09.test.ts/i.

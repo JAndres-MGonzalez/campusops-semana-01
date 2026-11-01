@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "week": 9,
+  "teamId": "9A-E08",
+  "members": [
+    {
+      "studentId": "3523110092",
+      "name": "Kevin Armando Montalvo Marcial",
+      "commitShas": [
+        "b2c27ab7f042f835060efc99cab9ad77f8241364",
+        "b54922dceef1aa5711715b3c28bf758f2bee4c32"
+      ],
+      "files": [
+        "src/infrastructure/resilience/retry-policy.ts",
+        "src/infrastructure/resilience/retry-executor.ts",
+        "src/infrastructure/geocoding/select-location.ts",
+        "src/infrastructure/incidents/http-incident-repository.ts",
+        "src/infrastructure/sync/outbox.ts",
+        "src/course-evaluation/index.ts"
+      ],
+      "tests": [
+        "src/infrastructure/resilience/retry-policy.test.ts",
+        "src/infrastructure/resilience/retry-executor.test.ts",
+        "src/infrastructure/geocoding/select-location.test.ts",
+        "src/infrastructure/incidents/http-incident-repository.retry.test.ts",
+        "src/infrastructure/sync/outbox.retry.test.ts"
+      ],
+      "reviews": [
+        "evidence/week-09/reports/3523110092.md"
+      ],
+      "prediction": "Los reintentos respetan Retry-After y el límite del cuarto intento; una escritura sin clave no se repite y una ubicación inválida conserva la alternativa manual.",
+      "command": "npm.cmd test -- --ci --runInBand src/infrastructure/resilience src/infrastructure/geocoding src/infrastructure/incidents src/infrastructure/sync",
+      "observedResult": "Su reporte registra 51 pruebas aprobadas en 9 suites después del cambio b2c27ab; tipos, lint y arquitectura terminan con código 0. Salida en evidence/week-09/logs/kevin-integracion.log.",
+      "explanation": "Implementó la política, el ejecutor y la validación de ubicación; conectó la identidad estable con el cliente HTTP y conservó los fallos en la cola. Su reporte y logs identifican las comprobaciones de su aporte."
+    },
+    {
+      "studentId": "3523110741",
+      "name": "Jose Ismael Montalvo Lopez",
+      "commitShas": [
+        "8db35971a67a599f176ce009a0c9f75e157da32f",
+        "96caa0e167652c75004ca2eb16e8f1e277b9dcfc",
+        "cc5c48bbf833d5c4078a6499c07c3c3ca8c7e7d3"
+      ],
+      "files": [
+        "src/infrastructure/geocoding/provider.ts",
+        "src/infrastructure/geocoding/cache.ts",
+        "src/infrastructure/geocoding/service.ts",
+        "src/ui/screens/IncidentCreateScreen.tsx",
+        "App.tsx",
+        "docs/resilience-policy.md",
+        "evidence/week-09/scripts/fault-injection.mjs"
+      ],
+      "tests": [
+        "src/infrastructure/geocoding",
+        "src/ui/screens/incident-create-location.test.tsx"
+      ],
+      "reviews": [
+        "evidence/week-09/reports/3523110741.md"
+      ],
+      "prediction": "El proveedor usa caché para respuestas válidas y conserva el texto manual ante errores; la repetición de resolución o cierre no duplica el historial.",
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "observedResult": "Su reporte y log registran 16 de 16 casos aprobados; geocodificación 52 de 52 y UI 6 de 6. Las capturas del teléfono acreditan caché y alternativa manual, y también muestran rechazo de permiso al guardar y abrir detalle sin conexión.",
+      "explanation": "Implementó proveedor, caché, servicio y captura manual. Reprodujo fallos del proveedor y respuesta perdida al resolver y cerrar; conservó los límites y errores observados en el teléfono en su reporte."
+    },
+    {
+      "studentId": "3523110131",
+      "name": "Juan Andrés Medina González",
+      "commitShas": [
+        "a14272514addc925c90c543a26cdc7efddb5574d"
+      ],
+      "files": [
+        "docs/resilience-policy.md",
+        ".github/workflows/week-09-integracion-resiliente-feedback.yml",
+        "evidence/week-09/retry-metrics.test.ts",
+        "evidence/week-09/scripts/retry-live-metrics.mjs",
+        "reports/week-09/retry-metrics.json",
+        "evidence/week-09/engineering.json",
+        "evidence/week-09/individual.json"
+      ],
+      "tests": [
+        "evidence/week-09/retry-metrics.test.ts"
+      ],
+      "reviews": [
+        "evidence/week-09/reports/3523110131.md",
+        "evidence/week-09/native/andres-ui.md"
+      ],
+      "prediction": "Las solicitudes terminan dentro del límite, conservan identidad y cuerpo y no duplican el efecto. El fallo de ubicación permite conservar una referencia manual y guardar con sesión vigente.",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-09/retry-metrics.test.ts; node evidence/week-09/scripts/retry-live-metrics.mjs",
+      "observedResult": "6 pruebas propias aprobadas, 165 de integración y 16 de fallas. El backend aislado observó 2 solicitudes y 1 evento al resolver y cerrar. En Android se conservó el texto manual, se encoló una creación sin conexión y se retiró al confirmar.",
+      "explanation": "Integración de las ramas con sus SHAs, política final, métricas independientes y registros del equipo. La comprobación asistida distingue el reloj controlado de Jest, los tiempos reales del backend y el recorrido del APK con una sesión vigente."
+    }
+  ]
+}

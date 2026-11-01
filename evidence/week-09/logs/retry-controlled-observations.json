@@ -1,0 +1,63 @@
+{
+  "generatedAt": "2026-11-01T00:46:44.078Z",
+  "clock": "controlled",
+  "observations": [
+    {
+      "id": "retry-after-honored",
+      "requests": 2,
+      "startsMs": [
+        0,
+        1000
+      ],
+      "delaysMs": [
+        1000
+      ],
+      "stableKey": true,
+      "stableBody": true
+    },
+    {
+      "id": "bounded-503",
+      "requests": 4,
+      "startsMs": [
+        0,
+        500,
+        1500,
+        3500
+      ],
+      "delaysMs": [
+        500,
+        1000,
+        2000
+      ]
+    },
+    {
+      "id": "retry-after-capped",
+      "requests": 2,
+      "delaysMs": [
+        30000
+      ]
+    },
+    {
+      "id": "post-without-key",
+      "requests": 1,
+      "delaysMs": [],
+      "requiresStableIdempotencyKey": true
+    },
+    {
+      "id": "conflict-not-retried",
+      "requests": 1,
+      "delaysMs": []
+    },
+    {
+      "id": "lost-response-controlled",
+      "requests": 2,
+      "delaysMs": [
+        500
+      ],
+      "historyEvents": 1,
+      "duplicate": true,
+      "stableKey": true,
+      "stableBody": true
+    }
+  ]
+}

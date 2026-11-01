@@ -1,0 +1,53 @@
+{
+  "package": "mx.edu.dmi.engineeringapp",
+  "sourceSha": "4281dd683c54a6597d0c7fcf9716aa4f6bbbd45d",
+  "verifiedCodeSha": "d14a5a8d96721cd858284ea1f135c3a051647f8e",
+  "sourceUnchanged": "App.tsx, src/, package.json y package-lock.json no cambiaron entre el APK y la integración técnica",
+  "platform": "Android 16 / API 36 / x86_64",
+  "variant": "release de laboratorio con firma debug generada por Expo",
+  "backend": "http://10.0.2.2:4319",
+  "apkSha256": "38a71739dfd19df94db6781440aa08266e4b2b9322dfe606b792dbc38c1b0124",
+  "apkBytes": 27880744,
+  "captures": [
+    {
+      "capture": "andres-01-provider.png",
+      "sha256": "858c2940a80264b77b9d10979b03a7605e198bd0904e482b5d61752ba11f7baf",
+      "checked": true
+    },
+    {
+      "capture": "andres-02-saved-online.png",
+      "sha256": "a59219d5f2e6ed2cb05cfdf123e8190f77653916beb4d7b3b10149302d530725",
+      "checked": true
+    },
+    {
+      "capture": "andres-03-list-online.png",
+      "sha256": "6090559d7d4968b95d64f69c48471a25df2c35687f1d9098ac78cf4934b2b05b",
+      "checked": true
+    },
+    {
+      "capture": "andres-04-manual-offline.png",
+      "sha256": "bf7ac33eb9993bed470129bf35e25d48e724a58dc5630beaabc7ce4af2a294a5",
+      "checked": true
+    },
+    {
+      "capture": "andres-05-saved-offline.png",
+      "sha256": "1b2452670b3192658e096e2ffdf71504fdf27876ca88ce18440e906e24785f05",
+      "checked": true
+    },
+    {
+      "capture": "andres-06-confirmed.png",
+      "sha256": "8e10ffa29ce81d85f504fb25697e284ff5e11e369aa12295a1f9ec3b35b1fbe3",
+      "checked": true
+    },
+    {
+      "capture": "andres-07-list-confirmed.png",
+      "sha256": "8e10ffa29ce81d85f504fb25697e284ff5e11e369aa12295a1f9ec3b35b1fbe3",
+      "checked": true
+    },
+    {
+      "capture": "andres-08-detail-confirmed.png",
+      "sha256": "9dbf3d37c937dbb111b6532655bd15ebbcbe6686cc9b6250eade79ae4f425dfd",
+      "checked": true
+    }
+  ]
+}

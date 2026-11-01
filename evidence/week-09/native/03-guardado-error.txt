@@ -1,0 +1,1 @@
+Teléfono Xiaomi, 16:38. Al intentar guardar sin conexión aparece en rojo "No tienes permiso para esta operación." El formulario conserva "Prueba 1" y "Zona A" y "Pendientes sin conexión" sigue en 0: la incidencia no se guardó ni quedó en la cola en este intento.

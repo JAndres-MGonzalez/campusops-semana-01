@@ -1,0 +1,2 @@
+{"id":"lost-response-resolve-live","requests":2,"requestedWaitsMs":[500],"waitsMs":[510],"startsMs":[0,1324],"elapsedMs":1328,"duplicate":true,"historyEvents":1,"version":3,"state":"resolved","stableKey":true,"stableBody":true}
+{"id":"lost-response-close-live","requests":2,"requestedWaitsMs":[500],"waitsMs":[508],"startsMs":[0,1310],"elapsedMs":1315,"duplicate":true,"historyEvents":1,"version":4,"state":"closed","stableKey":true,"stableBody":true}

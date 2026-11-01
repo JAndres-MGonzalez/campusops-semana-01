@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "week": 9,
+  "commitSha": "d14a5a8d96721cd858284ea1f135c3a051647f8e",
+  "decision": "Reintentar los fallos transitorios publicados sólo cuando la operación sea segura. Las escrituras conservan clave y cuerpo y terminan con un máximo de cuatro solicitudes; Retry-After se acota a 30 s. La ubicación usa una solicitud, caché de resultados válidos y alternativa manual ante fallo. Un conflicto, falta de identidad o límite agotado se informa y no autoriza descartar el pendiente. La alternativa manual conserva la autorización de sesión.",
+  "alternatives": [
+    "Reintentar cualquier error: puede saturar al proveedor y repetir efectos cuando no se conserva una identidad estable.",
+    "No reintentar ninguna operación: simplifica el cliente, pero impide recuperar escrituras seguras cuya respuesta se perdió.",
+    "Reintentar sólo lo seguro y continuar con ubicación manual: limita solicitudes, conserva intención local y evita duplicar efectos."
+  ],
+  "tradeoff": "Coordinar identidad, cuerpo y esperas añade complejidad y latencia, con hasta 30 s por espera. A cambio se acotan los intentos y se puede recuperar una respuesta perdida sin repetir su efecto. La caché en memoria evita consultas durante la captura, pero desaparece al reiniciar. El respaldo manual no evita reautenticarse si la sesión vence sin conexión.",
+  "requirementIds": [
+    "AC-01",
+    "AC-02",
+    "AC-03",
+    "AC-04",
+    "AC-05"
+  ],
+  "verification": [
+    {
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-09/retry-metrics.test.ts",
+      "result": "6 pruebas aprobadas: 429, límite de 503, espera máxima, POST sin clave, conflicto y respuesta perdida con transporte controlado.",
+      "evidence": "reports/week-09/retry-metrics.json y evidence/week-09/logs/retry-metrics-test.log"
+    },
+    {
+      "command": "node evidence/week-09/scripts/retry-live-metrics.mjs",
+      "result": "Resolver y cerrar tras perder la primera respuesta: 2 solicitudes y un evento por operación; duplicate=true, misma clave y cuerpo.",
+      "evidence": "evidence/week-09/logs/retry-live.log y retry-live-observations.json"
+    },
+    {
+      "command": "node evidence/week-09/scripts/fault-injection.mjs",
+      "result": "16 comprobaciones aprobadas contra backend controlado, incluidos fallos de ubicación y respuesta perdida al resolver y cerrar.",
+      "evidence": "reports/week-09/fault-injection.json y evidence/week-09/logs/andres-fault-injection.log"
+    },
+    {
+      "command": "npm.cmd test -- --ci --runInBand course-tests/public/week-06.test.ts course-tests/public/week-08.test.ts course-tests/public/week-09.test.ts src/infrastructure/session src/infrastructure/persistence src/infrastructure/sync src/infrastructure/resilience src/infrastructure/geocoding src/infrastructure/incidents src/ui/screens/incident-create-location.test.tsx evidence/week-06/concurrency.test.ts evidence/week-06/auth-cases.test.ts evidence/week-06/session-app.test.tsx evidence/week-09/retry-metrics.test.ts",
+      "result": "165 pruebas aprobadas en 23 suites, sin fallos.",
+      "evidence": "evidence/week-09/logs/integration-tests.log"
+    },
+    {
+      "command": "make feedback",
+      "result": "Tipos, lint, smoke, auditoría al umbral critical y bundle Android completados con código 0. El bundle no sustituye la prueba del APK.",
+      "evidence": "evidence/week-09/logs/make-feedback.log"
+    },
+    {
+      "command": "Procedimiento Android de evidence/week-09/native/andres-ui.md",
+      "result": "Proveedor, guardado en línea, alternativa manual sin conexión, cola 1 a 0 tras confirmar y detalle con ubicación escrita. Sesión vigente al guardar.",
+      "evidence": "evidence/week-09/native/andres-01-provider.png a andres-08-detail-confirmed.png"
+    }
+  ]
+}

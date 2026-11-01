@@ -1,0 +1,18 @@
+
+> dmi-react-native-starter@1.0.0 test
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand evidence/week-09/retry-metrics.test.ts
+
+PASS evidence/week-09/retry-metrics.test.ts
+  métricas independientes de reintento
+    √ respeta Retry-After y conserva clave y cuerpo después de un 429 (4 ms)
+    √ termina con cuatro solicitudes ante un 503 persistente (2 ms)
+    √ recorta Retry-After de 120 segundos a una espera finita de 30 segundos
+    √ ejecuta una sola solicitud POST cuando falta identidad estable (1 ms)
+    √ conserva el conflicto 409 sin repetir la operación (1 ms)
+    √ recupera una respuesta perdida con la misma identidad y un solo efecto (1 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       6 passed, 6 total
+Snapshots:   0 total
+Time:        1.725 s
+Ran all test suites matching /evidence\\week-09\\retry-metrics.test.ts/i.

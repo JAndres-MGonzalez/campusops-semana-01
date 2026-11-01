@@ -1,0 +1,18 @@
+[
+  {
+    "stage": "kevin-after-merge",
+    "name": "typecheck",
+    "sha": "92a59c7b75507107022f3b9ee688d23bf8e4ffc4",
+    "command": "npm.cmd run typecheck",
+    "exitCode": 0,
+    "log": "C:\\Users\\Ra1zeR\\.cache\\campusops-tools\\week-09-andres\\kevin-after-merge-typecheck.log"
+  },
+  {
+    "stage": "kevin-after-merge",
+    "name": "public-09",
+    "sha": "92a59c7b75507107022f3b9ee688d23bf8e4ffc4",
+    "command": "npm.cmd test -- --ci --runInBand course-tests/public/week-09.test.ts",
+    "exitCode": 0,
+    "log": "C:\\Users\\Ra1zeR\\.cache\\campusops-tools\\week-09-andres\\kevin-after-merge-public-09.log"
+  }
+]

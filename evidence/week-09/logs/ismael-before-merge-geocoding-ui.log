@@ -1,0 +1,15 @@
+
+> dmi-react-native-starter@1.0.0 test
+> jest --no-watchman --cacheDirectory .jest-cache --ci --runInBand src/infrastructure/geocoding src/ui/screens/incident-create-location.test.tsx
+
+PASS src/infrastructure/geocoding/provider.test.ts
+PASS src/infrastructure/geocoding/service.test.ts
+PASS src/ui/screens/incident-create-location.test.tsx
+PASS src/infrastructure/geocoding/cache.test.ts
+PASS src/infrastructure/geocoding/select-location.test.ts
+
+Test Suites: 5 passed, 5 total
+Tests:       58 passed, 58 total
+Snapshots:   0 total
+Time:        7.209 s
+Ran all test suites matching /src\\infrastructure\\geocoding|src\\ui\\screens\\incident-create-location.test.tsx/i.

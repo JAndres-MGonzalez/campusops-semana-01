@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 1,
+  "week": 9,
+  "commitSha": "d14a5a8d96721cd858284ea1f135c3a051647f8e",
+  "generatedAt": "2026-11-01T00:55:59.956943+00:00",
+  "checks": [
+    {
+      "id": "retry-after-honored",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-09/retry-metrics.test.ts",
+      "evidence": "Reloj controlado: 2 solicitudes simuladas al cliente HTTP; comienzos 0/1000 ms, espera 1000 ms, misma clave y cuerpo. Salida en evidence/week-09/logs/retry-metrics-test.log y retry-controlled-observations.json."
+    },
+    {
+      "id": "bounded-503",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-09/retry-metrics.test.ts",
+      "evidence": "Reloj controlado: 4 solicitudes; comienzos 0/500/1500/3500 ms, esperas 500/1000/2000 ms; el 503 final se informa como fallo. Salida en evidence/week-09/logs/retry-metrics-test.log y retry-controlled-observations.json."
+    },
+    {
+      "id": "retry-after-capped",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-09/retry-metrics.test.ts",
+      "evidence": "Reloj controlado: Retry-After de 120 s produce una espera de 30000 ms, finita; se recupera en la segunda solicitud. Salida en evidence/week-09/logs/retry-metrics-test.log y retry-controlled-observations.json."
+    },
+    {
+      "id": "post-without-key",
+      "status": "pass",
+      "scenarioType": "boundary",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-09/retry-metrics.test.ts",
+      "evidence": "Ejecutor con transporte simulado: 1 intento y 0 esperas; requiresStableIdempotencyKey=true. No se repite una operación sin identidad. Salida en evidence/week-09/logs/retry-metrics-test.log y retry-controlled-observations.json."
+    },
+    {
+      "id": "conflict-not-retried",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-09/retry-metrics.test.ts",
+      "evidence": "Cliente HTTP con transporte simulado: 1 solicitud y 0 esperas ante 409; se conserva el tipo conflict. Salida en evidence/week-09/logs/retry-metrics-test.log y retry-controlled-observations.json."
+    },
+    {
+      "id": "lost-response-controlled",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "npm.cmd test -- --ci --runInBand evidence/week-09/retry-metrics.test.ts",
+      "evidence": "Reloj y servidor simulados: 2 intentos, espera 500 ms, misma identidad y contenido, duplicate=true y 1 efecto. Salida en evidence/week-09/logs/retry-metrics-test.log y retry-controlled-observations.json."
+    },
+    {
+      "id": "lost-response-resolve-live",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "node evidence/week-09/scripts/retry-live-metrics.mjs",
+      "evidence": "Backend local aislado y ejecutor real: 2 solicitudes; espera solicitada [500] ms, medida [510] ms; comienzos [0, 1324] ms; total 1328 ms; duplicate=true, un evento, versión 3 y estado resolved. Misma clave y cuerpo. evidence/week-09/logs/retry-live.log."
+    },
+    {
+      "id": "lost-response-close-live",
+      "status": "pass",
+      "scenarioType": "failure",
+      "command": "node evidence/week-09/scripts/retry-live-metrics.mjs",
+      "evidence": "Backend local aislado y ejecutor real: 2 solicitudes; espera solicitada [500] ms, medida [508] ms; comienzos [0, 1310] ms; total 1315 ms; duplicate=true, un evento, versión 4 y estado closed. Misma clave y cuerpo. evidence/week-09/logs/retry-live.log."
+    }
+  ],
+  "controlledClock": {
+    "generatedAt": "2026-11-01T00:46:44.078Z",
+    "clock": "controlled",
+    "observations": [
+      {
+        "id": "retry-after-honored",
+        "requests": 2,
+        "startsMs": [
+          0,
+          1000
+        ],
+        "delaysMs": [
+          1000
+        ],
+        "stableKey": true,
+        "stableBody": true
+      },
+      {
+        "id": "bounded-503",
+        "requests": 4,
+        "startsMs": [
+          0,
+          500,
+          1500,
+          3500
+        ],
+        "delaysMs": [
+          500,
+          1000,
+          2000
+        ]
+      },
+      {
+        "id": "retry-after-capped",
+        "requests": 2,
+        "delaysMs": [
+          30000
+        ]
+      },
+      {
+        "id": "post-without-key",
+        "requests": 1,
+        "delaysMs": [],
+        "requiresStableIdempotencyKey": true
+      },
+      {
+        "id": "conflict-not-retried",
+        "requests": 1,
+        "delaysMs": []
+      },
+      {
+        "id": "lost-response-controlled",
+        "requests": 2,
+        "delaysMs": [
+          500
+        ],
+        "historyEvents": 1,
+        "duplicate": true,
+        "stableKey": true,
+        "stableBody": true
+      }
+    ]
+  },
+  "realClock": {
+    "generatedAt": "2026-11-01T00:46:47.489Z",
+    "backend": "isolated-local",
+    "observations": [
+      {
+        "id": "lost-response-resolve-live",
+        "requests": 2,
+        "requestedWaitsMs": [
+          500
+        ],
+        "waitsMs": [
+          510
+        ],
+        "startsMs": [
+          0,
+          1324
+        ],
+        "elapsedMs": 1328,
+        "duplicate": true,
+        "historyEvents": 1,
+        "version": 3,
+        "state": "resolved",
+        "stableKey": true,
+        "stableBody": true
+      },
+      {
+        "id": "lost-response-close-live",
+        "requests": 2,
+        "requestedWaitsMs": [
+          500
+        ],
+        "waitsMs": [
+          508
+        ],
+        "startsMs": [
+          0,
+          1310
+        ],
+        "elapsedMs": 1315,
+        "duplicate": true,
+        "historyEvents": 1,
+        "version": 4,
+        "state": "closed",
+        "stableKey": true,
+        "stableBody": true
+      }
+    ]
+  }
+}

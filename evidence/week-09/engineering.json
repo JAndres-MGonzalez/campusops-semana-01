@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "week": 9,
-  "commitSha": "d14a5a8d96721cd858284ea1f135c3a051647f8e",
+  "commitSha": "5717caa00d6b75eb3d96b3337f728c63ca9a8767",
   "decision": "Reintentar los fallos transitorios publicados sólo cuando la operación sea segura. Las escrituras conservan clave y cuerpo y terminan con un máximo de cuatro solicitudes; Retry-After se acota a 30 s. La ubicación usa una solicitud, caché de resultados válidos y alternativa manual ante fallo. Un conflicto, falta de identidad o límite agotado se informa y no autoriza descartar el pendiente. La alternativa manual conserva la autorización de sesión.",
   "alternatives": [
     "Reintentar cualquier error: puede saturar al proveedor y repetir efectos cuando no se conserva una identidad estable.",
